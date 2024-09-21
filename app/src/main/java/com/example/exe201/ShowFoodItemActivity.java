@@ -44,7 +44,9 @@ import java.util.Map;
 
 public class ShowFoodItemActivity extends AppCompatActivity {
 
-    private LinearLayout parentLinearLayout;
+    private LinearLayout parentLinearLayout, basketLayout;
+    private TextView basketItemCount, basketTotalPrice;
+
     private List<FoodType> foodTypeList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,16 @@ public class ShowFoodItemActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_food_item);
 
+
         // Nhận SupplierId từ Intent
         int supplierId = getIntent().getIntExtra("supplier_id", -1);
         if(supplierId != -1){
             getFoodTypeSupplierId(supplierId);
         }
         parentLinearLayout = findViewById(R.id.parentLinearLayout);
+        basketLayout = findViewById(R.id.basketLayout);
+        basketItemCount = findViewById(R.id.basketItemCount);
+         basketTotalPrice = findViewById(R.id.basketTotalPrice);
 
 
     }
@@ -135,6 +141,8 @@ public class ShowFoodItemActivity extends AppCompatActivity {
             Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.divider);
             itemDecoration.setDrawable(dividerDrawable);
             recyclerView.addItemDecoration(itemDecoration);
+
+            // Thêm RecyclerView vào parentLinearLayout
             parentLinearLayout.addView(recyclerView);
 
             SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -163,7 +171,10 @@ public class ShowFoodItemActivity extends AppCompatActivity {
 
                             }
                             // Đặt Adapter cho RecyclerView
-                            FoodItemCustomerAdapter adapter = new FoodItemCustomerAdapter(foodItemList,ShowFoodItemActivity.this);
+                            FoodItemCustomerAdapter adapter = new FoodItemCustomerAdapter(
+                                    foodItemList,
+                                    ShowFoodItemActivity.this,
+                                    basketLayout,basketItemCount,basketTotalPrice);
                             recyclerView.setAdapter(adapter);
                             // Đặt chiều cao cho RecyclerView dựa trên số lượng mục
                             setRecyclerViewHeight(recyclerView, foodItemList.size());

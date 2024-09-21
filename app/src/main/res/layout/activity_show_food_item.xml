@@ -161,7 +161,59 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Outer LinearLayout với nền màu trắng -->
+    <LinearLayout
+        android:id="@+id/outerBasketLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="10dp">
+
+        <!-- Inner LinearLayout với nền màu xanh -->
+        <LinearLayout
+            android:id="@+id/basketLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:background="@color/tropical_blue"
+            android:padding="10dp"
+            android:elevation="10dp">
+
+            <!-- TextView để hiển thị số lượng item trong giỏ -->
+            <TextView
+                android:id="@+id/basketItemCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Basket • 1 Item"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical" />
+
+            <!-- TextView để hiển thị tổng tiền của giỏ hàng -->
+            <TextView
+                android:id="@+id/basketTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="38.000đ"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
