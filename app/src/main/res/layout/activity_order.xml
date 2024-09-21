@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_location_pin" />
+                    android:src="@color/tropical_blue" />
 
                 <TextView
                     android:id="@+id/textViewDeliveryAddress"
@@ -65,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:text="Edit"
                     android:textColor="@android:color/holo_blue_light"
-                    android:layout_marginStart="auto"
                     android:textSize="14sp"
                     android:padding="4dp"/>
             </LinearLayout>
@@ -109,7 +108,7 @@
                         android:id="@+id/radioPriority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Priority - < 15 mins (26.000đ)" />
+                        android:text="Priority - 15 mins (26.000đ)" />
 
                     <RadioButton
                         android:id="@+id/radioStandard"
@@ -219,6 +218,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/layoutCashPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -227,7 +227,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_cash" />
+                        android:src="@color/tropical_blue" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -247,7 +247,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_personal" />
+                        android:src="@color/black" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -264,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:text="Apply as many available offers as you can 🎉"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:backgroundTint="@color/white"
                     android:padding="10dp"
                     android:layout_marginTop="10dp" />
             </LinearLayout>
@@ -299,7 +299,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Place Order"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="@color/tropical_blue"
             android:textColor="@android:color/white"
             android:padding="10dp"
             android:textSize="16sp" />
