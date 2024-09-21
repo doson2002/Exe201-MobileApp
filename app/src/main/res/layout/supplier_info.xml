@@ -1,0 +1,141 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <!-- Container cho toàn bộ nội dung của FoodItem -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Hình ảnh món ăn -->
+        <ImageView
+            android:id="@+id/imageViewSupplier"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="Food Image" />
+
+        <!-- Thông tin chi tiết về món ăn -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Tên món ăn -->
+            <TextView
+                android:id="@+id/textViewRestaurantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên nhà hàng"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <!-- Giá món ăn và giá giảm -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <!-- Giá gốc -->
+                <TextView
+                    android:id="@+id/textViewTotalStar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total star"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+                <TextView
+                    android:id="@+id/textViewCountReview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Số lượng đánh giá)"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+
+                <!-- Loại nhà hàng -->
+                <TextView
+                    android:id="@+id/textViewRestaurantType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loại nhà hàng"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:layout_marginStart="10dp" />
+            </LinearLayout>
+
+
+
+            <!-- Giảm giá và thời gian giao hàng -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <!-- Thông tin nhà hàng -->
+                <TextView
+                    android:id="@+id/textViewPriceDelivery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tiền delivery"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray" />
+                <!-- Thời gian giao hàng -->
+                <TextView
+                    android:id="@+id/textViewDeliveryTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="From 35 mins"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_green_dark" />
+
+                <!-- Thông tin giảm giá -->
+                <TextView
+                    android:id="@+id/textViewDiscountInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giảm 10.000đ"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:layout_marginStart="10dp" />
+            </LinearLayout>
+
+            <!-- Khuyến mãi thêm -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <!-- Thông tin khuyến mãi 1 -->
+                <TextView
+                    android:id="@+id/textViewPromo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10.000đ off"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_blue_dark" />
+
+                <!-- Thông tin khuyến mãi 2 -->
+                <TextView
+                    android:id="@+id/textViewPromo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10% off"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:layout_marginStart="10dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,101 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <!-- Container cho toàn bộ nội dung của FoodItem -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <!-- Hình ảnh món ăn -->
+        <ImageView
+            android:id="@+id/imageViewFoodItem"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="10dp"
+            android:clipToOutline="true"
+            android:contentDescription="Food Image"
+            android:background="@drawable/radius_image"/>
+
+
+        <!-- Thông tin chi tiết về món ăn -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <!-- Tên món ăn -->
+            <TextView
+                android:id="@+id/textViewFoodItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên món ăn"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <!-- Thông tin nhà hàng -->
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mô tả cho món ăn"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="4dp" />
+            <!-- Giá món ăn và giá giảm -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <!-- Giá gốc -->
+                <TextView
+                    android:id="@+id/textViewFoodItemOriginalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100.000đ"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                     />
+
+                <!-- Giá khuyến mãi -->
+                <TextView
+                    android:id="@+id/textViewFoodItemDiscountPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="80.000đ"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:layout_marginStart="10dp" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/imgAddFood"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Thêm món ăn"
+            android:layout_gravity="end"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/ic_add_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Exe201</string>
+    <string name="welcome_msg">Welcome User</string>
+
+    <string name="gender_prompt">Select Gender</string>
+
+    <string name="status_prompt">Chọn Trạng Thái</string>
+    <string name="category_prompt">Chọn Loại</string>
+
+
+    <!--    For Sign In Page/ Activity-->
+    <string name="go_to_sign_in">Already have account? Sign In</string>
+    <!--    For Sign Up Page/ Activity-->
+    <string name="go_to_sign_up">Don\'t have account? Sign In</string>
+
+
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="status_array">
+        <item>Có Sẵn</item>
+        <item>Hết hàng</item>
+    </string-array>
+
+    <string-array name="category_array">
+        <item>Trả phí</item>
+        <item>Miễn phí</item>
+    </string-array>
+
+
+</resources>

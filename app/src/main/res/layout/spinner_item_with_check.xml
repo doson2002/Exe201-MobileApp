@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+<!--    &lt;!&ndash; Biểu tượng dấu tích hoặc icon khác &ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:id="@+id/check_icon"-->
+<!--        android:layout_width="18dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:visibility="gone"-->
+<!--    android:src="@drawable/ic_checked_foreground" />-->
+
+    <!-- Sử dụng RadioButton thay cho ImageView -->
+<!--    <RadioButton-->
+<!--        android:id="@+id/radio_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:buttonTint="@color/light_black"-->
+<!--        android:visibility="visible" />-->
+
+    <!-- Sử dụng CheckBox thay vì ImageView hoặc RadioButton -->
+    <CheckBox
+        android:id="@+id/check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:buttonTint="@color/light_black"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="visible" />
+
+    <!-- TextView để hiển thị tên FoodType -->
+    <TextView
+        android:id="@+id/spinner_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+</LinearLayout>

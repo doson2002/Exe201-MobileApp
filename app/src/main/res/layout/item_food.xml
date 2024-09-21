@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Hình ảnh món ăn -->
+    <ImageView
+        android:id="@+id/foodImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitXY"
+    android:background="@drawable/rounded_border"
+    android:clipToOutline="true"
+    android:contentDescription="Food Image" />
+
+    <!-- Thông tin món ăn -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="4">
+
+        <!-- Tên món ăn nằm sát mép trên -->
+        <TextView
+            android:id="@+id/foodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên món ăn"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Giá món ăn nằm ngay dưới tên món ăn -->
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giá món ăn"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/foodName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Số lượng món ăn -->
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số lượng"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/price"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Loại món ăn nằm sát mép dưới -->
+        <TextView
+            android:id="@+id/foodTypes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loại món ăn"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Nút và hình ảnh phía bên phải -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- ImageView biểu tượng cho dấu (-) để xóa món -->
+        <ImageView
+            android:id="@+id/imgRemoveFood"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Xóa món ăn"
+            android:src="@drawable/ic_remove_no_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Nút "Xem chi tiết" -->
+        <Button
+            android:id="@+id/btnViewDetails"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            android:text="Chi tiết"
+            android:textColor="@color/black"
+            android:background="@drawable/main_btn_styling"
+            app:layout_constraintTop_toBottomOf="@id/imgRemoveFood"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

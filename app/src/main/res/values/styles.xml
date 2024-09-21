@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Định nghĩa màu cho hint -->
+    <style name="SearchViewHintStyle">
+        <item name="android:textColorHint">@color/colorHint</item> <!-- Màu hint -->
+    </style>
+
+    <!-- Định nghĩa màu cho text khi người dùng nhập -->
+    <style name="SearchViewTextStyle">
+        <item name="android:textColor">@color/colorText</item> <!-- Màu text -->
+    </style>
+
+    <!-- Style cho Spinner -->
+    <style name="WhiteSpinnerTheme" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@android:color/white</item> <!-- Màu nền cho popup -->
+        <item name="android:background">@android:color/white</item> <!-- Màu nền cho Spinner chính -->
+        <item name="android:textColor">@android:color/black</item> <!-- Màu chữ cho Spinner -->
+    </style>
+
+
+</resources>
