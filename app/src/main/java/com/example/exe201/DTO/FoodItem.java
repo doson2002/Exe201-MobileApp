@@ -1,8 +1,13 @@
 package com.example.exe201.DTO;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class FoodItem {
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+
+public class FoodItem  implements Serializable {
     private int id;
     private String foodName;
     private String description;
@@ -76,5 +81,19 @@ public class FoodItem {
 
     public void setFoodTypes(List<FoodType> foodTypes) {
         this.foodTypes = foodTypes;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FoodItem foodItem = (FoodItem) o;
+        return id == foodItem.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
