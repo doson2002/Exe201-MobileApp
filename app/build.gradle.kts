@@ -50,5 +50,6 @@ dependencies {
     implementation(libs.glide) // Thêm Glide để load ảnh
     annotationProcessor(libs.glide.compiler) // Thêm Glide Compiler để load ảnh
     implementation(libs.circleimageview)
+    implementation(libs.gson)
 
 }
