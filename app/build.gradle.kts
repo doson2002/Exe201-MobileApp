@@ -51,5 +51,6 @@ dependencies {
     annotationProcessor(libs.glide.compiler) // Thêm Glide Compiler để load ảnh
     implementation(libs.circleimageview)
     implementation(libs.gson)
+    implementation(libs.ucrop)
 
 }

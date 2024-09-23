@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -44,6 +46,7 @@ public class SupplierForCustomer extends AppCompatActivity {
 
     private RecyclerView recyclerViewSupplierTypes;
     private RecyclerView recyclerViewSuppliers;
+    private ImageView backArrow;
     private SupplierTypeAdapter supplierTypeAdapter;
     private SupplierInfoAdapter supplierInfoAdapter;
     private List<SupplierType> supplierTypeList = new ArrayList<>();
@@ -54,6 +57,14 @@ public class SupplierForCustomer extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_supplier_for_customer);
 
+        backArrow = findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Quay lại trang trước
+                onBackPressed();
+            }
+        });
         recyclerViewSupplierTypes = findViewById(R.id.recyclerSupplierTypes);
         recyclerViewSuppliers = findViewById(R.id.recyclerViewSupplier);
 
@@ -78,9 +89,9 @@ public class SupplierForCustomer extends AppCompatActivity {
 
         supplierInfoAdapter  = new SupplierInfoAdapter(supplierInfoList, this, new SupplierInfoAdapter.OnSupplierInfoClickListener(){
             @Override
-            public void onSupplierInfoClick(int supplierInfoId) {
+            public void onSupplierInfoClick(SupplierInfo supplierInfo) {
                 Intent intent = new Intent(SupplierForCustomer.this, ShowFoodItemActivity.class);
-                intent.putExtra("supplier_id",supplierInfoId); // Truyền SupplierId qua Intent
+                intent.putExtra("supplier",supplierInfo); // Truyền SupplierId qua Intent
                 startActivity(intent);
             }
         });

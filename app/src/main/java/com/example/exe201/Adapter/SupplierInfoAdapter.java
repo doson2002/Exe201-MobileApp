@@ -57,7 +57,7 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
         holder.itemView.setOnClickListener(v -> {
             selectedPosition = holder.getAdapterPosition();
             if (listener != null) {
-            listener.onSupplierInfoClick(supplierInfo.getId());
+            listener.onSupplierInfoClick(supplierInfo);
             }
             //notifyDataSetChanged();
             notifyItemChanged(selectedPosition);
@@ -85,7 +85,7 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
     }
 
     public interface OnSupplierInfoClickListener {
-        void onSupplierInfoClick(int supplierId);
+        void onSupplierInfoClick(SupplierInfo supplierInfo);
     }
 
 

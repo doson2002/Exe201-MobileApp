@@ -18,5 +18,25 @@
         <item name="android:textColor">@android:color/black</item> <!-- Màu chữ cho Spinner -->
     </style>
 
+    <!-- Style cho tiêu đề khi thu gọn -->
+    <style name="CollapsedToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item> <!-- Màu chữ khi thu gọn -->
+        <item name="android:textSize">20sp</item> <!-- Kích thước chữ khi thu gọn -->
+        <item name="android:textStyle">bold</item> <!-- Kiểu chữ đậm -->
+    </style>
+
+    <!-- Style cho tiêu đề khi mở rộng -->
+    <style name="ExpandedToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item> <!-- Màu chữ khi mở rộng -->
+        <item name="android:textSize">30sp</item> <!-- Kích thước chữ khi mở rộng -->
+        <item name="android:textStyle">bold</item> <!-- Kiểu chữ đậm -->
+    </style>
+
+    <!-- Định nghĩa trong styles.xml -->
+    <style name="ShapeAppearance.MaterialComponents.SmallComponent" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item> <!-- Độ bo tròn của góc -->
+    </style>
+
 
 </resources>

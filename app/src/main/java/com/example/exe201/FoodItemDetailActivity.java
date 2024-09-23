@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -56,7 +58,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
     ImageView backArrow,imageView;
     private TypeSpinnerAdapter TypeAdapter;
     FloatingActionButton fbutton;
-    Button saveButton;
+    LinearLayout saveButton;
     Uri imageUri;
     String imageUrl;
     private List<FoodType> foodTypes;
@@ -196,6 +198,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         String url = ApiEndpoints.GET_FOOD_ITEM_BY_ID + "/" + foodItemId; // Thay thế bằng URL API của bạn
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
+        int supplierId = sharedPreferences.getInt("supplier_id", -1);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
@@ -227,7 +230,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                                 selectedFoodTypes.add(new FoodType(foodTypeJson.getInt("id"), foodTypeJson.getString("typeName")));
                             }
                             // Gọi API để lấy tất cả các loại FoodType và cập nhật Spinner
-                            loadAllFoodTypes(selectedFoodTypes); // Cập nhật spinner loại món ăn
+                            loadAllFoodTypes(supplierId, selectedFoodTypes); // Cập nhật spinner loại món ăn
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -253,11 +256,13 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
 
-    private void loadAllFoodTypes(List<FoodType> selectedFoodTypes) {
-        String url = ApiEndpoints.GET_ALL_FOOD_TYPES; // Thay thế bằng URL API của bạn
+
+    private void loadAllFoodTypes(int supplierId, List<FoodType> selectedFoodTypes) {
+        String url = ApiEndpoints.GET_FOOD_TYPES_BY_SUPPLIER_ID +"/" + supplierId; // Thay thế bằng URL API của bạn
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
+
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
@@ -270,7 +275,13 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                                 JSONObject foodTypeJson = response.getJSONObject(i);
                                 int id = foodTypeJson.getInt("id");
                                 String typeName = foodTypeJson.getString("typeName");
-                                foodTypes.add(new FoodType(id, typeName));
+                                int order = foodTypeJson.getInt("i");
+                                // Tạo đối tượng FoodType từ JSON
+                                FoodType foodType = new FoodType(id, typeName);
+                                foodType.setOrder(order); // Gán thêm thuộc tính order nếu có
+
+                                foodTypes.add(foodType);
+
                             }
                             // Cập nhật dữ liệu cho spinner
                             updateTypeSpinner(foodTypes, selectedFoodTypes);
@@ -457,6 +468,12 @@ public class FoodItemDetailActivity extends AppCompatActivity {
             }
         };
 
+        // Thiết lập RetryPolicy với thời gian chờ là 10 giây và thử lại 1 lần
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000, // Thời gian chờ (10 giây)
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Số lần thử lại mặc định
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Hệ số backoff mặc định
+        ));
         Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
 
