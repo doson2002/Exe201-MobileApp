@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -167,17 +168,20 @@ public class FoodItemActivity extends AppCompatActivity {
                                    foodTypes.add(foodType);
                                }
 
+                               // Lấy thông tin supplier_info
+                               JSONObject supplierInfoJson = foodItemJson.getJSONObject("supplier_info");
+                               SupplierInfo supplierInfo = new SupplierInfo(
+                                       supplierInfoJson.getInt("id"),
+                                       supplierInfoJson.getString("restaurantName"),
+                                       supplierInfoJson.getString("imgUrl")
+                               );
                                FoodItem foodItem = new FoodItem(
                                        foodItemJson.getInt("id"),
                                        foodItemJson.getString("food_name"),
                                        foodItemJson.getInt("quantity"),
                                        foodItemJson.getDouble("price"),
                                        foodItemJson.getString("image_url"),
-                                       new SupplierInfo(
-                                               foodItemJson.getJSONArray("supplier_info").getInt(Integer.parseInt("id")),
-                                               foodItemJson.getJSONObject("supplier_info").getString("restaurantName"),
-                                               foodItemJson.getJSONObject("supplier_info").getString("imgUrl")
-                                       ),
+                                       supplierInfo,
                                        foodTypes
                                );
 

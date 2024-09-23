@@ -2,6 +2,7 @@ package com.example.exe201;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.exe201.API.ApiEndpoints;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +42,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,11 +53,13 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ImageView imageView, backArrow;
+    ImageView  backArrow;
+    ShapeableImageView imageView;
+    LinearLayout saveButton;
     FloatingActionButton fbutton;
     private EditText nameInput, phoneInput, emailInput;
     private Spinner genderSpinner;
-    Button sign_out_btn, saveButton;
+    Button sign_out_btn ;
     Uri imageUri;
     String imageUrl,fullName, phoneNumber, currentEmail;
     int gender;
@@ -101,6 +108,9 @@ public class ProfileActivity extends AppCompatActivity {
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_launcher_foreground) // Ảnh hiển thị khi đang tải
                     .error(R.drawable.ic_launcher_foreground) // Ảnh hiển thị khi tải thất bại
+                    .fitCenter()
+                    .transform(new RoundedCorners(30))
+                    .override(imageView.getWidth(), imageView.getHeight()) // Cố định kích thước ImageView
                     .into(imageView);
         }
         if (imageUrl.isEmpty()) {
@@ -131,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ImagePicker.with(ProfileActivity.this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .cropSquare() // Cắt ảnh hình tròn    			//Crop image(Optional), Check Customization for more option
                         .compress(1024)			//Final image size will be less than 1 MB(Optional)
                         .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                         .start();
@@ -153,6 +163,16 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    // Hàm thiết lập tùy chọn cho uCrop
+    private UCrop.Options getUCropOptions() {
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true); // Bo tròn ảnh
+        options.setShowCropGrid(false); // Ẩn lưới cắt ảnh
+        options.setShowCropFrame(true); // Hiển thị khung cắt ảnh
+        options.setCropFrameColor(Color.parseColor("#FFFFFF")); // Màu khung cắt
+        options.setCropFrameStrokeWidth(5); // Độ dày khung cắt
+        return options;
+    }
     // Upload ảnh lên Firebase Storage và lấy URL
     private void uploadImageToFirebase(Uri uri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -319,7 +339,17 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            imageView.setImageURI(imageUri); // Hiển thị ảnh
+            // Sử dụng Glide để tải ảnh và bo tròn các góc
+            Glide.with(this)
+                    .load(imageUri)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(30))) // Bo tròn góc với bán kính 30
+                    .into(imageView);
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            // Xử lý lỗi khi chọn ảnh
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            // Người dùng hủy chọn ảnh
+            Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -3,21 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/orange"
+    android:background="@color/light_black"
     android:layout_height="match_parent"
     tools:context=".OrderActivity">
 
-    <!-- ImageView for Back Arrow, đặt ở góc trái trên -->
-    <ImageView
-        android:id="@+id/back_arrow"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearTop"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="Back Arrow"
-        android:src="@drawable/baseline_arrow_back_24"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="16dp"
-        android:layout_margin="16dp" />
+        app:layout_constraintTop_toTopOf="parent">
+    <!-- ImageView for Back Arrow, đặt ở góc trái trên -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="Back Arrow"
+            android:padding="16dp"
+            android:src="@drawable/baseline_arrow_back_24" />
     <!-- Tên quán ăn, địa chỉ và thông tin tổng quan -->
     <TextView
         android:id="@+id/textViewRestaurantName"
@@ -27,10 +34,12 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:padding="16dp"
+        android:layout_marginTop="10dp"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
 
     <!-- ScrollView để chứa phần địa chỉ và các tùy chọn giao hàng -->
     <ScrollView
@@ -38,7 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/textViewRestaurantName"
+        app:layout_constraintTop_toBottomOf="@id/linearTop"
         app:layout_constraintBottom_toTopOf="@id/layoutTotal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -48,19 +57,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="15dp">
 
             <!-- Địa chỉ giao hàng -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:background="@color/white">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@color/tropical_blue" />
+                    android:src="@drawable/baseline_add_location_alt_24" />
 
                 <TextView
                     android:id="@+id/textViewDeliveryAddress"
@@ -114,13 +124,15 @@
                 <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/white">
 
                     <RadioButton
                         android:id="@+id/radioPriority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
+                        android:buttonTint="@color/black"
                         android:text="Priority - 15 mins (26.000đ)" />
 
                     <RadioButton
@@ -128,6 +140,7 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/black"
                         android:layout_height="wrap_content"
+                        android:buttonTint="@color/black"
                         android:text="Standard - 15 mins (21.000đ)" />
 
                     <RadioButton
@@ -135,7 +148,8 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/black"
                         android:layout_height="wrap_content"
-                        android:text="Saver - 30 mins (13.000đ)" />
+                        android:text="Saver - 30 mins (13.000đ)"
+                        android:buttonTint="@color/black"/>
                 </RadioGroup>
             </LinearLayout>
             <!-- Phần Order Summary -->
@@ -143,7 +157,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:background="@color/white">
             <TextView
                 android:id="@+id/textViewOrderSummary"
                 android:layout_width="wrap_content"
@@ -158,7 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thêm món ăn"
-                android:textColor="@android:color/holo_blue_light"
+                android:textColor="@color/blue1"
                 android:textSize="14sp"
                 android:padding="4dp"/>
 
@@ -178,7 +193,7 @@
                 android:id="@+id/textViewPaymentDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Payment details"
+                android:text="Phương thức thanh toán"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="10dp"
@@ -188,7 +203,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/white">
 
                 <LinearLayout
                     android:id="@+id/layoutCashPayment"
@@ -200,12 +216,14 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@color/tropical_blue" />
+                        android:src="@drawable/baseline_attach_money_24"
+                        android:background="@drawable/rounded_border"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cash"
+                        android:text="Tiền mặt"
                         android:textSize="16sp"
                         android:textColor="@android:color/black"
                         android:layout_marginStart="10dp" />
@@ -220,12 +238,12 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@color/black" />
+                        android:src="@drawable/vnpay" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Personal"
+                        android:text="VnPay"
                         android:textSize="16sp"
                         android:textColor="@android:color/black"
                         android:layout_marginStart="10dp" />
@@ -261,7 +279,7 @@
             android:id="@+id/textViewTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total: 105.000đ"
+            android:text="Tổng: 105.000đ"
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:layout_weight="1" />
@@ -279,8 +297,8 @@
             android:id="@+id/buttonPlaceOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Place Order"
-            android:backgroundTint="@color/tropical_blue"
+            android:text="Thanh Toán"
+            android:backgroundTint="@color/orange"
             android:textColor="@android:color/white"
             android:padding="10dp"
             android:textSize="16sp" />

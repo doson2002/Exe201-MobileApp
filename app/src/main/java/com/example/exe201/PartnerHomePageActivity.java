@@ -55,7 +55,9 @@ public class PartnerHomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_partner_home_page);
-
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("user_id", 0);
+        fetchSupplierByUserId(userId);
         accountIcon = findViewById(R.id.account_icon);
         accountIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +82,7 @@ public class PartnerHomePageActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                int userId = sharedPreferences.getInt("user_id", 0);
+                int supplierId = sharedPreferences.getInt("supplier_id", 0);
 
                 // Lấy thông tin giờ mở và đóng cửa từ các TextView hoặc EditText
                 String openTime = openTimeTextView.getText().toString();
@@ -92,7 +93,7 @@ public class PartnerHomePageActivity extends AppCompatActivity {
                     Toast.makeText(PartnerHomePageActivity.this, "Vui lòng chọn giờ mở cửa và đóng cửa", Toast.LENGTH_SHORT).show();
                     return; // Không thực hiện cập nhật nếu chưa chọn đủ thông tin
                 }
-                fetchSupplierByUserId(userId, openTime, closeTime);
+                updateRestaurantTime(supplierId, openTime, closeTime);
             }
         });
         // Ánh xạ ImageView
@@ -156,9 +157,9 @@ public class PartnerHomePageActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(PartnerHomePageActivity.this, "Giờ mở cửa: " + openTimeTextView.getText() + "\nGiờ đóng cửa: " + closeTimeTextView.getText(), Toast.LENGTH_SHORT).show();
                 SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                int userId = sharedPreferences.getInt("user_id", 0);
+                int supplierId = sharedPreferences.getInt("supplier_id", 0);
                 // Kiểm tra nếu người dùng chưa chọn giờ mở và đóng cửa
-                fetchSupplierByUserId(userId, openTime, closeTime);
+                updateRestaurantTime(supplierId, openTime, closeTime);
                 dialog.dismiss(); // Đóng dialog sau khi lưu
             }
         });
@@ -191,7 +192,7 @@ public class PartnerHomePageActivity extends AppCompatActivity {
 
         timePickerDialog.show();
     }
-    private void fetchSupplierByUserId(int userId,String openTime, String closeTime) {
+    private void fetchSupplierByUserId(int userId) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
@@ -205,9 +206,12 @@ public class PartnerHomePageActivity extends AppCompatActivity {
                         try {
                             // Lấy supplierId từ phản hồi
                             int supplierId = response.getInt("id"); // Lấy id của restaurant
-
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("supplier_id", supplierId);
+                            editor.apply();
                             // Sau khi lấy được supplierId, gọi hàm getFoodItemBySupplierId
-                            updateRestaurantTime(supplierId, openTime, closeTime);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();

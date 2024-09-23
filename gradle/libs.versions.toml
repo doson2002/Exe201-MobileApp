@@ -14,6 +14,7 @@ firebaseStorage = "21.0.0"
 glide = "4.12.0"
 circleimageview = "3.1.0" # Thêm phiên bản cho CircleImageView
 gson = "2.8.8"
+ucrop = "2.2.6"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -30,6 +31,8 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop" }
+
 
 
 

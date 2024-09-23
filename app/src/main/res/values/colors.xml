@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#EBFFFFFF</color>
     <color name="dark_royal_purple">#221F37</color>
     <color name="royal_purple">#3F3D56</color>
     <color name="plain_purple">#595675</color>
@@ -9,7 +9,8 @@
     <color name="tropical_blue">#63C7FF</color>
     <color name="light_grey">#DCDCDC</color>
     <color name="blue">#2196F3</color>
-    <color name="light_black">#5D5E5F</color>
+    <color name="light_black">#E1E5E7</color>
+    <color name="blue1">#0324FB</color>
 
     <color name="colorHint">#888888</color> <!-- Màu hint (xám) -->
     <color name="colorText">#000000</color> <!-- Màu text (đen) -->

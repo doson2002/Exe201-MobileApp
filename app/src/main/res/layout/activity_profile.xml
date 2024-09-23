@@ -19,17 +19,34 @@
         android:padding="16dp"
         android:layout_margin="16dp" />
     <!-- ImageView for Right Icon, đặt ở góc phải trên -->
-    <Button
+    <LinearLayout
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:drawableTop="@drawable/ic_save_foreground"
+        android:orientation="vertical"
         android:gravity="center"
-        android:text="Save"
-        android:textColor="@android:color/black"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/save_image"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_save_foreground"
+            android:contentDescription="Save Icon" />
+
+        <TextView
+            android:id="@+id/save_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@android:color/black"
+            android:gravity="center" />
+    </LinearLayout>
+
 
     <!-- Phần cố định ở trên -->
 
@@ -46,26 +63,34 @@
         <!-- Ảnh đại diện -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="259dp"
-            android:layout_height="183dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            android:background="@drawable/rounded_border"
+            android:clipToOutline="true" />
 
         <!-- FloatingActionButton đè lên góc bên phải -->
 
         <!-- Số điểm -->
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="64dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@id/imageView"
             app:layout_constraintEnd_toEndOf="@id/imageView"
+            app:layout_constraintVertical_bias="1.3"
+            app:layout_constraintHorizontal_bias="1.0"
             app:srcCompat="@drawable/ic_camera_foreground" />
 
         <TextView
@@ -94,6 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -214,20 +240,33 @@
                     android:textColor="@android:color/black"/>
 
             </LinearLayout>
-            <Button
-                android:id="@+id/sign_out_btn"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/alt_btn_styling"
-                android:padding="20dp"
-                android:text="Đăng Xuất"
-                android:textSize="30sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp" />
+                >
+                <Button
+                    android:id="@+id/sign_out_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/alt_btn_styling"
+                    android:padding="10dp"
+                    android:text="Đăng Xuất"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

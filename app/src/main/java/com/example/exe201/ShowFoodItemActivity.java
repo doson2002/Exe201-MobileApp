@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +36,9 @@ import com.example.exe201.DTO.CartFoodItem;
 import com.example.exe201.DTO.FoodItem;
 import com.example.exe201.DTO.FoodType;
 import com.example.exe201.DTO.Menu;
+import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.Decorations.CustomDividerItemDecoration;
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,15 +61,44 @@ public class ShowFoodItemActivity extends AppCompatActivity {
     private  List<Menu> cartList = new ArrayList<>();
     private List<FoodType> foodTypeList = new ArrayList<>();
     private List<Menu> foodItemList = new ArrayList<>();
+    private ImageView backArrow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_food_item);
-        // Nhận SupplierId từ Intent
-        int supplierId = getIntent().getIntExtra("supplier_id", -1);
+
+
+        backArrow = findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Quay lại trang trước
+                onBackPressed();
+            }
+        });
+        // Bước 1: Lấy TextView cần hiển thị tên nhà cung cấp
+        TextView textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
+        TextView textViewReviews = findViewById(R.id.textViewReviews);
+
+
+        // Nhận đối tượng SupplierInfo từ Intent
+        SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
+        int supplierId = supplierInfo.getId();
         if(supplierId != -1){
             getFoodTypeSupplierId(supplierId);
+        }
+
+        // Nếu SupplierInfo không null, hiển thị tên nhà cung cấp
+        if (supplierInfo != null) {
+            // Bước 3: Lấy tên nhà cung cấp từ SupplierInfo và thiết lập cho TextView
+            String supplierName = supplierInfo.getRestaurantName();
+            int totalRating = supplierInfo.getTotalReviewCount();
+            textViewReviews.setText(String.format("(%d ratings)", totalRating));
+            textViewRestaurantName.setText(supplierName);
+        } else {
+            // Nếu supplierInfo null, bạn có thể hiển thị thông báo lỗi hoặc tên mặc định
+            textViewRestaurantName.setText("Unknown Supplier");
         }
         parentLinearLayout = findViewById(R.id.parentLinearLayout);
 
