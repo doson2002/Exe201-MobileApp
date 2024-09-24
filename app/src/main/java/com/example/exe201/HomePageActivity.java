@@ -56,15 +56,17 @@ public class HomePageActivity extends AppCompatActivity {
                     case R.id.action_home:
                         // Handle Home action
                         return true;
-                    case R.id.action_search:
+                    case R.id.action_activity:
+                        Intent intentProgress = new Intent(HomePageActivity.this, ProfileActivity.class); // Thay bằng activity của bạn
+                        startActivity(intentProgress);
                         // Handle Search action
                         return true;
                     case R.id.action_notifications:
                         // Handle Notifications action
                         return true;
                     case R.id.action_profile:
-                        Intent intent = new Intent(HomePageActivity.this, ProfileActivity.class); // Thay bằng activity của bạn
-                        startActivity(intent);
+                        Intent intentProfile = new Intent(HomePageActivity.this, ProfileActivity.class); // Thay bằng activity của bạn
+                        startActivity(intentProfile);
                         // Handle Profile action
                         return true;
                 }

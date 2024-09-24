@@ -12,6 +12,7 @@
     <string name="go_to_sign_in">Already have account? Sign In</string>
     <!--    For Sign Up Page/ Activity-->
     <string name="go_to_sign_up">Don\'t have account? Sign In</string>
+    <string name="MAPS_API_KEY">AIzaSyDunPQAsRhc7Y0ZHDLxglB7BQ2GXLQ1uCA</string>
 
 
     <string-array name="gender_array">
@@ -28,6 +29,7 @@
         <item>Trả phí</item>
         <item>Miễn phí</item>
     </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
 
 
 </resources>

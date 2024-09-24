@@ -45,10 +45,17 @@ public class SupplierTypeAdapter extends RecyclerView.Adapter<SupplierTypeAdapte
 
         // Kiểm tra vị trí được chọn
         if (selectedPosition == holder.getAdapterPosition()) {
-            holder.itemView.setBackgroundResource(R.drawable.circle_with_check); // Thay thế bằng background của bạn
-        } else {
-            holder.itemView.setBackgroundResource(R.drawable.image_view_background); // Thay thế bằng background của bạn
+            // Hiển thị overlayBackground khi được chọn
+            holder.overlayBackground.setVisibility(View.VISIBLE);
 
+            // Đổi màu chữ thành màu cam khi được chọn
+            holder.textViewSupplierTypeName.setTextColor(context.getResources().getColor(android.R.color.holo_orange_dark));
+        } else {
+            // Trở về background ban đầu
+            // Ẩn overlayBackground khi không được chọn
+            holder.overlayBackground.setVisibility(View.GONE);
+            // Trở về màu chữ ban đầu
+            holder.textViewSupplierTypeName.setTextColor(context.getResources().getColor(android.R.color.black));
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -57,6 +64,7 @@ public class SupplierTypeAdapter extends RecyclerView.Adapter<SupplierTypeAdapte
             notifyDataSetChanged();
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -70,11 +78,14 @@ public class SupplierTypeAdapter extends RecyclerView.Adapter<SupplierTypeAdapte
     public static class SupplierTypeViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewSupplierType;
         TextView textViewSupplierTypeName;
+        View overlayBackground;
 
         public SupplierTypeViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewSupplierType = itemView.findViewById(R.id.imageViewSupplierType);
             textViewSupplierTypeName = itemView.findViewById(R.id.textViewSupplierTypeName);
+            overlayBackground = itemView.findViewById(R.id.overlayBackground);
+
         }
     }
 }

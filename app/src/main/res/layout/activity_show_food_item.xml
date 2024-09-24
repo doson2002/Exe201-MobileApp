@@ -10,7 +10,7 @@
 
     <!-- Image for the dish -->
     <ImageView
-        android:id="@+id/imageViewDish"
+        android:id="@+id/imageViewSupplier"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -19,15 +19,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-
-
     <LinearLayout
         android:id="@+id/linearLayoutBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@id/imageViewDish"
+        app:layout_constraintTop_toTopOf="@id/imageViewSupplier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp"
@@ -62,6 +59,96 @@
             android:layout_gravity="end"
             android:layout_margin="16dp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/topBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white"
+        android:elevation="10dp">
+
+        <!-- Back Arrow and Restaurant Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Back button -->
+            <ImageView
+                android:id="@+id/back_arrow_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/circle_background_back_button"
+                android:padding="8dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="Back Arrow" />
+
+            <!-- TextView for Restaurant Name -->
+            <TextView
+                android:id="@+id/textViewRestaurantName1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Hủ Tiếu Đêm Cô Bình"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <!-- Search Bar (replaces 'For You' TextView) -->
+        <LinearLayout
+            android:id="@+id/searchBarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <!-- EditText for the Search Bar -->
+                <EditText
+                    android:id="@+id/searchBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search"
+                    android:paddingStart="40dp"
+                    android:padding="12dp"
+                    android:background="@color/light_black"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_vertical" />
+
+                <!-- Search Icon inside the search bar, aligned to the left -->
+                <ImageView
+                    android:id="@+id/searchIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search_foreground"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="Search Icon" />
+
+            </FrameLayout>
+
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
 
 
     <!-- NestedScrollView bao quanh LinearLayout -->

@@ -39,11 +39,21 @@ public class OrderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private ImageView backArrow;
+    private TextView textViewEditAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order);
+
+        textViewEditAddress= findViewById(R.id.textViewEditAddress);
+        textViewEditAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {

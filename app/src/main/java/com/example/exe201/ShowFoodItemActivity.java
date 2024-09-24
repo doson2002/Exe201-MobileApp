@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodItemAdapter;
 import com.example.exe201.Adapter.FoodItemCustomerAdapter;
@@ -50,25 +52,53 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShowFoodItemActivity extends AppCompatActivity {
+public class ShowFoodItemActivity extends AppCompatActivity{
 
-    private LinearLayout parentLinearLayout, addToCart;
+    private LinearLayout parentLinearLayout, addToCart, linearLayoutRating;
     private TextView basketItemCount, basketTotalPrice;
     // Khai báo cartMap để lưu các món ăn và số lượng
     private FoodItemCustomerAdapter foodAdapter;
+    private LinearLayout searchBarContainer ;
+    private NestedScrollView nestedScrollView ;
 
 
     private  List<Menu> cartList = new ArrayList<>();
     private List<FoodType> foodTypeList = new ArrayList<>();
     private List<Menu> foodItemList = new ArrayList<>();
-    private ImageView backArrow;
+    private ImageView backArrow, imageViewSupplier;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_food_item);
 
+        SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
 
+        searchBarContainer = findViewById(R.id.searchBarContainer);
+        nestedScrollView = findViewById(R.id.nestedScrollViewContent);
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > 100) {
+                    imageViewSupplier.setVisibility(View.GONE);  // Hide the image
+                    searchBarContainer.setVisibility(View.VISIBLE);  // Show search bar
+                } else {
+                    imageViewSupplier.setVisibility(View.VISIBLE);  // Show the image
+                    searchBarContainer.setVisibility(View.GONE);  // Hide search bar
+                }
+            }
+        });
+
+        linearLayoutRating = findViewById(R.id.linearLayoutRating);
+        linearLayoutRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShowFoodItemActivity.this, CustomerReviewActivity.class);
+                intent.putExtra("supplier", supplierInfo);
+                startActivity(intent);
+            }
+        });
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,12 +112,18 @@ public class ShowFoodItemActivity extends AppCompatActivity {
         TextView textViewReviews = findViewById(R.id.textViewReviews);
 
 
-        // Nhận đối tượng SupplierInfo từ Intent
-        SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
+
         int supplierId = supplierInfo.getId();
         if(supplierId != -1){
             getFoodTypeSupplierId(supplierId);
         }
+
+        imageViewSupplier = findViewById(R.id.imageViewSupplier);
+        String supplierUrl = supplierInfo.getImgUrl();
+        // Load the image using Glide
+        Glide.with(this)
+                .load(supplierUrl)
+                .into(imageViewSupplier);
 
         // Nếu SupplierInfo không null, hiển thị tên nhà cung cấp
         if (supplierInfo != null) {
@@ -259,72 +295,6 @@ public class ShowFoodItemActivity extends AppCompatActivity {
             Volley.newRequestQueue(this).add(foodItemRequest);        }
     }
 
-//    private void displayFoodTypes() {
-//        // Lấy RecyclerView từ XML
-//        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-//        CustomDividerItemDecoration itemDecoration = new CustomDividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-//        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.divider);
-//        itemDecoration.setDrawable(dividerDrawable);
-//        recyclerView.addItemDecoration(itemDecoration);
-//
-//        // Danh sách chung để chứa toàn bộ FoodItems
-//        final List<Menu> allFoodItems = new ArrayList<>();
-//
-//        // Vòng lặp qua từng FoodType và thêm các FoodItem vào danh sách chung
-//        for (final FoodType foodType : foodTypeList) {
-//            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-//            String jwtToken = sharedPreferences.getString("JwtToken", null);
-//
-//            // Gọi API để lấy danh sách FoodItem theo FoodTypeId
-//            String url = ApiEndpoints.GET_FOOD_ITEM_BY_FOOD_TYPE_ID + "/" + foodType.getId();
-//            JsonArrayRequest foodItemRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-//                    new Response.Listener<JSONArray>() {
-//                        @Override
-//                        public void onResponse(JSONArray response) {
-//                            for (int i = 0; i < response.length(); i++) {
-//                                try {
-//                                    JSONObject jsonObject = response.getJSONObject(i);
-//                                    int id = jsonObject.getInt("id");
-//                                    String name = jsonObject.getString("food_name");
-//                                    double price = jsonObject.getDouble("price");
-//                                    String imageUrl = jsonObject.getString("image_url");
-//                                    String description = jsonObject.getString("description");
-//
-//                                    Menu foodItem = new Menu(id, name, description, price, imageUrl);
-//                                    allFoodItems.add(foodItem);
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            // Đặt Adapter cho RecyclerView với danh sách tổng hợp các FoodItem
-//                            foodAdapter = new FoodItemCustomerAdapter(
-//                                    allFoodItems,
-//                                    ShowFoodItemActivity.this);
-//                            recyclerView.setAdapter(foodAdapter);
-//
-//                            // Đặt chiều cao cho RecyclerView dựa trên số lượng mục
-//                            setRecyclerViewHeight(recyclerView, allFoodItems.size());
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    Log.e("Volley Error", error.toString());
-//                }
-//            }) {
-//                @Override
-//                public Map<String, String> getHeaders() {
-//                    Map<String, String> headers = new HashMap<>();
-//                    headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
-//                    return headers;
-//                }
-//            };
-//
-//            // Thêm yêu cầu vào hàng đợi
-//            Volley.newRequestQueue(this).add(foodItemRequest);
-//        }
-//    }
 
 
 
@@ -343,8 +313,12 @@ public class ShowFoodItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             if (data.hasExtra("updated_cart_list")) {
-                cartList = (List<Menu>) data.getSerializableExtra("updated_cart_list"); // Nhận giỏ hàng đã cập nhật
-                updateCartInfo(); // Cập nhật thông tin giỏ hàng trên UI
+                List<Menu> updatedCartList = (List<Menu>) data.getSerializableExtra("updated_cart_list"); // Nhận giỏ hàng đã cập nhật
+                if (updatedCartList != null) {
+                    cartList.clear();
+                    cartList.addAll(updatedCartList); // Cập nhật giỏ hàng
+                    updateCartInfo(); // Cập nhật giao diện giỏ hàng
+                }
             }
         }
     }
@@ -353,6 +327,7 @@ public class ShowFoodItemActivity extends AppCompatActivity {
         double totalPrice = 0;
         for (Menu item : cartList) {
             totalPrice += item.getPrice() * item.getQuantity();
+
         }
         basketTotalPrice.setText(String.format("%,.0fđ ", totalPrice)); // Cập nhật tổng giá
         basketItemCount.setText(String.valueOf(cartList.size()) + " Món"); // Cập nhật số lượng

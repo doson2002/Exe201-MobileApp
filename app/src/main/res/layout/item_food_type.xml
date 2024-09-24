@@ -7,14 +7,22 @@
     android:background="@color/white"
     android:padding="8dp">
 
-    <!-- Sử dụng CircleImageView thay cho ImageView -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewFoodType"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ic_launcher_background"
-        app:civ_border_width="2dp"
-        app:civ_border_color="@android:color/holo_green_dark"/>
+    <FrameLayout
+        android:id="@+id/frameLayoutFoodType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <!-- CircleImageView with no background initially -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewFoodType"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_launcher_background"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@android:color/holo_green_dark"/>
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textViewFoodTypeName"
@@ -25,4 +33,5 @@
         android:text="Food Type"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
+
 </LinearLayout>

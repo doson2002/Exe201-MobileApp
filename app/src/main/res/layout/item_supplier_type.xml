@@ -7,14 +7,30 @@
     android:background="@color/white"
     android:padding="8dp">
 
-    <!-- Sử dụng CircleImageView thay cho ImageView -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewSupplierType"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ic_launcher_background"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@android:color/holo_green_dark"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/white"
+       >
+
+        <!-- Overlay background with green circle and checkmark (this will be on top) -->
+        <View
+            android:id="@+id/overlayBackground"
+            android:layout_width="83dp"
+            android:layout_height="83dp"
+            android:background="@drawable/circle_with_check"
+            android:visibility="gone"/> <!-- Initially hidden -->
+
+        <!-- Image view to display supplier type image -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewSupplierType"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+
+            />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textViewSupplierTypeName"
@@ -25,4 +41,5 @@
         android:text="Supplier Type"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
+
 </LinearLayout>

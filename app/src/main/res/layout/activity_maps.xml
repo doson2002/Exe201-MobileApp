@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapsActivity">
+
+    <!-- Search bar at the top -->
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#E0E0E0"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            android:layout_gravity="center_vertical"/>
+
+        <!-- Search field -->
+        <EditText
+            android:id="@+id/deliver_to"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="Deliver to"
+            android:background="@color/light_black"
+            android:paddingStart="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/baseline_add_location_alt_24"/>
+    </LinearLayout>
+
+    <!-- Google Map Fragment -->
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"/>
+
+    <!-- Bottom Sheet for location options -->
+    <LinearLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/current_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ho Chi Minh City Student Cultural House"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/location_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Luu Huu Phuoc, P. Dong Hoa, Binh Duong"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <!-- Location options -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp">
+
+
+
+            <!-- Option 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/baseline_add_location_alt_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Luu Huu Phuoc Gate"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:paddingStart="10dp"/>
+            </LinearLayout>
+
+            <!-- Choose location button -->
+            <Button
+                android:id="@+id/choose_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Choose This Location"
+                android:backgroundTint="@color/orange"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
