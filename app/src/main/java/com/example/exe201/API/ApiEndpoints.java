@@ -31,11 +31,16 @@ public class ApiEndpoints {
     public static final String UPDATE_OPEN_CLOSE_TIME = BASE_URL + "supplier_info/update_time";
     public static final String GET_ALL_SUPPLIER_TYPES = BASE_URL + "supplier_types/get_all_supplier_types";
     public static final String GET_SUPPLIER_BY_SUPPLIER_TYPE_ID  = BASE_URL + "supplier_info/get_supplier_by_supplier_type_id";
+    public static final String GET_SUPPLIER_BY_ID  = BASE_URL + "supplier_info/get_supplier_by_id";
 
 
     //Food type
     public static final String GET_ALL_FOOD_TYPES = BASE_URL + "food_types/get_all_food_types";
     public static final String GET_FOOD_TYPES_BY_SUPPLIER_ID = BASE_URL + "food_types/get_food_type_by_supplier_id";
+
+ // Rating
+ public static final String GET_RATING_BY_SUPPLIER_ID = BASE_URL + "order_ratings/get_rating_by_supplier_id";
+    public static final String CREATE_RATING = BASE_URL + "order_ratings/add_rating";
 
 
 

@@ -44,8 +44,9 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
         this.basketTotalPrice = basketTotalPrice;
 
     }
-    public void updateData(List<Menu> foodItemList){
-        this.foodItemList = foodItemList;
+
+    public void updateCartList(List<Menu> updatedCartList){
+        this.cartList = updatedCartList;
         notifyDataSetChanged();
     }
 
@@ -85,11 +86,22 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
         holder.imgAddFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!cartList.contains(foodItem)) { // Nếu chưa có trong giỏ hàng
+                // Kiểm tra nếu món ăn đã có trong giỏ hàng
+                boolean itemExists = false;
+                for (Menu item : cartList) {
+                    if (item.getId() == foodItem.getId()) { // So sánh ID
+                        itemExists = true;
+                        // Tăng số lượng món ăn trong giỏ hàng
+                        item.setQuantity(item.getQuantity() + 1);
+                        break; // Kết thúc vòng lặp khi đã tìm thấy
+                    }
+                }
+
+                // Nếu món ăn chưa có trong giỏ hàng, thêm mới
+                if (!itemExists) {
+                    foodItem.setQuantity(1); // Đặt số lượng ban đầu là 1
                     cartList.add(foodItem); // Thêm vào giỏ hàng
                 }
-                // Tăng số lượng món ăn trong đối tượng Menu
-                foodItem.setQuantity(foodItem.getQuantity() + 1);
 
                 updateBasketUI();
                 // Cập nhật giao diện số lượng trên TextView
