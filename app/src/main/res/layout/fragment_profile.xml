@@ -141,7 +141,7 @@
                 android:textColorHint="@color/black"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
-                 />
+                />
 
             <!-- Số điện thoại -->
             <TextView
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:background="@drawable/edit_text_border"
-                 />
+                />
 
             <!-- Địa chỉ email -->
             <TextView

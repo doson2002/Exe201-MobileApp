@@ -18,6 +18,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".FoodItemGroupedBySupplierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FoodOrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BottomNavHomePageActivity"
+            android:exported="false" />
+        <activity
             android:name=".OrderProgressActivity"
             android:exported="false" />
         <!--
