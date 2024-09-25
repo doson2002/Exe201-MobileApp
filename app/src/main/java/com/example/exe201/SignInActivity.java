@@ -115,7 +115,7 @@ public class SignInActivity extends AppCompatActivity {
                         if(role.equalsIgnoreCase("ROLE_PARTNER")) {
 
                             if(!firstLogin){
-                                Intent goToProfile = new Intent(SignInActivity.this, HomePageActivity.class);
+                                Intent goToProfile = new Intent(SignInActivity.this, BottomNavHomePageActivity.class);
                                 // Pass Values To Profile Activity:
                                 goToProfile.putExtra("full_name", full_name);
                                 goToProfile.putExtra("email", email);
@@ -132,7 +132,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         } else if (role.equalsIgnoreCase("ROLE_CUSTOMER")) {
                             // Set Intent for go to profile
-                            Intent goToProfile = new Intent(SignInActivity.this, ProfileActivity.class);
+                            Intent goToProfile = new Intent(SignInActivity.this, BottomNavHomePageActivity.class);
                             // Start Activity:
                             startActivity(goToProfile);
                         }

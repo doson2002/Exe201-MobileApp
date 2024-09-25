@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 // Kiểm tra role của người dùng
                 if (role != null && role.equalsIgnoreCase("ROLE_CUSTOMER")) {
                     // Người dùng là Customer -> chuyển tới HomePageActivity
-                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, BottomNavHomePageActivity.class);
                     startActivity(intent);
                     finish();  // Kết thúc MainActivity
                 } else if (role != null && role.equalsIgnoreCase("ROLE_PARTNER")) {

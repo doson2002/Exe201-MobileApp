@@ -57,6 +57,9 @@ public class SupplierForCustomer extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_supplier_for_customer);
 
+        int supplierTypeId = getIntent().getIntExtra("supplierTypeId", 0);
+        loadSuppliersBySupplierTypeId(supplierTypeId);
+//
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,6 +229,12 @@ public class SupplierForCustomer extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(this).add(jsonArrayRequest);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Áp dụng hoạt ảnh khi quay lại trang trước
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
     }
 
 

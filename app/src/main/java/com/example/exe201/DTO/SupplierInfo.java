@@ -30,6 +30,15 @@ public class SupplierInfo implements Parcelable {
         this.imgUrl = imgUrl;
 
     }
+    public SupplierInfo(int id, String restaurantName, String imgUrl
+            , double totalStarRating, int totalReviewCount) {
+        this.id = id;
+        this.restaurantName = restaurantName;
+        this.imgUrl = imgUrl;
+        this.totalStarRating = totalStarRating;
+        this.totalReviewCount = totalReviewCount;
+
+    }
 
     protected SupplierInfo(Parcel in) {
         id = in.readInt();
