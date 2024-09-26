@@ -178,7 +178,7 @@ public class FoodItemActivity extends AppCompatActivity {
                                FoodItem foodItem = new FoodItem(
                                        foodItemJson.getInt("id"),
                                        foodItemJson.getString("food_name"),
-                                       foodItemJson.getInt("quantity"),
+                                       foodItemJson.getInt("quantity_sold"),
                                        foodItemJson.getDouble("price"),
                                        foodItemJson.getString("image_url"),
                                        supplierInfo,

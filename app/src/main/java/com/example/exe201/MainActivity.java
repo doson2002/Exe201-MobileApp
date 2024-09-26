@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     //End of On Create method
 
     public void goToSignUp(View view) {
-        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+        Intent intent = new Intent(MainActivity.this, ChooseRole.class);
         startActivity(intent);
         finish();
     }

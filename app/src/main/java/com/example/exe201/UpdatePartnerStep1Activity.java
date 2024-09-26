@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 public class UpdatePartnerStep1Activity extends AppCompatActivity {
 
     private EditText restaurantName, description;
+    private String restaurantNameString = "";
+    private String descriptionString = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,10 +30,11 @@ public class UpdatePartnerStep1Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UpdatePartnerStep1Activity.this, UpdatePartnerStep2Activity.class);
-
+                restaurantNameString = restaurantName.getText().toString();
+                descriptionString = description.getText().toString();
                 // Pass the data to the second Activity
-                intent.putExtra("restaurantName", restaurantName.getText().toString());
-                intent.putExtra("description", description.getText().toString());
+                intent.putExtra("restaurantName", restaurantNameString);
+                intent.putExtra("description", descriptionString);
                 startActivity(intent);
             }
         });

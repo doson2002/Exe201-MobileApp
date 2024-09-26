@@ -181,7 +181,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         errorMessage = data.optString("message", "Unknown error");
                                     } catch (JSONException e) {
                                         e.printStackTrace();
-                                        errorMessage = "Error parsing server response";
+                                        errorMessage = "Email đã tồn tại, vui lòng chọn email khác";
                                     }
                                 } else {
                                     // Nếu phản hồi rỗng hoặc null

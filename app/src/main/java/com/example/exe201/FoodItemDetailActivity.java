@@ -411,7 +411,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         JSONObject foodItemJson = new JSONObject();
         try {
             foodItemJson.put("food_name", foodName);
-            foodItemJson.put("quantity", quantity);
+            foodItemJson.put("quantity_sold", quantity);
             foodItemJson.put("price", price);
             foodItemJson.put("status", status);
             foodItemJson.put("image_url", imgUrl); // URL ảnh từ Firebase

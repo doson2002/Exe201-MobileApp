@@ -29,12 +29,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.DTO.PhuongXa;
 import com.example.exe201.DTO.Quan;
+import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.DTO.TinhThanh;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,16 +52,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UpdatePartnerStep2Activity extends AppCompatActivity {
 
-     EditText slogan;
      String restaurantName, description;
      ImageView imageView;
      FloatingActionButton button;
+     Button submitButton;
      Uri imageUri;
-     String imageUrl;
+     String imageUrl = "";
+     Spinner spinnerSupplierType;
+    private ArrayList<SupplierType> supplierTypes = new ArrayList<>();
     private Spinner spinnerTinh, spinnerQuan, spinnerPhuong;
     private ArrayAdapter<TinhThanh> adapterTinh;
     private ArrayAdapter<Quan>       adapterQuan;
@@ -74,6 +79,7 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
     private PhuongXa selectedPhuong;
 
     private String fullAddress;
+    private int selectedSupplierTypeId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +96,9 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
             }
         });
 
-        slogan = findViewById(R.id.slogan);
 
-        Button submitButton = findViewById(R.id.submit_button);
+
+        submitButton = findViewById(R.id.submit_button);
         imageView = findViewById(R.id.imageView);
         button = findViewById(R.id.floatingActionButton);
 
@@ -108,6 +114,26 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
         listPhuong.add(new PhuongXa("","Chọn Phường"));
 
 
+        spinnerSupplierType = findViewById(R.id.type_spinner);
+        // Gọi API để lấy danh sách Supplier Types
+        getAllSupplierTypes();
+
+        spinnerSupplierType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Lấy SupplierType đã chọn
+                SupplierType selectedSupplierType = (SupplierType) parent.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), "Selected: " + selectedSupplierType.getTypeName(), Toast.LENGTH_SHORT).show();
+
+                // Lưu id hoặc thực hiện thao tác khác với supplierTypeId
+                selectedSupplierTypeId = selectedSupplierType.getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Xử lý nếu không có gì được chọn (tuỳ chọn)
+            }
+        });
 
         // Ánh xạ Spinner
         spinnerTinh = findViewById(R.id.spinner_tinh);
@@ -217,6 +243,8 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 if (imageUri != null) {
                     uploadImageToFirebase(imageUri); // Upload ảnh lên Firebase
+                }else{
+                    sendDataToApi();
                 }
             }
         });
@@ -224,6 +252,73 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
 
 
     }
+    private void getAllSupplierTypes() {
+        String url = ApiEndpoints.GET_ALL_SUPPLIER_TYPES; // URL của API
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        // Tạo RequestQueue
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // Tạo JsonArrayRequest để nhận danh sách các loại nhà cung cấp
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Tạo danh sách để lưu các SupplierType
+
+
+                        // Duyệt qua mảng JSON và chuyển đổi thành các đối tượng SupplierType
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                int id = jsonObject.getInt("id");
+                                String typeName = jsonObject.getString("typeName");
+                                String imgUrl = jsonObject.getString("imgUrl");
+
+                                SupplierType supplierType = new SupplierType(id, typeName, imgUrl);
+                                supplierTypes.add(supplierType);
+                            }
+
+                            // Gán danh sách vào Spinner
+                            populateSpinner(supplierTypes);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Xử lý lỗi nếu có
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+
+        // Thêm yêu cầu vào hàng đợi
+        queue.add(jsonArrayRequest);
+    }
+    private void populateSpinner(List<SupplierType> supplierTypeList) {
+        // Tạo ArrayAdapter để hiển thị danh sách lên Spinner
+        ArrayAdapter<SupplierType> adapter = new ArrayAdapter<>(
+                this, R.layout.spinner_item, supplierTypeList
+        );
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        spinnerSupplierType.setAdapter(adapter);
+        // In log để kiểm tra adapter
+        Log.d("Spinner Adapter", adapter.toString());
+
+    }
+
 
     private void getTinhThanh() {
         String url = "https://esgoo.net/api-tinhthanh/1/0.htm";
@@ -379,7 +474,7 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
             jsonBody.put("description", description);
             jsonBody.put("address", fullAddress);
             jsonBody.put("img_url", imageUrl); // URL của ảnh đã upload
-            jsonBody.put("slogan", slogan.getText().toString());
+            jsonBody.put("supplier_type_id", selectedSupplierTypeId);
             jsonBody.put("user_id", userId); // Giá trị user_id dạng int
         } catch (JSONException e) {
             e.printStackTrace();

@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,8 @@ public class PartnerHomePageActivity extends AppCompatActivity {
 
     private TextView openTimeTextView, closeTimeTextView;
     private LocalTime openTime, closeTime;
-    private ImageView timeIcon, accountIcon;
+    private LinearLayout timeIcon, reportIcon,menuIcon;
+    private ImageView accountIcon;
 
 
     @Override
@@ -67,11 +69,19 @@ public class PartnerHomePageActivity extends AppCompatActivity {
             }
         });
 
-        ImageView menuIcon = findViewById(R.id.menu_icon);
+        menuIcon = findViewById(R.id.menu_icon);
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PartnerHomePageActivity.this, FoodItemActivity.class); // Thay bằng activity của bạn
+                startActivity(intent);
+            }
+        });
+        reportIcon = findViewById(R.id.reportIcon);
+        reportIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PartnerHomePageActivity.this, ReportForPartnerActivity.class); // Thay bằng activity của bạn
                 startActivity(intent);
             }
         });

@@ -1,0 +1,251 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white">
+
+        <!-- ImageView for Back Arrow -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="Back Arrow"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+        <!-- Title TextView -->
+        <TextView
+            android:id="@+id/textViewReportTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Báo Cáo Thống Kê"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/textViewTypeReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn loại báo cáo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:textColor="@android:color/black"/>
+
+    <!-- RadioGroup to choose report type -->
+    <RadioGroup
+        android:id="@+id/radioGroupReportType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <RadioButton
+            android:id="@+id/radioByDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/black"
+            android:textColor="@color/black"
+            android:text="Báo cáo theo ngày" />
+
+        <RadioButton
+            android:id="@+id/radioByRange"
+            android:layout_width="wrap_content"
+            android:buttonTint="@color/black"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Báo cáo theo khoảng thời gian" />
+    </RadioGroup>
+
+    <!-- Date picker for single day -->
+    <!-- Date picker for single day -->
+    <LinearLayout
+        android:id="@+id/dayPickerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Vui lòng chọn ngày bạn muốn xem báo cáo:" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSelectDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:layout_marginTop="5dp"
+                android:text="Chọn ngày" />
+
+            <TextView
+                android:id="@+id/tvSelectedDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text=""
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Date pickers for range -->
+    <!-- Date pickers for range -->
+    <LinearLayout
+        android:id="@+id/rangePickerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Chọn ngày bắt đầu và kết thúc:" />
+
+        <!-- Horizontal layout for Start Date -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/btnSelectStartDate"
+                android:layout_width="0dp"
+                android:layout_marginHorizontal="60dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:layout_weight="1"
+                android:text="Chọn ngày bắt đầu" />
+
+        </LinearLayout>
+
+        <!-- TextView for Start Date -->
+        <TextView
+            android:id="@+id/tvSelectedStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="@android:color/darker_gray" />
+
+        <!-- Horizontal layout for End Date -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/btnSelectEndDate"
+                android:layout_width="0dp"
+                android:background="@color/blue"
+                android:layout_marginHorizontal="60dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CHỌN NGÀY KẾT THÚC" />
+
+        </LinearLayout>
+
+        <!-- TextView for End Date -->
+        <TextView
+            android:id="@+id/tvSelectedEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+
+
+
+    <!-- EditText to display total order count -->
+    <EditText
+        android:id="@+id/etTotalOrderCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:hint="Total Order Count"
+        android:padding="10dp"
+        android:textColorHint="@color/black"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:background="@android:color/transparent"
+        android:textStyle="bold"
+        android:inputType="number" />
+
+    <!-- EditText to display total revenue -->
+    <EditText
+        android:id="@+id/etTotalRevenue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:padding="10dp"
+        android:textColorHint="@color/black"
+        android:hint="Total Revenue"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:background="@android:color/transparent"
+        android:textStyle="bold"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/textViewTopSellingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Top các món bán chạy"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" /> <!-- Mặc định ẩn -->
+    <!-- RecyclerView to display the list of top-selling products -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTopSellingProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
+
+    <!-- Button to generate report -->
+    <Button
+        android:id="@+id/btnGenerateReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:background="@drawable/button_background"
+        android:padding="15dp"
+        android:text="TẠO BÁO CÁO"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp" />
+</LinearLayout>
