@@ -51,11 +51,11 @@
 
 
     <TextView
-        android:id="@+id/text_slogan"
+        android:id="@+id/text_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Restaurant Slogan"
+        android:text="Loại nhà hàng"
         android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,20 +63,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_step2" />
 
-    <EditText
-        android:id="@+id/slogan"
+    <Spinner
+        android:id="@+id/type_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:dropDownVerticalOffset="0dp"
+        android:popupBackground="@android:color/white"
         android:background="@drawable/edit_text_border"
-        android:hint="Slogan"
-        android:textColor="@color/black"
-        android:paddingLeft="10dp"
-        android:textColorHint="@color/light_purple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_slogan" />
+        app:layout_constraintTop_toBottomOf="@id/text_type"
+        android:prompt="@string/category_prompt" />
+
+
 
     <!-- Address (Tỉnh, Quận, Phường Spinners) -->
     <TextView
@@ -84,13 +85,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Restaurant Address"
+        android:text="Địa chỉ nhà hàng"
         android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slogan" />
+        app:layout_constraintTop_toBottomOf="@id/type_spinner" />
 
     <!-- Spinner for Province/City -->
     <Spinner
@@ -162,7 +163,7 @@
         android:id="@+id/submit_button"
         android:layout_width="178dp"
         android:layout_height="63dp"
-        android:layout_marginTop="292dp"
+        android:layout_marginTop="300dp"
         android:background="@drawable/button_background"
         android:text="Submit"
         android:textColor="@android:color/white"

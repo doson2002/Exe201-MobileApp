@@ -14,11 +14,11 @@
 
         <ImageView
             android:id="@+id/close_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_close_foreground"
             android:contentDescription="Close"
-            android:padding="8dp"/>
+            />
     </LinearLayout>
 
     <TextView
@@ -36,34 +36,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:padding="8dp"/>
+        android:textColor="@color/black"
+        android:padding="8dp"
+        android:layout_gravity="center" /> <!-- Căn giữa -->
+
     <Button
         android:id="@+id/open_time_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="90dp"
         android:text="Chọn giờ mở cửa"
         android:layout_marginTop="16dp"
-        android:gravity="center"/>
+        android:layout_gravity="center" /> <!-- Căn giữa -->
 
     <TextView
         android:id="@+id/close_time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center" /> <!-- Căn giữa -->
+
     <Button
         android:id="@+id/close_time_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Chọn giờ đóng cửa"
+        android:layout_marginHorizontal="90dp"
         android:layout_marginTop="16dp"
-        android:gravity="center"/>
+        android:layout_gravity="center" /> <!-- Căn giữa -->
 
     <Button
         android:id="@+id/save_button_time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lưu"
+        android:background="@drawable/button_background"
         android:layout_marginTop="16dp"
-        android:gravity="center"/>
+        android:layout_gravity="center" /> <!-- Căn giữa -->
 </LinearLayout>

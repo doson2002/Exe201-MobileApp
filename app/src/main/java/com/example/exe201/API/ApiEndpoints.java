@@ -28,6 +28,7 @@ public class ApiEndpoints {
 
 
 
+
     //Supplier
     public static final String GET_SUPPLIER_BY_USER_ID = BASE_URL + "supplier_info/get_supplier_by_user_id";
     public static final String UPDATE_OPEN_CLOSE_TIME = BASE_URL + "supplier_info/update_time";
@@ -49,6 +50,9 @@ public class ApiEndpoints {
     public static final String GET_ORDER_DETAIL = BASE_URL + "food_orders/get_food_order_by_id";
 
 
+ // Report
+    public static final String GET_REPORT_BY_DATE = BASE_URL + "report/report_for_partner_by_date?";
+    public static final String GET_REPORT_BY_DATE_RANGE = BASE_URL + "report/report_for_partner_by_range_date?";
 
 
 

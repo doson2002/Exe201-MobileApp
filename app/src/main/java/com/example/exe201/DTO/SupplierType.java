@@ -42,4 +42,9 @@ public class SupplierType {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    @Override
+    public String toString() {
+        return typeName;  // Trả về tên của loại nhà cung cấp để hiển thị trong Spinner
+    }
 }

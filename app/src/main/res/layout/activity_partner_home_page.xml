@@ -78,6 +78,7 @@
 
         <!-- Menu Icon -->
         <LinearLayout
+            android:id="@+id/menu_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -87,7 +88,6 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/menu_icon"
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
@@ -160,6 +160,7 @@
 
         <!-- Report Icon -->
         <LinearLayout
+            android:id="@+id/reportIcon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -268,6 +269,7 @@
 
         <!-- Close/Open Branch Icon -->
         <LinearLayout
+            android:id="@+id/time_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -277,7 +279,6 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/time_icon"
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
