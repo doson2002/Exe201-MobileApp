@@ -19,6 +19,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -50,7 +52,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodVi
         public TextView quantity;
         public TextView foodTypes;
         public Button btnViewDetail;
-        public ImageView deleteIcon;
+        public ImageView deleteIcon, starIcon;
 
         public FoodViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +63,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodVi
             foodTypes = itemView.findViewById(R.id.foodTypes); // Thêm TextView cho foodTypes
             btnViewDetail = itemView.findViewById(R.id.btnViewDetails);
             deleteIcon = itemView.findViewById(R.id.imgRemoveFood);
+            starIcon = itemView.findViewById(R.id.starIcon);
         }
     }
 
@@ -77,6 +80,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodVi
         holder.foodName.setText(foodItem.getFoodName());
         holder.price.setText(foodItem.getPrice() + " VND");
         holder.quantity.setText("Số lượng: " + foodItem.getQuantity());
+
 
         // Hiển thị các loại món ăn (nếu cần)
         StringBuilder types = new StringBuilder();
@@ -96,6 +100,28 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodVi
             Intent intent = new Intent(context, FoodItemDetailActivity.class);
             intent.putExtra("foodItemId", foodItem.getId()); // Truyền ID của FoodItem
             context.startActivity(intent);
+        });
+
+        // Hiển thị ngôi sao dựa vào isOffered
+        holder.starIcon.setImageResource(
+                foodItem.getIsOffered() == 1 ? R.drawable.baseline_star_24_filled : R.drawable.baseline_star_border_24
+        );
+        // Khi người dùng nhấn vào ngôi sao
+        holder.starIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Đổi trạng thái isOffered (0 -> 1, 1 -> 0)
+                int newOfferedStatus = foodItem.getIsOffered() == 1 ? 0 : 1;
+                foodItem.setIsOffered(newOfferedStatus);
+
+                // Cập nhật lại giao diện ngôi sao
+                holder.starIcon.setImageResource(
+                        newOfferedStatus == 1 ? R.drawable.baseline_star_24_filled : R.drawable.baseline_star_border_24
+                );
+
+                // Gọi API cập nhật trạng thái isOffered
+                updateOfferedStatus(foodItem.getId(), newOfferedStatus);
+            }
         });
         // Xử lý sự kiện nhấn vào icon xóa
         holder.deleteIcon.setOnClickListener(v -> {
@@ -160,6 +186,40 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodVi
 
         // Thêm request vào hàng đợi của Volley
         Volley.newRequestQueue(context).add(deleteRequest);
+    }
+
+    private void updateOfferedStatus(final int foodItemId, final int isOffered) {
+        // URL với query parameter isOffered
+        String url = ApiEndpoints.UPDATE_OFFERED_STATUS+"/" + foodItemId + "?isOffered=" + isOffered;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Cập nhật thành công
+                        Toast.makeText(context, "Trạng thái ưu tiên được cập nhật", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Xử lý lỗi
+                        Toast.makeText(context, "Lỗi khi cập nhật trạng thái ưu tiên", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // Thêm JWT Token vào header nếu cần
+                headers.put("Authorization", "Bearer " + jwtToken); // Thay jwtToken bằng token thực tế của bạn
+                return headers;
+            }
+        };
+
+        // Thêm yêu cầu vào RequestQueue
+        Volley.newRequestQueue(context).add(putRequest);
     }
 
 }

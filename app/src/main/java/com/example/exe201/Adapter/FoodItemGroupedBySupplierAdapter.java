@@ -28,6 +28,12 @@ public class FoodItemGroupedBySupplierAdapter extends RecyclerView.Adapter<FoodI
         this.foodItemList = foodItemList;
         this.context = context;
     }
+    // Phương thức để cập nhật danh sách món ăn
+    public void updateFoodItemList(List<FoodItemResponseWithSupplier> newFoodItemList) {
+        this.foodItemList.clear();  // Xóa danh sách cũ
+        this.foodItemList.addAll(newFoodItemList);  // Thêm danh sách mới
+        notifyDataSetChanged();  // Thông báo dữ liệu thay đổi để RecyclerView cập nhật
+    }
 
     @NonNull
     @Override
@@ -50,7 +56,7 @@ public class FoodItemGroupedBySupplierAdapter extends RecyclerView.Adapter<FoodI
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.baseline_downloading_24) // Ảnh mặc định khi đang tải
                         .error(R.drawable.baseline_downloading_24) // Ảnh mặc định khi URL rỗng hoặc lỗi
-                        .centerCrop() // Cắt ảnh cho vừa vặn với ImageView hình vuông
+                        .fitCenter() // Cắt ảnh cho vừa vặn với ImageView hình vuông
                         .transform(new RoundedCorners(30))) // Bo tròn 4 góc
                 .into(holder.foodImage);
 

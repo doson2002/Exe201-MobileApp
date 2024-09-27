@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".UpdateAddressActivity">
+
+    <!-- LinearLayout for Top Bar -->
+    <LinearLayout
+        android:id="@+id/linearTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white">
+
+        <!-- ImageView for Back Arrow -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="Back Arrow"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+        <!-- Title TextView -->
+        <TextView
+            android:id="@+id/textViewReportTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chỉnh sửa địa chỉ nhà hàng"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <!-- Address (Tỉnh, Quận, Phường Spinners) -->
+    <TextView
+        android:id="@+id/text_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ nhà hàng"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="24dp" />
+
+    <!-- Spinner for Province/City -->
+    <Spinner
+        android:id="@+id/spinner_tinh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_border" />
+
+    <!-- Spinner for District -->
+    <Spinner
+        android:id="@+id/spinner_quan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_border" />
+
+    <!-- Spinner for Ward -->
+    <Spinner
+        android:id="@+id/spinner_phuong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_border" />
+
+    <!-- Address Input -->
+    <EditText
+        android:id="@+id/address_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_purple"
+        android:hint="Địa chỉ cụ thể, số nhà"
+        android:background="@drawable/edit_text_border"/>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="178dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_background"
+        android:layout_gravity="center"
+        android:text="Submit"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/address_input" />
+</LinearLayout>

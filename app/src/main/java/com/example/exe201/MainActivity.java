@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.exe201.Fragment.Partner.PartnerHomeFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     Button sign_in, sign_up;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();  // Kết thúc MainActivity
                 } else if (role != null && role.equalsIgnoreCase("ROLE_PARTNER")) {
                     // Người dùng là Partner -> chuyển tới PartnerHomePageActivity
-                    Intent intent = new Intent(MainActivity.this, PartnerHomePageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, BottomNavPartnerHomeActivity.class);
                     startActivity(intent);
                     finish();  // Kết thúc MainActivity
                 } else {
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
      }
     //ENd of Go To Sign In activity.
     public void goToTest(View view){
-        Intent intent = new Intent(MainActivity.this, PartnerHomePageActivity.class);
+        Intent intent = new Intent(MainActivity.this, PartnerHomeFragment.class);
         startActivity(intent);
         finish();
     }

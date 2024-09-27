@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +35,10 @@ import com.bumptech.glide.Glide;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodItemAdapter;
 import com.example.exe201.Adapter.FoodItemCustomerAdapter;
+import com.example.exe201.Adapter.FoodItemGroupedBySupplierAdapter;
 import com.example.exe201.DTO.CartFoodItem;
 import com.example.exe201.DTO.FoodItem;
+import com.example.exe201.DTO.FoodItemResponseWithSupplier;
 import com.example.exe201.DTO.FoodType;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.SupplierInfo;
@@ -58,6 +61,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
     private TextView basketItemCount, basketTotalPrice;
     // Khai báo cartMap để lưu các món ăn và số lượng
     private FoodItemCustomerAdapter foodAdapter;
+    private FoodItemGroupedBySupplierAdapter foodItemOfferedAdapter;
     private LinearLayout searchBarContainer ;
     private NestedScrollView nestedScrollView ;
 
@@ -65,6 +69,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
     private  List<Menu> cartList = new ArrayList<>();
     private List<FoodType> foodTypeList = new ArrayList<>();
     private List<Menu> foodItemList = new ArrayList<>();
+    private List<FoodItemResponseWithSupplier> foodItemOfferedList = new ArrayList<>();
     private ImageView backArrow, imageViewSupplier;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         setContentView(R.layout.activity_show_food_item);
 
         SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
+
 
         searchBarContainer = findViewById(R.id.searchBarContainer);
         nestedScrollView = findViewById(R.id.nestedScrollViewContent);
@@ -89,6 +95,9 @@ public class ShowFoodItemActivity extends AppCompatActivity{
                 }
             }
         });
+        if(supplierInfo!=null){
+            setupRecyclerViewForFoodOffered(supplierInfo.getId());
+        }
 
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutRating.setOnClickListener(new View.OnClickListener() {
@@ -308,6 +317,21 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         recyclerView.setLayoutParams(params);
     }
 
+    private void setupRecyclerViewForFoodOffered(int supplierId) {
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewOffered);
+
+        // Sử dụng LinearLayoutManager với chiều ngang
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManager);
+
+        // Thiết lập Adapter
+        foodItemOfferedAdapter = new FoodItemGroupedBySupplierAdapter(foodItemOfferedList,this);
+        recyclerView.setAdapter(foodItemOfferedAdapter);
+
+        // Fetch data và cập nhật vào RecyclerView
+        fetchFoodItemsByOfferedStatus(supplierId, 1);  // Truyền 1 cho món ăn được ưu tiên
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -331,6 +355,54 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         }
         basketTotalPrice.setText(String.format("%,.0fđ ", totalPrice)); // Cập nhật tổng giá
         basketItemCount.setText(String.valueOf(cartList.size()) + " Món"); // Cập nhật số lượng
+    }
+
+    private void fetchFoodItemsByOfferedStatus(int supplierId, int isOffered) {
+        String url = ApiEndpoints.GET_FOOD_ITEMS_BY_OFFERED_STATUS+ "/" + supplierId + "?isOffered=" + isOffered;
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Parse response và cập nhật RecyclerView
+                        foodItemOfferedList = new ArrayList<>();
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject foodItemObj = response.getJSONObject(i);
+                                Long id = foodItemObj.getLong("id");
+                                String foodName = foodItemObj.getString("food_name");
+                                String imgUrl = foodItemObj.getString("image_url");
+                                double price = foodItemObj.getDouble("price");
+
+                                FoodItemResponseWithSupplier foodItem = new FoodItemResponseWithSupplier(id, foodName, price, imgUrl);
+                                foodItemOfferedList.add(foodItem);
+                            }
+
+                            // Cập nhật adapter với danh sách món ăn
+                            foodItemOfferedAdapter.updateFoodItemList(foodItemOfferedList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Xử lý lỗi
+                        Toast.makeText(ShowFoodItemActivity.this, "Lỗi khi lấy dữ liệu món ăn", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                        return headers;
+                    }
+                };
+
+        // Thêm request vào hàng đợi
+        Volley.newRequestQueue(this).add(request);
     }
 
 }

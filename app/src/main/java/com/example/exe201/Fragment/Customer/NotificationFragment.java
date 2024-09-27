@@ -1,4 +1,4 @@
-package com.example.exe201.Fragment;
+package com.example.exe201.Fragment.Customer;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

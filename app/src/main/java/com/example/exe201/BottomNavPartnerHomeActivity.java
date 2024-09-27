@@ -6,6 +6,9 @@ import android.view.MenuItem;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,38 +17,34 @@ import com.example.exe201.Fragment.Customer.ActivityFragment;
 import com.example.exe201.Fragment.Customer.HomeFragment;
 import com.example.exe201.Fragment.Customer.NotificationFragment;
 import com.example.exe201.Fragment.Customer.ProfileFragment;
+import com.example.exe201.Fragment.Partner.PartnerHomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class BottomNavHomePageActivity extends AppCompatActivity {
+public class BottomNavPartnerHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_bottom_nav_home_page);
+        setContentView(R.layout.activity_bottom_nav_partner_home);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set Fragment mặc định khi khởi tạo Activity
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
-                    new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_partner,
+                    new PartnerHomeFragment()).commit();
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_home:
-                        replaceFragment(new HomeFragment());
+                    case R.id.nav_home:
+                        replaceFragment(new PartnerHomeFragment());
                         break;
-                    case R.id.action_activity:
+                    case R.id.nav_promotion:
                         replaceFragment(new ActivityFragment());
                         break;
-                    case R.id.action_notifications:
-                        replaceFragment(new NotificationFragment());
-                        break;
-                    case R.id.action_profile:
-                        replaceFragment(new ProfileFragment());
-                        break;
+
                 }
                 return true;
             }
@@ -55,7 +54,7 @@ public class BottomNavHomePageActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.replace(R.id.frame_layout_partner, fragment);
         fragmentTransaction.commit();
     }
 }
