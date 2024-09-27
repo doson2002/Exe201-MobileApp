@@ -14,21 +14,37 @@ public class FoodItem  implements Serializable {
     private int quantity;
     private double price;
     private String imageUrl;
+    private int isOffered;
     private SupplierInfo supplierInfo;
     private List<FoodType> foodTypes;
 
     // Constructor, getters, and setters
-    public FoodItem(int id, String foodName, int quantity, double price, String imageUrl, SupplierInfo supplierInfo, List<FoodType> foodTypes) {
+    public FoodItem(int id, String foodName, int quantity, double price, String imageUrl,int isOffered, SupplierInfo supplierInfo, List<FoodType> foodTypes) {
         this.id = id;
         this.foodName = foodName;
         this.quantity = quantity;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.isOffered = isOffered;
         this.supplierInfo = supplierInfo;
         this.foodTypes = foodTypes;
     }
 
-    public FoodItem(int id, String foodName, double price, String imageUrl,String description, SupplierInfo supplierInfo) {
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getIsOffered() {
+        return isOffered;
+    }
+
+    public void setIsOffered(int isOffered) {
+        this.isOffered = isOffered;
+    }
+
+    public FoodItem(int id, String foodName, double price, String imageUrl, String description, SupplierInfo supplierInfo) {
         this.id = id;
         this.foodName = foodName;
         this.price = price;

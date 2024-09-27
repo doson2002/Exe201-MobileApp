@@ -1,11 +1,8 @@
-package com.example.exe201.Fragment;
+package com.example.exe201.Fragment.Customer;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -26,9 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodOrderAdapter;
 import com.example.exe201.DTO.FoodOrder;
-import com.example.exe201.ProfileActivity;
 import com.example.exe201.R;
-import com.example.exe201.SupplierForCustomer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

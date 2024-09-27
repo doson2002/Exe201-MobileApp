@@ -1,4 +1,4 @@
-package com.example.exe201.Fragment;
+package com.example.exe201.Fragment.Customer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +41,6 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
 import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.FoodItemGroupedBySupplierActivity;
-import com.example.exe201.HomePageActivity;
 import com.example.exe201.ProfileActivity;
 import com.example.exe201.R;
 import com.example.exe201.SupplierForCustomer;
@@ -51,7 +50,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

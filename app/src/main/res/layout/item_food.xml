@@ -93,6 +93,17 @@
             app:layout_constraintTop_toBottomOf="@id/imgRemoveFood"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Hình ngôi sao dưới nút "Xem chi tiết" -->
+        <ImageView
+            android:id="@+id/starIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/baseline_star_border_24"
+            android:contentDescription="Ngôi sao ưu tiên"
+            app:layout_constraintTop_toBottomOf="@id/btnViewDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

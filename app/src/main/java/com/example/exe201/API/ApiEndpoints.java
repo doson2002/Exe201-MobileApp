@@ -25,6 +25,8 @@ public class ApiEndpoints {
     public static final String GET_FOOD_ITEM_BY_FOOD_TYPE_ID  = BASE_URL + "food_item/get_food_item_by_food_type";
     public static final String GET_FOOD_ITEM_GROUPED_BY_SUPPLIER_ID  = BASE_URL + "food_item/get_food_items_grouped_by_supplierId?keyword=";
     public static final String GET_FOOD_ITEM_NAME_FOR_SUGGESTION  = BASE_URL + "food_item/get_all_food_item_names?keyword=";
+    public static final String UPDATE_OFFERED_STATUS  = BASE_URL + "food_item/update_offered_status";
+    public static final String GET_FOOD_ITEMS_BY_OFFERED_STATUS  = BASE_URL + "food_item/get_food_items_by_offered_status";
 
 
 
@@ -35,6 +37,7 @@ public class ApiEndpoints {
     public static final String GET_ALL_SUPPLIER_TYPES = BASE_URL + "supplier_types/get_all_supplier_types";
     public static final String GET_SUPPLIER_BY_SUPPLIER_TYPE_ID  = BASE_URL + "supplier_info/get_supplier_by_supplier_type_id";
     public static final String GET_SUPPLIER_BY_ID  = BASE_URL + "supplier_info/get_supplier_by_id";
+    public static final String UPDATE_SUPPLIER  = BASE_URL + "supplier_info/update";
 
 
     //Food type

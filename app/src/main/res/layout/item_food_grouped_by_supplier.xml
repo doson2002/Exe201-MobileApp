@@ -10,11 +10,10 @@
     <!-- ImageView để hiển thị ảnh món ăn -->
     <ImageView
         android:id="@+id/ivFoodImage"
-        android:layout_width="119dp"
+        android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background" /> <!-- Placeholder cho ảnh món ăn -->
+        android:scaleType="fitXY" /> <!-- Placeholder cho ảnh món ăn -->
 
     <!-- TextView để hiển thị giá món ăn -->
     <TextView
@@ -25,7 +24,7 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp" />
 
     <!-- TextView để hiển thị tên món ăn -->
@@ -35,6 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Cơm chiên hải sản"
         android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
         android:textSize="14sp"
         android:gravity="center_horizontal"
         android:layout_marginTop="4dp" />

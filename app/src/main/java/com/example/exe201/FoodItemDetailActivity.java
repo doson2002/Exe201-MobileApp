@@ -208,7 +208,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                         try {
                             // Cập nhật các trường
                             String foodName = response.getString("food_name");
-                            int quantity = response.getInt("quantity");
+                            int quantity = response.getInt("inventory_quantity");
                             double price = response.getDouble("price");
                             String status = response.getString("status");
                             String category = response.getString("category");
@@ -234,7 +234,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(FoodItemDetailActivity.this, "Error parsing food item data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FoodItemDetailActivity.this, "Lỗi load dữ liệu của món ăn", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -411,7 +411,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         JSONObject foodItemJson = new JSONObject();
         try {
             foodItemJson.put("food_name", foodName);
-            foodItemJson.put("quantity_sold", quantity);
+            foodItemJson.put("inventory_quantity", quantity);
             foodItemJson.put("price", price);
             foodItemJson.put("status", status);
             foodItemJson.put("image_url", imgUrl); // URL ảnh từ Firebase
