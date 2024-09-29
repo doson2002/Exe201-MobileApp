@@ -1,5 +1,7 @@
 package com.example.exe201.Fragment.Customer;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,9 +38,14 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
+import com.example.exe201.Adapter.FoodItemTopSoldAdapter;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
+import com.example.exe201.Adapter.TopSupplierRatingAdapter;
+import com.example.exe201.DTO.FoodItemTopSold;
+import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.FoodItemGroupedBySupplierActivity;
 import com.example.exe201.ProfileActivity;
@@ -57,6 +64,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class HomeFragment extends Fragment {
+
+    private RecyclerView recyclerViewTopSold;
+    private FoodItemTopSoldAdapter foodItemTopSoldAdapter;
+    private List<FoodItemTopSold> foodItemTopSoldList = new ArrayList<>();
+
     private AutoCompleteTextView searchAutoComplete;
     private Button btnSearch;
     private RecyclerView recyclerViewSupplierTypes;
@@ -64,11 +76,45 @@ public class HomeFragment extends Fragment {
     private List<String> suggestions = new ArrayList<>();
     private List<SupplierType> supplierTypeList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private RecyclerView topSupplierRecyclerView;
+    private TopSupplierRatingAdapter topSupplierAdapter;
+    private List<SupplierInfo> supplierList;
+    private int currentPage = 0;
+    private int pageSize = 5; // Kích thước mỗi trang
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_home_page, container, false);
+
+        recyclerViewTopSold = view.findViewById(R.id.recyclerBestFood);
+        recyclerViewTopSold.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
+
+        // Call API
+        fetchFoodItemsTopSold();
+        topSupplierRecyclerView = view.findViewById(R.id.recyclerViewSuppliers);
+        // Thiết lập LayoutManager với hướng nằm ngang
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        topSupplierRecyclerView.setLayoutManager(layoutManager);
+
+        supplierList = new ArrayList<>();
+        topSupplierAdapter = new TopSupplierRatingAdapter(supplierList, getActivity());
+        topSupplierRecyclerView.setAdapter(topSupplierAdapter);
+        // Gọi API để lấy dữ liệu
+        fetchSuppliers(currentPage, pageSize);
+        // Thiết lập listener cho việc cuộn
+        topSupplierRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1) && !isLoading && !isLastPage) {
+                    currentPage++;
+                    fetchSuppliers(currentPage, pageSize);
+                }
+            }
+        });
 
         // Ánh xạ các thành phần UI
         searchAutoComplete = view.findViewById(R.id.searchAutoComplete);
@@ -167,6 +213,115 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+    private void fetchSuppliers(int page, int size) {
+        isLoading = true;
+        String url = ApiEndpoints.GET_TOP_RATING+ "?page=" + page + "&size=" + size;  // Địa chỉ API của bạn
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("JwtToken", null);
+        // Tạo một RequestQueue
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+
+        // Tạo một JsonObjectRequest để gọi API
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray contentArray = response.getJSONArray("content");
+
+                            for (int i = 0; i < contentArray.length(); i++) {
+                                JSONObject supplierObject = contentArray.getJSONObject(i).getJSONObject("supplier");
+                                SupplierInfo supplier = new SupplierInfo();
+
+                                supplier.setId(supplierObject.getInt("id"));
+                                supplier.setRestaurantName(supplierObject.getString("restaurantName"));
+                                supplier.setImgUrl(supplierObject.getString("imgUrl"));
+                                supplier.setTotalStarRating(supplierObject.getDouble("totalStarRating"));
+                                supplier.setTotalReviewCount(supplierObject.getInt("totalReviewCount"));
+
+                                supplierList.add(supplier);
+                            }
+
+                            // Cập nhật adapter
+                            topSupplierAdapter.notifyDataSetChanged();
+
+                            // Kiểm tra xem đã đạt đến trang cuối chưa
+                            isLastPage = currentPage == response.getInt("totalPages") - 1;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } finally {
+                            isLoading = false;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Xử lý lỗi
+                        Log.e("API Error", error.toString());
+                        isLoading = false;
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        // Thêm request vào queue
+        queue.add(jsonObjectRequest);
+    }
+    private void fetchFoodItemsTopSold() {
+        String url = ApiEndpoints.GET_FOOD_ITEMS_TOP_SOLD;
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("JwtToken", null);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray contentArray = response.getJSONArray("content");
+                        for (int i = 0; i < contentArray.length(); i++) {
+                            JSONObject foodItemJson = contentArray.getJSONObject(i);
+                            FoodItemTopSold foodItemTopSold = new FoodItemTopSold();
+                            foodItemTopSold.setName(foodItemJson.getString("name"));
+                            foodItemTopSold.setQuantitySold(foodItemJson.getInt("quantitySold"));
+
+                            JSONObject supplierInfoJson = foodItemJson.getJSONObject("supplierInfo");
+                            SupplierInfo supplierInfo = new SupplierInfo();
+                            supplierInfo.setId(supplierInfoJson.getInt("id"));
+                            supplierInfo.setRestaurantName(supplierInfoJson.getString("restaurant_name"));
+                            supplierInfo.setImgUrl(supplierInfoJson.getString("img_url"));
+
+                            foodItemTopSold.setSupplierInfo(supplierInfo);
+                            foodItemTopSoldList.add(foodItemTopSold);
+                        }
+
+                        foodItemTopSoldAdapter = new FoodItemTopSoldAdapter(getContext(), foodItemTopSoldList);
+                        recyclerViewTopSold.setAdapter(foodItemTopSoldAdapter);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    // Handle error
+                    error.printStackTrace();
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
     }
     // Hàm chuyển sang FoodItemGroupedBySupplierActivity với từ khóa tìm kiếm
     private void startSearchActivity(String keyword) {
@@ -294,6 +449,7 @@ public class HomeFragment extends Fragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);
     }
+
 
 
 }
