@@ -145,28 +145,12 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_marginTop="40dp"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerBestFood"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Image Cards -->
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/food" />
-
-                </LinearLayout>
-            </HorizontalScrollView>
+                    android:layout_marginTop="40dp"
+                    android:scrollbars="horizontal" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -265,30 +249,13 @@
                     android:textColor="#FF9800"
                     android:textSize="12sp" />
             </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:scrollbars="none"
-                android:layout_marginTop="40dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSuppliers"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="40dp"
+                    android:scrollbars="horizontal" />
 
-                    <!-- Image Cards -->
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/food" />
-
-
-                </LinearLayout>
-            </HorizontalScrollView>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView

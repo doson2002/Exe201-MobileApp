@@ -27,6 +27,7 @@ public class ApiEndpoints {
     public static final String GET_FOOD_ITEM_NAME_FOR_SUGGESTION  = BASE_URL + "food_item/get_all_food_item_names?keyword=";
     public static final String UPDATE_OFFERED_STATUS  = BASE_URL + "food_item/update_offered_status";
     public static final String GET_FOOD_ITEMS_BY_OFFERED_STATUS  = BASE_URL + "food_item/get_food_items_by_offered_status";
+    public static final String GET_FOOD_ITEMS_TOP_SOLD  = BASE_URL + "food_item/top_sold";
 
 
 
@@ -38,6 +39,7 @@ public class ApiEndpoints {
     public static final String GET_SUPPLIER_BY_SUPPLIER_TYPE_ID  = BASE_URL + "supplier_info/get_supplier_by_supplier_type_id";
     public static final String GET_SUPPLIER_BY_ID  = BASE_URL + "supplier_info/get_supplier_by_id";
     public static final String UPDATE_SUPPLIER  = BASE_URL + "supplier_info/update";
+    public static final String GET_TOP_RATING  = BASE_URL + "supplier_info/top";
 
 
     //Food type
@@ -51,9 +53,10 @@ public class ApiEndpoints {
     //Food order
     public static final String GET_ORDER_BY_USER_ID = BASE_URL + "food_orders/get_food_order_by_userId";
     public static final String GET_ORDER_DETAIL = BASE_URL + "food_orders/get_food_order_by_id";
+    public static final String CREATE_ORDER = BASE_URL + "food_orders/create";
 
 
- // Report
+    // Report
     public static final String GET_REPORT_BY_DATE = BASE_URL + "report/report_for_partner_by_date?";
     public static final String GET_REPORT_BY_DATE_RANGE = BASE_URL + "report/report_for_partner_by_range_date?";
 

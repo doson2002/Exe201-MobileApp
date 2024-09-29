@@ -56,4 +56,5 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.ucrop)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 }
