@@ -72,5 +72,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="Thêm món ăn"
-        android:src="@drawable/ic_favourites_foreground" />
+        android:backgroundTint="@color/orange"
+        android:src="@drawable/baseline_add_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
