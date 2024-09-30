@@ -11,6 +11,8 @@
     <color name="blue">#2196F3</color>
     <color name="light_black">#E1E5E7</color>
     <color name="blue1">#0324FB</color>
+    <color name="green">#009688</color>
+
 
     <color name="colorHint">#888888</color> <!-- Màu hint (xám) -->
     <color name="colorText">#000000</color> <!-- Màu text (đen) -->

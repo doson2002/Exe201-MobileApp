@@ -115,7 +115,7 @@ public class SignInActivity extends AppCompatActivity {
                         if(role.equalsIgnoreCase("ROLE_PARTNER")) {
 
                             if(!firstLogin){
-                                Intent goToProfile = new Intent(SignInActivity.this, BottomNavHomePageActivity.class);
+                                Intent goToProfile = new Intent(SignInActivity.this, BottomNavPartnerHomeActivity.class);
                                 // Pass Values To Profile Activity:
                                 goToProfile.putExtra("full_name", full_name);
                                 goToProfile.putExtra("email", email);

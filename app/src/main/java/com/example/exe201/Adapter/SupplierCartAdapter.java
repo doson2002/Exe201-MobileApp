@@ -18,6 +18,8 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.OrderActivity;
@@ -97,8 +99,15 @@ public class SupplierCartAdapter extends RecyclerView.Adapter<SupplierCartAdapte
                         name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
                         // Cập nhật UI với thông tin nhà cung cấp
                         holder.textViewSupplierName.setText(name);
-                        Glide.with(context).load(imgUrl).into(holder.imageViewSupplier);
 
+                        Glide.with(context)
+                                .load(imgUrl)
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.baseline_downloading_24) // Ảnh mặc định khi đang tải
+                                        .error(R.drawable.baseline_downloading_24) // Ảnh mặc định khi URL rỗng hoặc lỗi
+                                        .fitCenter() // Cắt ảnh cho vừa vặn với ImageView hình vuông
+                                        .transform(new RoundedCorners(30))) // Bo tròn 4 góc
+                                .into(holder.imageViewSupplier);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (UnsupportedEncodingException e) {
