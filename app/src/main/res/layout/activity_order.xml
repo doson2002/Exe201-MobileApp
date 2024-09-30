@@ -56,15 +56,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:orientation="vertical">
 
             <!-- Địa chỉ giao hàng -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
                 android:background="@color/white">
 
                 <ImageView
@@ -72,15 +71,19 @@
                     android:layout_height="24dp"
                     android:src="@drawable/baseline_add_location_alt_24" />
 
+                <!-- TextView for Delivery Address -->
                 <TextView
                     android:id="@+id/textViewDeliveryAddress"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="220/20 Vo Van Hat St."
-                    android:layout_marginStart="10dp"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
 
+                <!-- TextView for Edit Address -->
                 <TextView
                     android:id="@+id/textViewEditAddress"
                     android:layout_width="wrap_content"
@@ -101,7 +104,7 @@
                 android:background="@android:color/darker_gray"
                 android:padding="10dp"
                 android:textSize="14sp"
-                android:layout_marginBottom="10dp" />
+                android:layout_margin="10dp" />
 
             <!-- Tùy chọn giao hàng -->
             <TextView
@@ -112,7 +115,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp" />
+                android:layout_margin="10dp" />
 
             <!-- Các lựa chọn giao hàng (Priority, Standard, Saver) -->
             <LinearLayout
@@ -164,6 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Order summary"
+                android:layout_marginHorizontal="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -187,9 +191,10 @@
                     android:id="@+id/recyclerViewCart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2" />
+                    android:layout_weight="1" />
             <!-- Phần Payment Details -->
             <TextView
+
                 android:id="@+id/textViewPaymentDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -197,8 +202,11 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="10dp"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewCart"
                 android:textColor="@android:color/black"/>
 
+            <!-- Các lựa chọn thanh toán -->
             <!-- Các lựa chọn thanh toán -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,48 +214,38 @@
                 android:orientation="vertical"
                 android:background="@color/white">
 
-                <LinearLayout
-                    android:id="@+id/layoutCashPayment"
+                <RadioGroup
+                    android:id="@+id/paymentOptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/baseline_attach_money_24"
-                        android:background="@drawable/rounded_border"
-                        />
-
-                    <TextView
+                    <RadioButton
+                        android:id="@+id/radioCashPayment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:text="Tiền mặt"
+                        android:buttonTint="@color/black"
                         android:textSize="16sp"
+                        android:drawableRight="@drawable/baseline_attach_money_24"
                         android:textColor="@android:color/black"
-                        android:layout_marginStart="10dp" />
-                </LinearLayout>
+                        android:padding="10dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/vnpay" />
-
-                    <TextView
+                    <RadioButton
+                        android:id="@+id/radioVnpay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="VnPay"
+                        android:buttonTint="@color/black"
+                        android:drawableRight="@drawable/vnpay"
+                        android:layout_marginLeft="10dp"
+                        android:drawablePadding="10dp"
                         android:textSize="16sp"
                         android:textColor="@android:color/black"
-                        android:layout_marginStart="10dp" />
-                </LinearLayout>
+                        android:padding="10dp" />
+                </RadioGroup>
+
 
                 <Button
                     android:id="@+id/buttonApplyOffers"
@@ -257,8 +255,11 @@
                     android:textColor="@android:color/white"
                     android:backgroundTint="@color/white"
                     android:padding="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"/>
             </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 
@@ -294,7 +295,7 @@
 
         <!-- Nút đặt hàng -->
         <Button
-            android:id="@+id/buttonPlaceOrder"
+            android:id="@+id/createOrderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thanh Toán"

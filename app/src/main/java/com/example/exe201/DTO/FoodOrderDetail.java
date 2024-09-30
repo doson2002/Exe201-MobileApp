@@ -13,6 +13,7 @@ public class FoodOrderDetail implements Parcelable {
     private String status;
     private String paymentMethod;
     private int paymentStatus;
+    private SupplierInfo supplierInfo;
 
     // Constructor
     public FoodOrderDetail(int id, List<FoodOrderItemResponse> foodOrderItemResponseList, long pickupTime,
