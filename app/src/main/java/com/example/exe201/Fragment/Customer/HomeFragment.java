@@ -39,6 +39,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
+import com.example.exe201.AddFoodItemActivity;
 import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.FoodItemGroupedBySupplierActivity;
 import com.example.exe201.ProfileActivity;
@@ -149,7 +150,7 @@ public class HomeFragment extends Fragment {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FoodItemGroupedBySupplierActivity.class); // Thay bằng activity của bạn
+                Intent intent = new Intent(getActivity(), AddFoodItemActivity.class); // Thay bằng activity của bạn
                 startActivity(intent);
             }
         });
