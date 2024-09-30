@@ -78,7 +78,7 @@ public class SupplierTypeAdapter extends RecyclerView.Adapter<SupplierTypeAdapte
     public static class SupplierTypeViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewSupplierType;
         TextView textViewSupplierTypeName;
-        View overlayBackground;
+        ImageView overlayBackground;
 
         public SupplierTypeViewHolder(@NonNull View itemView) {
             super(itemView);

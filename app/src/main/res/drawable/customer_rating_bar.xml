@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <solid android:color="#C0C0C0" /> <!-- Màu xám cho sao chưa đầy -->
+            <size android:width="25dp" android:height="25dp" /> <!-- Kích thước của sao -->
+        </shape>
+    </item>
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#FFD700" /> <!-- Màu vàng cho sao đã đầy -->
+                <size android:width="25dp" android:height="25dp" /> <!-- Kích thước của sao -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

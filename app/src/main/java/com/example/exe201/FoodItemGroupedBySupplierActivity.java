@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.SupplierWithFoodItemAdapter;
@@ -100,27 +102,48 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
         });
     }
 
+
     // Hàm gọi API để tìm kiếm các món ăn theo từ khóa
     private void searchFoodItems(String keyword) {
+        // Kiểm tra nếu keyword trống, không thực hiện tìm kiếm
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return; // Có thể thông báo cho người dùng về từ khóa không hợp lệ
+        }
+
         // Thực hiện lời gọi API tới backend để lấy danh sách món ăn theo từ khóa
         String url = ApiEndpoints.GET_FOOD_ITEM_GROUPED_BY_SUPPLIER_ID + keyword;
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
-        // Sử dụng thư viện Volley để gửi request đến API (hoặc thư viện khác)
+
+        if (token == null) {
+            Log.e("SearchFoodItems", "Token is null, user might not be logged in.");
+            return;
+        }
+
+        // Chỉ tạo một request queue duy nhất trong ứng dụng
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 response -> {
                     try {
-                        // Xử lý dữ liệu JSON trả về
-                        supplierWithFoodItemsList.clear(); // Xóa danh sách cũ trước khi thêm mới
+                        // Lấy mảng content từ response
+                        JSONArray contentArray = response.getJSONArray("content");
 
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject supplierWithFoodItemsJson = response.getJSONObject(i);
+                        // Xóa danh sách cũ trước khi thêm mới
+                        supplierWithFoodItemsList.clear();
+
+                        // Lặp qua từng đối tượng trong contentArray
+                        for (int i = 0; i < contentArray.length(); i++) {
+                            JSONObject supplierWithFoodItemsJson = contentArray.getJSONObject(i);
 
                             // Lấy thông tin SupplierInfo
                             JSONObject supplierInfoJson = supplierWithFoodItemsJson.getJSONObject("supplierInfo");
+
+                            // Lấy chi tiết SupplierInfo từ "user" và "supplierType"
+                            JSONObject userJson = supplierInfoJson.getJSONObject("user");
+                            JSONObject supplierTypeJson = supplierInfoJson.getJSONObject("supplierType");
+
                             SupplierInfo supplierInfo = new SupplierInfo(
                                     supplierInfoJson.getInt("id"),
                                     supplierInfoJson.getString("restaurantName"),
@@ -134,6 +157,8 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
                             List<FoodItemResponseWithSupplier> foodItemResponses = new ArrayList<>();
                             for (int j = 0; j < foodItemsJsonArray.length(); j++) {
                                 JSONObject foodItemJson = foodItemsJsonArray.getJSONObject(j);
+
+                                // Tạo FoodItemResponse từ các thông tin trả về
                                 FoodItemResponseWithSupplier foodItemResponse = new FoodItemResponseWithSupplier(
                                         foodItemJson.getLong("id"),
                                         foodItemJson.getString("food_name"),
@@ -148,30 +173,32 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
                             supplierWithFoodItemsList.add(supplierWithFoodItems);
                         }
 
-                        // Cập nhật Adapter sau khi dữ liệu mới được tải về
-                        supplierAdapter.notifyDataSetChanged();
+                        // Cập nhật Adapter trong UI thread
+                        runOnUiThread(() -> supplierAdapter.notifyDataSetChanged());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        // Có thể hiển thị thông báo lỗi cho người dùng
                     }
                 },
                 error -> {
-                    // Xử lý lỗi nếu có
                     error.printStackTrace();
+                    // Có thể hiển thị thông báo lỗi cho người dùng
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                if (token != null) {
-                    headers.put("Authorization", "Bearer " + token);
-                }
+                headers.put("Authorization", "Bearer " + token);
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
         };
 
         // Thêm request vào hàng đợi
-        queue.add(jsonArrayRequest);
+        queue.add(jsonObjectRequest);
     }
+
+
+
 }

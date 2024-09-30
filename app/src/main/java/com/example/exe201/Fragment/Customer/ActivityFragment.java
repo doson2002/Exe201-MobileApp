@@ -3,7 +3,9 @@ package com.example.exe201.Fragment.Customer;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -126,7 +128,7 @@ public class ActivityFragment extends Fragment {
     private String formatOrderTime(long timestamp) {
         // Định dạng ngày/tháng/năm, giờ:phút
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date date = new Date(timestamp * 1000); // Chuyển đổi từ giây sang milliseconds
+        Date date = new Date(timestamp); // Chuyển đổi từ giây sang milliseconds
         return sdf.format(date);
     }
 
@@ -139,7 +141,11 @@ public class ActivityFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
+// Add a divider between RecyclerView items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                new LinearLayoutManager(getActivity()).getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
         return view;
     }
 }

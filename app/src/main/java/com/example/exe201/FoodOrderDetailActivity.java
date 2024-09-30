@@ -1,8 +1,11 @@
 package com.example.exe201;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,11 +29,13 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodOrderItemAdapter;
 import com.example.exe201.DTO.FoodOrder;
 import com.example.exe201.DTO.FoodOrderItemResponse;
+import com.example.exe201.DTO.Menu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +51,8 @@ public class FoodOrderDetailActivity extends AppCompatActivity {
     private FoodOrderItemAdapter foodOrderItemAdapter;
     private List<FoodOrderItemResponse> foodOrderItemList;
     private ImageView backArrow;
+    private Button reOrderBtn;
+    private int supplierId ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +66,25 @@ public class FoodOrderDetailActivity extends AppCompatActivity {
         tvPaymentMethod = findViewById(R.id.tvPaymentMethod);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         rvFoodOrderItems = findViewById(R.id.rvFoodOrderItems);
-
+        reOrderBtn = findViewById(R.id.reOrderBtn);
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Quay lại trang trước
                 onBackPressed();
+            }
+        });
+        reOrderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Quay lại trang trước
+                Intent intent = new Intent(FoodOrderDetailActivity.this, OrderActivity.class);
+                // Gửi danh sách `Parcelable` (FoodOrderItemResponse)
+                // Map danh sách FoodOrderItemResponse sang Menu
+                List<Menu> cartList = mapToMenuList(foodOrderItemList);
+                intent.putExtra("cart_list", (Serializable) cartList);
+                startActivity(intent);
             }
         });
 
@@ -110,6 +129,8 @@ public class FoodOrderDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            JSONObject supplier = response.getJSONObject("supplier_info");
+                            supplierId = supplier.getInt("id");
                             // Lấy thông tin chi tiết từ API và cập nhật UI
                             long pickupTime = response.getLong("pickup_time");
                             String pickupLocation = response.getString("pickup_location");
@@ -130,7 +151,10 @@ public class FoodOrderDetailActivity extends AppCompatActivity {
                                 FoodOrderItemResponse foodOrderItem = new FoodOrderItemResponse(
                                         item.getInt("id"),
                                         item.getString("foodName"),
-                                        item.getInt("quantity")
+                                        item.getInt("quantity"),
+                                        item.getDouble("price"),
+                                        item.getInt("foodItemId"),
+                                        supplierId
                                 );
                                 foodOrderItemList.add(foodOrderItem);
                             }
@@ -169,5 +193,24 @@ public class FoodOrderDetailActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, h:mm a", Locale.getDefault());
         Date date = new Date(timestamp);
         return sdf.format(date);
+    }
+
+    public List<Menu> mapToMenuList(List<FoodOrderItemResponse> reOrderList) {
+        List<Menu> cartList = new ArrayList<>();
+
+        // Lặp qua từng phần tử trong reOrderList
+        for (FoodOrderItemResponse item : reOrderList) {
+            // Tạo đối tượng Menu từ FoodOrderItemResponse
+            Menu menu = new Menu();
+            menu.setId(item.getFoodItemId());
+            menu.setName(item.getFoodName());
+            menu.setQuantity(item.getQuantity());
+            menu.setPrice(item.getPrice());
+            menu.setSupplierId(item.getSupplierId());
+            // Thêm đối tượng Menu vào cartList
+            cartList.add(menu);
+        }
+
+        return cartList;
     }
 }
