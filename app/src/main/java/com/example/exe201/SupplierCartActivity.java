@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,9 @@ public class SupplierCartActivity extends AppCompatActivity {
         // Khởi tạo Adapter và truyền cartMap vào Adapter
         supplierCartAdapter = new SupplierCartAdapter(cartMap);
         recyclerViewSuppliers.setAdapter(supplierCartAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewSuppliers.getContext(), LinearLayoutManager.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider)); // Thay đổi đường gạch ngang
+        recyclerViewSuppliers.addItemDecoration(dividerItemDecoration);
     }
 
     @Override

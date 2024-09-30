@@ -29,6 +29,7 @@ public class ApiEndpoints {
     public static final String UPDATE_OFFERED_STATUS  = BASE_URL + "food_item/update_offered_status";
     public static final String GET_FOOD_ITEMS_BY_OFFERED_STATUS  = BASE_URL + "food_item/get_food_items_by_offered_status";
     public static final String GET_FOOD_ITEMS_TOP_SOLD  = BASE_URL + "food_item/top_sold";
+    public static final String CREATE_FOOD_ITEM = BASE_URL + "food_item/create";
 
 
 

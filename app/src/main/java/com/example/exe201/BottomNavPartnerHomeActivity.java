@@ -17,6 +17,7 @@ import com.example.exe201.Fragment.Customer.ActivityFragment;
 import com.example.exe201.Fragment.Customer.HomeFragment;
 import com.example.exe201.Fragment.Customer.NotificationFragment;
 import com.example.exe201.Fragment.Customer.ProfileFragment;
+import com.example.exe201.Fragment.Partner.MessageFragment;
 import com.example.exe201.Fragment.Partner.PartnerHomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -41,8 +42,8 @@ public class BottomNavPartnerHomeActivity extends AppCompatActivity {
                     case R.id.nav_home:
                         replaceFragment(new PartnerHomeFragment());
                         break;
-                    case R.id.nav_promotion:
-                        replaceFragment(new ActivityFragment());
+                    case R.id.nav_message:
+                        replaceFragment(new MessageFragment());
                         break;
 
                 }
