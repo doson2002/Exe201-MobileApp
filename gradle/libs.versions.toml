@@ -20,6 +20,7 @@ googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 legacySupportV4 = "1.0.0"
 recyclerview = "1.3.0"
 play-services-location="21.0.1"
+firebaseDatabase = "21.0.0"
 
 
 [libraries]
@@ -42,6 +43,7 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 
 

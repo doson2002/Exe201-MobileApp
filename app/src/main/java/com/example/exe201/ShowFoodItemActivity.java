@@ -71,7 +71,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
     private List<FoodItemResponseWithSupplier> foodItemOfferedList = new ArrayList<>();
     private ImageView backArrow, imageViewSupplier;
     private ImageView imgShowCart;
-    private int foodItemIndex; // Vị trí của món ăn
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +79,6 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         setContentView(R.layout.activity_show_food_item);
 
         SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
-        foodItemIndex = getIntent().getIntExtra("foodItemIndex", -1); // Mặc định -1 nếu không có
 
 
         imgShowCart= findViewById(R.id.imgShowCart);
@@ -268,11 +267,15 @@ public class ShowFoodItemActivity extends AppCompatActivity{
 
                                     Menu foodItem = new Menu(id, name, description, price,imageUrl,supplierId);
                                     foodItemList.add(foodItem);
+
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                // Tìm vị trí dựa trên ID
 
                             }
+
                             // Đặt Adapter cho RecyclerView
                             foodAdapter = new FoodItemCustomerAdapter(
                                     foodItemList,
@@ -283,9 +286,23 @@ public class ShowFoodItemActivity extends AppCompatActivity{
                             // Đặt chiều cao cho RecyclerView dựa trên số lượng mục
                             setRecyclerViewHeight(recyclerView, foodItemList.size());
                             // Cuộn đến vị trí món ăn
-                            if (foodItemIndex != -1) {
-                                recyclerView.post(() -> recyclerView.smoothScrollToPosition(foodItemIndex));
+                            // Nhận ID từ Intent
+                            int selectedFoodItemId = getIntent().getIntExtra("selectedFoodItemId", -1);
+
+                            int foodItemIndex = -1;
+                            for (int i = 0; i < foodItemList.size(); i++) {
+                                if (foodItemList.get(i).getId() == selectedFoodItemId) {
+                                    foodItemIndex = i;
+                                    break;
+                                }
                             }
+
+                        // Cuộn đến vị trí nếu tìm thấy
+                            final int finalFoodItemIndex = foodItemIndex;
+                            if (finalFoodItemIndex != -1) {
+                                recyclerView.post(() -> recyclerView.smoothScrollToPosition(finalFoodItemIndex));
+                            }
+
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -301,14 +318,16 @@ public class ShowFoodItemActivity extends AppCompatActivity{
                 }
             };
 
-            Volley.newRequestQueue(this).add(foodItemRequest);        }
+            Volley.newRequestQueue(this).add(foodItemRequest);
+        }
+
     }
 
 
 
 
     private void setRecyclerViewHeight(RecyclerView recyclerView, int itemCount) {
-        int itemHeight = 100; // Chiều cao trung bình của một mục, đơn vị: dp
+        int itemHeight = 150; // Chiều cao trung bình của một mục, đơn vị: dp
         float density = getResources().getDisplayMetrics().density;
         int totalHeight = (int) (itemCount * itemHeight * density);
 

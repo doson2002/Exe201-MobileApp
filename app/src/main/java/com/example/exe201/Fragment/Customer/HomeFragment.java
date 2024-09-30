@@ -44,6 +44,7 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodItemTopSoldAdapter;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
 import com.example.exe201.Adapter.TopSupplierRatingAdapter;
+import com.example.exe201.ChatActivity;
 import com.example.exe201.DTO.FoodItemTopSold;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierType;
@@ -195,7 +196,7 @@ public class HomeFragment extends Fragment {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FoodItemGroupedBySupplierActivity.class); // Thay bằng activity của bạn
+                Intent intent = new Intent(getActivity(), ChatActivity.class); // Thay bằng activity của bạn
                 startActivity(intent);
             }
         });
@@ -286,6 +287,7 @@ public class HomeFragment extends Fragment {
                         for (int i = 0; i < contentArray.length(); i++) {
                             JSONObject foodItemJson = contentArray.getJSONObject(i);
                             FoodItemTopSold foodItemTopSold = new FoodItemTopSold();
+                            foodItemTopSold.setFoodItemId(foodItemJson.getInt("foodId"));
                             foodItemTopSold.setName(foodItemJson.getString("name"));
                             foodItemTopSold.setQuantitySold(foodItemJson.getInt("quantitySold"));
 

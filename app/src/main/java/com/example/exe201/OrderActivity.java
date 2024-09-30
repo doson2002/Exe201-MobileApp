@@ -33,6 +33,7 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.CartAdapter;
 import com.example.exe201.DTO.CartFoodItem;
 import com.example.exe201.DTO.FoodItem;
+import com.example.exe201.DTO.FoodOrderItemResponse;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.OrderRequest;
 import com.google.gson.Gson;
@@ -58,6 +59,7 @@ public class OrderActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_MAP = 1;
     private TextView textViewDeliveryAddress;
     private List<Menu> cartList;
+    private List<FoodOrderItemResponse> reOrderList;
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private ImageView backArrow;
@@ -101,6 +103,7 @@ public class OrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     createOrder();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -133,7 +136,7 @@ public class OrderActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        // Lấy dữ liệu giỏ hàng từ Intent hoặc nguồn dữ liệu khác
         cartList = (ArrayList<Menu>) getIntent().getSerializableExtra("cart_list");
-
+// Nhận danh sách `Parcelable`
         if (cartList != null && !cartList.isEmpty()) {
             // Thiết lập Adapter và truyền dữ liệu
             cartAdapter = new CartAdapter(this, cartList,this);
@@ -248,6 +251,13 @@ public class OrderActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
         int userId = sharedPreferences.getInt("user_id", 0); // Lấy user_id
+
+        // Lấy cartMap từ SharedPreferences
+        Gson gson = new Gson();
+        String cartMapJson = sharedPreferences.getString("cart_map", null);
+        Type type = new TypeToken<HashMap<Integer, List<Menu>>>() {}.getType();
+        HashMap<Integer, List<Menu>> cartMap = gson.fromJson(cartMapJson, type);
+
         // Lấy giá trị từ cartList và textViewDeliveryAddress
         List<OrderRequest> orderRequests = new ArrayList<>();
         for (Menu item : cartList) {
@@ -295,7 +305,18 @@ public class OrderActivity extends AppCompatActivity {
                 response -> {
                     // Xử lý khi tạo order thành công
                     Toast.makeText(OrderActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
-                },
+                    // Xóa các item trong cartMap dựa trên supplierId
+                    if (cartMap.containsKey(supplierId)) {
+                        cartMap.remove(supplierId);
+                    }
+                    // Cập nhật lại cartMap vào SharedPreferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    String updatedCartMapJson = gson.toJson(cartMap);
+                    editor.putString("cart_map", updatedCartMapJson);
+                    editor.apply();
+                    Intent intent = new Intent(this, BottomNavHomePageActivity.class); // Thay bằng activity của bạn
+                    startActivity(intent);
+                    },
                 error -> {
                     // Xử lý khi có lỗi
                     Toast.makeText(OrderActivity.this, "Error creating order", Toast.LENGTH_SHORT).show();

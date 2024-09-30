@@ -7,12 +7,42 @@ public class FoodOrderItemResponse implements Parcelable {
     private int id;
     private String foodName;
     private int quantity;
+    private double price;
+    private int foodItemId;
+    private int supplierId;
 
     // Constructor
-    public FoodOrderItemResponse(int id, String foodName, int quantity) {
+    public FoodOrderItemResponse(int id, String foodName, int quantity,double price,int foodItemId, int supplierId) {
         this.id = id;
         this.foodName = foodName;
         this.quantity = quantity;
+        this.price = price;
+        this.foodItemId = foodItemId;
+        this.supplierId = supplierId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getFoodItemId() {
+        return foodItemId;
+    }
+
+    public void setFoodItemId(int foodItemId) {
+        this.foodItemId = foodItemId;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
     }
 
     // Getters and Setters
@@ -45,6 +75,9 @@ public class FoodOrderItemResponse implements Parcelable {
         id = in.readInt();
         foodName = in.readString();
         quantity = in.readInt();
+        price = in.readDouble();
+        foodItemId = in.readInt();
+        supplierId =in.readInt();
     }
 
     public static final Creator<FoodOrderItemResponse> CREATOR = new Creator<FoodOrderItemResponse>() {
@@ -69,5 +102,8 @@ public class FoodOrderItemResponse implements Parcelable {
         dest.writeInt(id);
         dest.writeString(foodName);
         dest.writeInt(quantity);
+        dest.writeDouble(price);
+        dest.writeInt(foodItemId);
+        dest.writeInt(supplierId);
     }
 }
