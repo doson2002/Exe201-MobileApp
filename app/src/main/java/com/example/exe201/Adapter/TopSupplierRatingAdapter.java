@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.R;
 import com.example.exe201.ShowFoodItemActivity;
@@ -40,10 +42,14 @@ public class TopSupplierRatingAdapter extends RecyclerView.Adapter<TopSupplierRa
     public void onBindViewHolder(@NonNull SupplierViewHolder holder, int position) {
         SupplierInfo supplier = supplierList.get(position);
 
-        // Thiết lập dữ liệu cho các view
-        Glide.with(holder.imageView.getContext())
+        // Load image using Glide or Picasso
+        Glide.with(context)
                 .load(supplier.getImgUrl())
-                .placeholder(R.drawable.loading)  // Placeholder
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.loading) // Ảnh mặc định khi đang tải
+                        .error(R.drawable.loading) // Ảnh mặc định khi URL rỗng hoặc lỗi
+                        .fitCenter() // Cắt ảnh cho vừa vặn với ImageView hình vuông
+                        .transform(new RoundedCorners(30))) // Bo tròn 4 góc
                 .into(holder.imageView);
 
         holder.nameTextView.setText(supplier.getRestaurantName());

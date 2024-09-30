@@ -1,11 +1,13 @@
 package com.example.exe201.DTO;
 
 public class FoodItemTopSold {
+    private int foodItemId;
     private String name;
     private int quantitySold;
     private SupplierInfo supplierInfo;
 
-    public FoodItemTopSold(String name, int quantitySold, SupplierInfo supplierInfo) {
+    public FoodItemTopSold(int foodItemId,String name, int quantitySold, SupplierInfo supplierInfo) {
+        this.foodItemId = foodItemId;
         this.name = name;
         this.quantitySold = quantitySold;
         this.supplierInfo = supplierInfo;
@@ -16,6 +18,14 @@ public class FoodItemTopSold {
 
     public String getName() {
         return name;
+    }
+
+    public int getFoodItemId() {
+        return foodItemId;
+    }
+
+    public void setFoodItemId(int foodItemId) {
+        this.foodItemId = foodItemId;
     }
 
     public void setName(String name) {

@@ -32,6 +32,9 @@ public class Menu implements Parcelable {
         this.imgUrl = imgUrl;
         this.supplierId = supplierId;
     }
+    public Menu(){
+    }
+
 
     public int getSupplierId() {
         return supplierId;
@@ -83,7 +86,7 @@ public class Menu implements Parcelable {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
