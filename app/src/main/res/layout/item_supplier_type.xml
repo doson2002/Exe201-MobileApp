@@ -15,10 +15,11 @@
        >
 
         <!-- Overlay background with green circle and checkmark (this will be on top) -->
-        <View
+        <ImageView
             android:id="@+id/overlayBackground"
             android:layout_width="83dp"
             android:layout_height="83dp"
+            android:elevation="10dp"
             android:background="@drawable/circle_with_check"
             android:visibility="gone"/> <!-- Initially hidden -->
 
@@ -27,7 +28,6 @@
             android:id="@+id/imageViewSupplierType"
             android:layout_width="80dp"
             android:layout_height="80dp"
-
             />
 
     </FrameLayout>

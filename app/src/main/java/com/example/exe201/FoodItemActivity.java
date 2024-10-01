@@ -33,6 +33,7 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodItemAdapter;
 import com.example.exe201.DTO.FoodItem;
 import com.example.exe201.DTO.FoodType;
+import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.SupplierInfo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +73,13 @@ public class FoodItemActivity extends AppCompatActivity {
         });
 // Ánh xạ các view
         fabAddFood = findViewById(R.id.fabAddFood);
+        fabAddFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodItemActivity.this, AddFoodItemActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Khởi tạo danh sách và adapter
         foodItems = new ArrayList<>(); // Đảm bảo khởi tạo danh sách ở đây

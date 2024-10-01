@@ -1,6 +1,8 @@
 package com.example.exe201.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,9 @@ public class CartAdapter extends ListAdapter<Menu, CartAdapter.CartViewHolder> {
     private Context context;
     private List<Menu> foodItemList;
     private CartUpdateListener cartUpdateListener;
+    // Thêm biến này để lưu tham chiếu đến OrderActivity
+    private OrderActivity orderActivity;
+
 
 
     public interface CartUpdateListener {
@@ -49,10 +54,11 @@ public class CartAdapter extends ListAdapter<Menu, CartAdapter.CartViewHolder> {
     };
 
     // Constructor cho ListAdapter
-    public CartAdapter(Context context, List<Menu> foodItemList) {
+    public CartAdapter(Context context, List<Menu> foodItemList, OrderActivity orderActivity) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.foodItemList = foodItemList;
+        this.orderActivity = orderActivity; // Lưu lại tham chiếu đến OrderActivity
     }
     // Thiết lập lắng nghe sự kiện cập nhật giỏ hàng
     public void setCartUpdateListener(CartUpdateListener listener) {
@@ -106,9 +112,22 @@ public class CartAdapter extends ListAdapter<Menu, CartAdapter.CartViewHolder> {
                             notifyItemChanged(adapterPosition);
                             updateTotalPrice(); // Cập nhật tổng giá
                         } else {
-                            // Xóa khỏi cart
-                            removeItem(adapterPosition);
-
+                            // Hiển thị hộp thoại xác nhận
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Xóa món ăn")
+                                    .setMessage("Bạn có chắc chắn muốn xóa " + foodItem.getName() + " khỏi giỏ hàng không?")
+                                    .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Xóa món ăn khỏi giỏ hàng
+                                            removeItem(adapterPosition); // Sử dụng adapterPosition để xóa
+                                            if (cartUpdateListener != null) {
+                                                cartUpdateListener.onCartUpdated(); // Gọi listener để cập nhật tổng số tiền và số lượng
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton("Không", null)
+                                    .show();
                         }
                         if (cartUpdateListener != null) {
                             cartUpdateListener.onCartUpdated(); // Thông báo cho Activity biết đã cập nhật
@@ -123,9 +142,15 @@ public class CartAdapter extends ListAdapter<Menu, CartAdapter.CartViewHolder> {
 
     // Hàm xóa item khỏi giỏ hàng
     public void removeItem(int position) {
+
+        // Lưu lại món ăn bị xóa
+        Menu removedItem = foodItemList.get(position);
+        int supplierId = removedItem.getSupplierId();
         foodItemList.remove(position); // Xóa item khỏi danh sách
         notifyItemRemoved(position); // Thông báo cho RecyclerView biết item đã bị xóa
         updateTotalPrice(); // Cập nhật tổng giá
+        // Cập nhật cartMap trong SharedPreferences
+        orderActivity.updateCartMap(supplierId, foodItemList); // Gọi updateCartMap với danh sách hiện tại
     }
 
     // Phương thức tính toán và cập nhật tổng tiền

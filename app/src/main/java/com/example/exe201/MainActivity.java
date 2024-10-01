@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
      }
     //ENd of Go To Sign In activity.
     public void goToTest(View view){
-        Intent intent = new Intent(MainActivity.this, PartnerHomeFragment.class);
+        Intent intent = new Intent(MainActivity.this, AddFoodItemActivity.class);
         startActivity(intent);
         finish();
     }

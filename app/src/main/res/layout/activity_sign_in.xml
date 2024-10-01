@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,17 +9,23 @@
     android:background="@color/white"
     tools:context=".SignInActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="217dp"
         android:layout_height="148dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="120dp"
         app:srcCompat="@drawable/foodptlogo" />
-
 
     <TextView
         android:id="@+id/textView2"
@@ -28,88 +35,67 @@
         android:text="Sign In"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        tools:layout_editor_absoluteX="0dp" />
+        android:textColor="@color/black" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/input_text_field_styling"
+        android:layout_height="55dp"
+        android:textColorHint="@color/light_black"
+        android:hint="Email"
+        android:textColor="@color/black"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:textColorHint="@color/light_black"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="10dp"
+        android:inputType="textPassword"
+        android:textColor="@color/black"
+        android:background="@drawable/input_text_field_styling"
+        android:hint="Password"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/sign_in_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:layout_editor_absoluteX="10dp" >
+        android:layout_marginTop="10dp"
+        android:text="Sign In"
+        android:layout_marginHorizontal="80dp"
+        android:padding="18dp"
+        android:background="@drawable/button_background"
+        android:textFontWeight="700"
+        android:textColor="@color/dark_royal_purple" />
 
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/input_text_field_styling"
-            android:layout_height="55dp"
-            android:textColorHint="@color/light_black"
-            android:hint="Email"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:textColorHint="@color/light_black"
-            android:layout_marginTop="7dp"
-            android:paddingLeft="10dp"
-            android:textColor="@color/black"
-            android:background="@drawable/input_text_field_styling"
-            android:hint="Password"
-            android:textAlignment="center"
-            />
-
-        <Button
-            android:id="@+id/sign_in_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Sign In"
-            android:padding="18dp"
-            android:background="@drawable/button_background"
-            android:textFontWeight="700"
-            android:textColor="@color/dark_royal_purple"
-
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/go_to_sign_up"
-            android:textColor="@color/blue"
-            android:textSize="18sp"
-            android:onClick="goToSignUpAct"
-            />
-
-
-    </LinearLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/go_to_sign_up"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:onClick="goToSignUpAct" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/dark_royal_purple"
+        android:background="@color/green"
         android:onClick="goToHome"
         android:padding="10dp"
+        android:layout_marginTop="10dp"
         android:text="Back To Home"
-        android:textColor="@color/tropical_blue"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.165" />
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+</LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

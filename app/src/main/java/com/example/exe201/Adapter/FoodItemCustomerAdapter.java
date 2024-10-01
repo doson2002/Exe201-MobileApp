@@ -1,6 +1,7 @@
 package com.example.exe201.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,39 +20,47 @@ import com.example.exe201.DTO.CartFoodItem;
 import com.example.exe201.DTO.FoodItem;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustomerAdapter.FoodItemCustomerViewHolder> {
 
     private List<Menu> foodItemList;
-    private List<Menu> cartList;
+    private HashMap<Integer, List<Menu>> cartMap = new HashMap<>();
     private Context context;
-    private LinearLayout addToCart;
+    private ImageView imgShowCart;
     private MenuListClickListener clickListener;
-    private TextView  basketItemCount, basketTotalPrice;
 
 
-    public FoodItemCustomerAdapter(List<Menu> foodItemList, Context context, List<Menu> cartList,
-                                   LinearLayout addToCart,
-                                   TextView  basketItemCount, TextView basketTotalPrice) {
+    public FoodItemCustomerAdapter(List<Menu> foodItemList, Context context, HashMap<Integer, List<Menu>> cartMap,
+                                   ImageView imgShowCart) {
         this.foodItemList = foodItemList;
         this.context = context;
-        this.cartList = cartList;
-        this.addToCart = addToCart;
-        this.basketItemCount = basketItemCount;
-        this.basketTotalPrice = basketTotalPrice;
+        this.cartMap = cartMap;
+        this.imgShowCart = imgShowCart;
 
     }
 
-    public void updateCartList(List<Menu> updatedCartList){
-        this.cartList = updatedCartList;
+    // Cập nhật giỏ hàng với cartMap
+    public void updateCartMap(int supplierId, List<Menu> updatedCartList) {
+        cartMap.put(supplierId, updatedCartList);
         notifyDataSetChanged();
     }
 
-    public List<Menu> getCartList() {
-        return cartList;
+    // Lấy danh sách món ăn trong giỏ hàng cho nhà cung cấp cụ thể
+    public List<Menu> getCartList(int supplierId) {
+        return cartMap.getOrDefault(supplierId, new ArrayList<>());
+    }
+    // Phương thức để lấy cartMap
+    public Map<Integer, List<Menu>> getCartMap() {
+        return this.cartMap;
     }
     @NonNull
     @Override
@@ -75,43 +84,82 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
         holder.textViewFoodItemDiscountPrice.setText(String.format("%,.0fđ", foodItem.getPrice()));
         holder.textViewDescription.setText(foodItem.getDescription());
         Glide.with(context).load(foodItem.getImgUrl()).into(holder.imageViewFoodItem);
+        // Kiểm tra và hiển thị imgShowCart nếu cartMap.size() > 1
+//        if (cartMap.size() > 1 && imgShowCart != null) {  // Kiểm tra holder.imgShowCart không null
+//            imgShowCart.setVisibility(View.VISIBLE);
+//        } else if (imgShowCart != null) {
+//            imgShowCart.setVisibility(View.GONE);
+//        }
 
-//        holder.imgAddFood.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                clickListener.onAddToCartClick(foodItemList.get(currentPosition));
-//            }
-//        });
-        // Xử lý khi người dùng nhấn vào dấu +
         holder.imgAddFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Kiểm tra nếu món ăn đã có trong giỏ hàng
+                int supplierId = foodItem.getSupplierId(); // Giả sử Menu có supplierId
+
+                // Lấy cartMap từ SharedPreferences
+                HashMap<Integer, List<Menu>> savedCartMap = loadCartMapFromPreferences();
+                if (savedCartMap == null) {
+                    savedCartMap = new HashMap<>(); // Nếu không có dữ liệu, khởi tạo cartMap mới
+                }
+
+                // Lấy giỏ hàng hiện tại của nhà cung cấp từ savedCartMap
+                List<Menu> currentCartList = savedCartMap.getOrDefault(supplierId, new ArrayList<>());
+
                 boolean itemExists = false;
-                for (Menu item : cartList) {
-                    if (item.getId() == foodItem.getId()) { // So sánh ID
+                // Kiểm tra xem món ăn đã có trong giỏ hàng chưa
+                for (Menu item : currentCartList) {
+                    if (item.getId() == foodItem.getId()) {
                         itemExists = true;
-                        // Tăng số lượng món ăn trong giỏ hàng
+                        // Nếu có, tăng số lượng món ăn
                         item.setQuantity(item.getQuantity() + 1);
-                        break; // Kết thúc vòng lặp khi đã tìm thấy
+                        break;
                     }
                 }
 
                 // Nếu món ăn chưa có trong giỏ hàng, thêm mới
                 if (!itemExists) {
-                    foodItem.setQuantity(1); // Đặt số lượng ban đầu là 1
-                    cartList.add(foodItem); // Thêm vào giỏ hàng
+                    foodItem.setQuantity(1);
+                    currentCartList.add(foodItem);
                 }
 
-                updateBasketUI();
-                // Cập nhật giao diện số lượng trên TextView
+                // Cập nhật giỏ hàng của supplier trong savedCartMap
+                savedCartMap.put(supplierId, currentCartList);
+
+                // Lưu cartMap mới vào SharedPreferences
+                saveCartMapToPreferences(savedCartMap);
+
+                // Cập nhật cartMap trong adapter
+                cartMap = savedCartMap;
+
+                // Hiển thị hoặc ẩn imgShowCart
+                if (cartMap != null && !cartMap.isEmpty()) {
+                    imgShowCart.setVisibility(View.VISIBLE); // Hiển thị imgShowCart nếu cartMap không rỗng
+                } else {
+                    imgShowCart.setVisibility(View.GONE); // Ẩn imgShowCart nếu cartMap rỗng
+                }
+
                 Toast.makeText(v.getContext(), foodItem.getName() + " đã thêm thành công vào giỏ hàng", Toast.LENGTH_SHORT).show();
-                Log.d("OrderActivity", "Số lượng món ăn: " + foodItem.getName() + " - " + foodItem.getQuantity());
-                Log.d("OrderActivity", "List sau khi thêm: " + getCartList().toString());
             }
         });
 
 
+    }
+    private void saveCartMapToPreferences(HashMap<Integer, List<Menu>> cartMap) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(cartMap); // Chuyển đổi cartMap thành JSON
+
+        editor.putString("cart_map", json); // Lưu vào SharedPreferences
+        editor.apply();
+    }
+    private HashMap<Integer, List<Menu>> loadCartMapFromPreferences() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("cart_map", null);
+
+        Type type = new TypeToken<HashMap<Integer, List<Menu>>>() {}.getType();
+        return new Gson().fromJson(json, type); // Chuyển đổi JSON về HashMap
     }
 
 
@@ -121,40 +169,16 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
     }
 
 
-    // Cập nhật hiển thị giỏ hàng
-    private void updateBasketUI() {
-        if (cartList.size() > 0) {
-            // Tính lại tổng tiền và tổng số lượng món ăn
-            double totalAmount = 0; // Reset tổng tiền trước khi tính lại
-            int itemCount = 0; // Tổng số lượng món ăn
-            for (Menu cartItem : cartList) {
-                totalAmount += cartItem.getPrice() * cartItem.getQuantity();
-                itemCount += cartItem.getQuantity();
-            }
 
-            // Cập nhật số lượng và tổng tiền
-            try {
-                basketItemCount.setText("• " + String.format("%,d", itemCount) + " Món");
-            } catch (NullPointerException e) {
-                Log.e("Error", "basketItemCount is null", e);
-            }
-            basketTotalPrice.setText(String.format("%,.0fđ", totalAmount));
-            addToCart.setVisibility(View.VISIBLE);
-        } else {
-            // Ẩn nút giỏ hàng nếu không có item nào
-            addToCart.setVisibility(View.GONE);
-        }
-    }
     // ViewHolder ánh xạ các thành phần UI từ layout item_food_item_customer.xml
     public static class FoodItemCustomerViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewFoodItem;
         ImageView imgAddFood;
-        LinearLayout addToCart;
         TextView textViewFoodItemName;
         TextView textViewDescription;
         TextView textViewFoodItemOriginalPrice;
         TextView textViewFoodItemDiscountPrice;
-        TextView basketItemCount, basketTotalPrice;
+        ImageView imgShowCart; // Biến cho icon giỏ hàng
 
 
 
@@ -165,10 +189,8 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
             textViewFoodItemOriginalPrice = itemView.findViewById(R.id.textViewFoodItemOriginalPrice);
             textViewFoodItemDiscountPrice = itemView.findViewById(R.id.textViewFoodItemDiscountPrice);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
-            addToCart = itemView.findViewById(R.id.addToCart);
+            imgShowCart = itemView.findViewById(R.id.imgShowCart);
             imgAddFood = itemView.findViewById(R.id.imgAddFood);
-            basketTotalPrice = itemView.findViewById(R.id.basketTotalPrice);
-            basketItemCount = itemView.findViewById((R.id.basketItemCount));
         }
 
 

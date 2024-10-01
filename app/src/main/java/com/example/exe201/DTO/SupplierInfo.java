@@ -24,6 +24,34 @@ public class SupplierInfo implements Parcelable {
         this.supplierType = supplierType;
 
     }
+
+    public SupplierInfo() {
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void setTotalStarRating(double totalStarRating) {
+        this.totalStarRating = totalStarRating;
+    }
+
+    public void setTotalReviewCount(int totalReviewCount) {
+        this.totalReviewCount = totalReviewCount;
+    }
+
+    public void setSupplierType(SupplierType supplierType) {
+        this.supplierType = supplierType;
+    }
+
     public SupplierInfo(int id, String restaurantName, String imgUrl) {
         this.id = id;
         this.restaurantName = restaurantName;

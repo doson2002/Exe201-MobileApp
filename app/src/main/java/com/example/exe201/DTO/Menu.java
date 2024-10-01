@@ -14,6 +14,7 @@ public class Menu implements Parcelable {
     private double price;
     private int quantity;
     private String imgUrl;
+    private int supplierId;
 
     public int getId() {
         return id;
@@ -23,12 +24,24 @@ public class Menu implements Parcelable {
         this.id = id;
     }
 
-    public Menu(int id, String name, String description, double price, String imgUrl) {
+    public Menu(int id, String name, String description, double price, String imgUrl,int supplierId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.supplierId = supplierId;
+    }
+    public Menu(){
+    }
+
+
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getDescription() {
@@ -40,11 +53,13 @@ public class Menu implements Parcelable {
     }
 
     public Menu(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         description = in.readString();
         price = in.readDouble();
         quantity = in.readInt();
         imgUrl = in.readString();
+        supplierId = in.readInt();
     }
 
     public static final Creator<Menu> CREATOR = new Creator<Menu>() {
@@ -71,7 +86,7 @@ public class Menu implements Parcelable {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -98,11 +113,13 @@ public class Menu implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeString(description);
         parcel.writeDouble(price);
         parcel.writeInt(quantity);
         parcel.writeString(imgUrl);
+        parcel.writeInt(supplierId);
     }
     // Triển khai equals() và hashCode() dựa trên các thuộc tính bạn muốn so sánh@Override
     @Override

@@ -3,7 +3,6 @@
     <!-- Hình tròn viền xanh -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="@android:color/white"/>
             <stroke
                 android:width="4dp"
                 android:color="@android:color/holo_green_dark"/>
