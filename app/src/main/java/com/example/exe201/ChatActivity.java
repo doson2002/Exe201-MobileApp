@@ -86,8 +86,8 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setAdapter(messageAdapter);
 
 
-        // Tải tin nhắn cũ
-        loadOldMessages();
+//        // Tải tin nhắn cũ
+//        loadOldMessages();
 
         // Lắng nghe tin nhắn mới
         listenForNewMessages();
