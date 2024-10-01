@@ -5,6 +5,7 @@ import static java.security.AccessController.getContext;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,18 +40,22 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences =  requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         int supplierId = sharedPreferences.getInt("supplier_id", -1);
 
         recyclerView = view.findViewById(R.id.recyclerViewMessages);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        messageAdapter = new ManageMessagePartnerAdapter(messageList, getContext());
+        messageAdapter = new ManageMessagePartnerAdapter(messageList,  requireActivity());
         recyclerView.setAdapter(messageAdapter);
         // Thay "supplier_3" bằng supplierId phù hợp
         String supplier = "supplier_" +supplierId;
         databaseReference = FirebaseDatabase.getInstance().getReference("supplier_chats").child(supplier);
-        loadMessages();
+        if (databaseReference != null) {
+            loadMessages();
+        } else {
+            Log.e("FirebaseError", "Database reference is null");
+        }
 
         return view;
     }
@@ -64,7 +69,6 @@ public class MessageFragment extends Fragment {
                     MessagePartner message = dataSnapshot.getValue(MessagePartner.class);
                     // Lấy chatId từ Firebase key (ví dụ supplier_3_customer_2)
                     String chatId = dataSnapshot.getKey();
-                    assert message != null;
                     message.setChatId(chatId);
                     messageList.add(message);
                 }
@@ -73,7 +77,7 @@ public class MessageFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Failed to load messages.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Failed to load messages.", Toast.LENGTH_SHORT).show();
             }
         });
     }
