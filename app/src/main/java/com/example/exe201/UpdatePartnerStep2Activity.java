@@ -38,6 +38,7 @@ import com.example.exe201.DTO.PhuongXa;
 import com.example.exe201.DTO.Quan;
 import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.DTO.TinhThanh;
+import com.example.exe201.Fragment.Partner.PartnerHomeFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -486,7 +487,7 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
                     // Hiển thị thông báo thành công:
                     Toast.makeText(UpdatePartnerStep2Activity.this, "Create your business profile Successfully", Toast.LENGTH_LONG).show();
                     // Set Intent for go to profile
-                    Intent goToProfile = new Intent(UpdatePartnerStep2Activity.this, ProfileActivity.class);
+                    Intent goToProfile = new Intent(UpdatePartnerStep2Activity.this, PartnerHomeFragment.class);
                     startActivity(goToProfile);
                     },
                 error -> {

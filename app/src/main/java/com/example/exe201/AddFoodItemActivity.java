@@ -2,11 +2,13 @@ package com.example.exe201;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -56,6 +59,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
     private Spinner statusSpinner, categorySpinner, typeSpinner;
     ImageView backArrow,imageView;
     private TypeSpinnerAdapter TypeAdapter;
+    private LinearLayout linearAddFoodType ;
     FloatingActionButton fbutton;
     Button saveButton;
     Uri imageUri;
@@ -72,8 +76,68 @@ public class AddFoodItemActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         fbutton = findViewById(R.id.floatingActionButton);
         saveButton = findViewById(R.id.save_button);
+        linearAddFoodType = findViewById(R.id.linearAddFoodType);
 
-        backArrow = findViewById(R.id.back_arrow);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        int supplierId = sharedPreferences.getInt("supplier_id", -1);
+        linearAddFoodType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inflate the dialog layout
+                LayoutInflater inflater = LayoutInflater.from(AddFoodItemActivity.this);
+                View dialogView = inflater.inflate(R.layout.dialog_add_food_type, null);
+
+
+                // Create the dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddFoodItemActivity.this);
+                builder.setView(dialogView);
+
+                // Get references to the input fields
+                EditText editTextTypeName = dialogView.findViewById(R.id.editTextTypeName);
+                EditText editTextPosition = dialogView.findViewById(R.id.editTextPosition);
+
+                // Set up the dialog buttons
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Get the entered data
+                        String typeName = editTextTypeName.getText().toString().trim();
+                        int position = Integer.parseInt(editTextPosition.getText().toString().trim());
+                        // Get supplierInfoId from SharedPreferences
+
+                        // Check if supplierInfoId is valid
+                        if (supplierId != -1) {
+                            // Create a JSON object for the request
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                jsonBody.put("typeName", typeName);
+                                jsonBody.put("i", position);
+                                jsonBody.put("supplierInfoId", supplierId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Send the API request
+                            sendCreateFoodTypeRequest(jsonBody,jwtToken);
+                        } else {
+                            Toast.makeText(AddFoodItemActivity.this, "Error: Supplier ID not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // Show the dialog
+                builder.create().show();
+            }
+        });
+                backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,9 +149,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
             Log.e("Spinner", "typeSpinner không thể tìm thấy trong layout.");
             return;
         }
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String jwtToken = sharedPreferences.getString("JwtToken", null);
-        int supplierId = sharedPreferences.getInt("supplier_id", -1);
+
         loadAllFoodTypes(supplierId);
 
         fbutton.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +230,38 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     }
                 });
     }
+    private void sendCreateFoodTypeRequest(JSONObject jsonBody, String jwtToken) {
+        String url = ApiEndpoints.CREATE_FOOD_TYPE;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from API
+                        Toast.makeText(AddFoodItemActivity.this, "Food type created successfully", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(AddFoodItemActivity.this, "Error creating food type", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(AddFoodItemActivity.this).add(jsonObjectRequest);
+    }
+
     private void loadAllFoodTypes(int supplierId) {
         String url = ApiEndpoints.GET_FOOD_TYPES_BY_SUPPLIER_ID +"/" + supplierId; // Thay thế bằng URL API của bạn
 
