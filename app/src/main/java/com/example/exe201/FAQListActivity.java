@@ -58,7 +58,7 @@ public class FAQListActivity extends AppCompatActivity {
         // Setup RecyclerView
         faqRecyclerView = findViewById(R.id.faqRecyclerView);
         faqRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        faqAdapter = new FAQAdapter(faqList);
+        faqAdapter = new FAQAdapter(faqList, this);
         faqRecyclerView.setAdapter(faqAdapter);
 
         // Setup SearchView
