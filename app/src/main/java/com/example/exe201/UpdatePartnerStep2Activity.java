@@ -485,7 +485,7 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
                     // Xử lý response từ API khi request thành công
                     Log.d("API Response", response.toString());
                     // Hiển thị thông báo thành công:
-                    Toast.makeText(UpdatePartnerStep2Activity.this, "Create your business profile Successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UpdatePartnerStep2Activity.this, "Tạo thông tin đối tác thành công", Toast.LENGTH_LONG).show();
                     // Set Intent for go to profile
                     Intent goToProfile = new Intent(UpdatePartnerStep2Activity.this, PartnerHomeFragment.class);
                     startActivity(goToProfile);
@@ -493,6 +493,8 @@ public class UpdatePartnerStep2Activity extends AppCompatActivity {
                 error -> {
                     // Xử lý lỗi khi request thất bại
                     Log.e("API Error", error.toString());
+                    Toast.makeText(UpdatePartnerStep2Activity.this, "Lỗi: Thông tin đối tác đã được tạo", Toast.LENGTH_LONG).show();
+
                 }
         ){
             @Override

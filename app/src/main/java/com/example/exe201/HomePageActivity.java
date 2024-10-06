@@ -47,14 +47,6 @@ public class HomePageActivity extends AppCompatActivity {
         });
         recyclerViewSupplierTypes.setAdapter(supplierTypeAdapter);
 
-        Button test = findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomePageActivity.this, SupplierForCustomer.class); // Thay bằng activity của bạn
-                startActivity(intent);
-            }
-        });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

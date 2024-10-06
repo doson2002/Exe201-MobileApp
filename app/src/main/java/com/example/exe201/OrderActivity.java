@@ -36,6 +36,8 @@ import com.example.exe201.DTO.FoodItem;
 import com.example.exe201.DTO.FoodOrderItemResponse;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.OrderRequest;
+import com.example.exe201.DTO.SupplierInfo;
+import com.example.exe201.helpers.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -63,7 +65,7 @@ public class OrderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private ImageView backArrow;
-    private TextView textViewEditAddress;
+    private TextView textViewEditAddress, textViewRestaurantName;
     private Button createOrderButton;
     private RequestQueue requestQueue;
     private String paymentMethod = "";
@@ -72,6 +74,10 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order);
+
+        SupplierInfo supplierInfoChose = Utils.getSupplierInfo(this);
+        textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
+        textViewRestaurantName.setText(supplierInfoChose.getRestaurantName());
 
         createOrderButton = findViewById(R.id.createOrderButton);
 

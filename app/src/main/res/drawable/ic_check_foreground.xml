@@ -3,7 +3,7 @@
   <!-- Nền xanh cho vector drawable -->
   <item>
     <shape android:shape="oval">
-      <solid android:color="@android:color/holo_green_dark"/> <!-- Màu nền xanh -->
+      <solid android:color="@color/orange"/> <!-- Màu nền xanh -->
       <size
           android:width="16dp"
           android:height="16dp"/> <!-- Kích thước của hình tròn nền -->

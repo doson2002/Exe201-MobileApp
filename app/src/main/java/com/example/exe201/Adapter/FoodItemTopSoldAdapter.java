@@ -40,7 +40,7 @@ public class FoodItemTopSoldAdapter extends RecyclerView.Adapter<FoodItemTopSold
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         FoodItemTopSold foodItemTopSold = foodItemList.get(position);
         holder.textViewFoodName.setText(foodItemTopSold.getName());
-        holder.textViewQuantitySold.setText("Sold: " + foodItemTopSold.getQuantitySold());
+        holder.textViewQuantitySold.setText("Đã bán: " + foodItemTopSold.getQuantitySold());
 
         // Load image using Glide or Picasso
         Glide.with(context)

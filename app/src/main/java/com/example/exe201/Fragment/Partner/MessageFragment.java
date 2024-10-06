@@ -1,7 +1,6 @@
 package com.example.exe201.Fragment.Partner;
 
 import static android.content.Context.MODE_PRIVATE;
-import static java.security.AccessController.getContext;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,12 +12,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.exe201.Adapter.ManageMessagePartnerAdapter;
-import com.example.exe201.DTO.ChatRealTime.MessagePartner;
+import com.example.exe201.Adapter.ManageMessageSenderAdapter;
+import com.example.exe201.DTO.ChatRealTime.MessageSender;
 import com.example.exe201.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,8 +33,8 @@ import java.util.List;
 public class MessageFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ManageMessagePartnerAdapter messageAdapter;
-    private List<MessagePartner> messageList = new ArrayList<>();
+    private ManageMessageSenderAdapter messageAdapter;
+    private List<MessageSender> messageList = new ArrayList<>();
     private DatabaseReference databaseReference;
 
     @Nullable
@@ -42,11 +43,15 @@ public class MessageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
         SharedPreferences sharedPreferences =  requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         int supplierId = sharedPreferences.getInt("supplier_id", -1);
+        String role = sharedPreferences.getString("role","");
 
         recyclerView = view.findViewById(R.id.recyclerViewMessages);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
-        messageAdapter = new ManageMessagePartnerAdapter(messageList,  requireActivity());
+        messageAdapter = new ManageMessageSenderAdapter(messageList,  requireActivity(), role);
         recyclerView.setAdapter(messageAdapter);
         // Thay "supplier_3" bằng supplierId phù hợp
         String supplier = "supplier_" +supplierId;
@@ -66,7 +71,7 @@ public class MessageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    MessagePartner message = dataSnapshot.getValue(MessagePartner.class);
+                    MessageSender message = dataSnapshot.getValue(MessageSender.class);
                     // Lấy chatId từ Firebase key (ví dụ supplier_3_customer_2)
                     String chatId = dataSnapshot.getKey();
                     message.setChatId(chatId);

@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/light_grey"
+            android:layout_marginTop="10dp"
             android:elevation="10dp"
             app:title=""
             app:titleTextColor="@color/black">
@@ -30,6 +31,7 @@
                 android:layout_gravity="end"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="30dp"
+                android:layout_marginTop="5dp"
                 android:padding="7dp"
                 android:src="@drawable/ic_account_foreground" />
 
@@ -54,7 +56,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
 
@@ -87,7 +89,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/menu" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,7 +116,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/voucher" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -142,7 +144,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/address" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,7 +172,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/report" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -212,6 +214,7 @@
 
         <!-- Restaurant Manager Icon -->
         <LinearLayout
+            android:id="@+id/partnerInfoIcon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -224,12 +227,12 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/restaurantinfo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Restaurant manager"
+                android:text="Thông tin đối tác"
                 android:textSize="14sp"
                 android:textColor="@color/black"
                 android:gravity="center"
@@ -239,6 +242,7 @@
 
         <!-- Restaurant Ratings Icon -->
         <LinearLayout
+            android:id="@+id/ratingIcon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -251,7 +255,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/rating" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -279,7 +283,7 @@
                 android:layout_width="48dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
-                android:src="@drawable/ic_menu_restaurant_foreground" />
+                android:src="@drawable/openclosetime" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:background="@color/light_black">
 
+    <LinearLayout
+        android:id="@+id/linearClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="end">
+
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_close_foreground"
+            android:contentDescription="Close"
+            />
+    </LinearLayout>
     <EditText
         android:id="@+id/editTextTypeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Food Type Name"
+        android:textColor="@color/colorText"
+        android:hint="Nhập tên loại thực phẩm"
+        android:layout_margin="15dp"
+        android:textColorHint="@color/colorHint"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextPosition"
         android:layout_width="match_parent"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorHint"
         android:layout_height="wrap_content"
-        android:hint="Enter Position"
+        android:layout_margin="15dp"
+        android:hint="Nhập vị trí hiển thị"
         android:inputType="number" />
 
 </LinearLayout>

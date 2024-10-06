@@ -25,7 +25,7 @@
         android:id="@+id/title_step2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Restaurant - Step 2"
+        android:text="Cập nhật thông tin- bước 2"
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingLeft="20dp"
@@ -34,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="@id/back_arrow"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="10dp"
         />
 
 
@@ -143,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Select The image"
+        android:text="Chọn hình ảnh"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -180,7 +180,7 @@
         android:layout_height="63dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_background"
-        android:text="Submit"
+        android:text="Cập nhật"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

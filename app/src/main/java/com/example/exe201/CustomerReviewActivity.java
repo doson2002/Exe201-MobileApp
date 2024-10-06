@@ -1,6 +1,9 @@
 package com.example.exe201;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -67,6 +71,8 @@ public class CustomerReviewActivity extends AppCompatActivity {
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         RatingBar ratingBarInput = findViewById(R.id.ratingBarInput); // Giả sử bạn đã có ratingBar trong layout
+        ratingBarInput.setRating(0);
+
         EditText messageInput = findViewById(R.id.editReviewText); // Giả sử bạn có EditText để nhập bình luận
 
 
@@ -93,12 +99,24 @@ public class CustomerReviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 float ratingStar = ratingBarInput.getRating(); // Lấy số sao từ rating bar
-                String responseMessage = messageInput.getText().toString(); // Lấy bình luận từ người dùng
-                // Kiểm tra giá trị
-                Log.d("Rating Value", String.valueOf(ratingStar));
-                Log.d("Message Value", responseMessage);
-                // Gọi hàm addRating với dữ liệu từ rating bar và message input
-                addRating(userId, supplierId, ratingStar, responseMessage);
+                if (ratingStar == 0.0f) {
+                    // Thông báo cho người dùng chọn sao
+                    Toast.makeText(CustomerReviewActivity.this, "Vui lòng chọn số sao trước khi gửi đánh giá!", Toast.LENGTH_SHORT).show();
+                } else {
+                    String responseMessage = messageInput.getText().toString(); // Lấy bình luận từ người dùng
+                    addRating(userId, supplierId, ratingStar, responseMessage, new ReviewAdapter.AddRatingCallback() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(CustomerReviewActivity.this, "Bình luận thành công!", Toast.LENGTH_SHORT).show();
+                            messageInput.setText("");
+                        }
+
+                        @Override
+                        public void onError(String errorMessage) {
+                            Toast.makeText(CustomerReviewActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -212,25 +230,22 @@ public class CustomerReviewActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void addRating(int userId, int supplierId, float ratingStar, String responseMessage) {
+    private void addRating(int userId, int supplierId, float ratingStar, String responseMessage, final ReviewAdapter.AddRatingCallback callback) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
 
-        // Đường dẫn API (Thay thế bằng đường dẫn API thực của bạn)
         String url = ApiEndpoints.CREATE_RATING;
 
-        // Tạo JSON Object để gửi
         JSONObject ratingData = new JSONObject();
         try {
-            ratingData.put("user_id", userId); // Lấy user_id từ shared preferences hoặc chỗ khác
-            ratingData.put("supplier_id", supplierId); // Lấy supplier_id từ shared preferences hoặc tham số
-            ratingData.put("rating_star", ratingStar); // Lấy số sao từ rating bar
-            ratingData.put("response_message", responseMessage); // Lấy tin nhắn từ người dùng
+            ratingData.put("user_id", userId);
+            ratingData.put("supplier_id", supplierId);
+            ratingData.put("rating_star", ratingStar);
+            ratingData.put("response_message", responseMessage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        // Tạo JsonObjectRequest
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
@@ -238,30 +253,52 @@ public class CustomerReviewActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Xử lý phản hồi từ server (ví dụ: thông báo người dùng hoặc cập nhật UI)
-                        Toast.makeText(CustomerReviewActivity.this, "Bình luận thành công!", Toast.LENGTH_SHORT).show();
+                        try {
+                            // Parse response to get new rating details
+                            int id = response.getInt("id");
+                            JSONObject userObject = response.getJSONObject("users");
+                            String fullName = userObject.getString("fullName");
+                            String imgUrl = userObject.getString("imgUrl");
+                            int ratingStar = response.getInt("ratingStar");
+                            String responseMessage = response.getString("responseMessage");
+
+                            // Tạo đối tượng Rating mới và thêm vào adapter
+                            Rating newRating = new Rating(id, fullName, ratingStar, responseMessage, imgUrl);
+                            reviewAdapter.addRating(newRating); // Thêm rating mới vào adapter
+
+                            // Thông báo thành công
+                            if (callback != null) {
+                                callback.onSuccess();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            if (callback != null) {
+                                callback.onError("Error parsing response");
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Xử lý lỗi (ví dụ: thông báo lỗi cho người dùng)
-                        Toast.makeText(CustomerReviewActivity.this, "Error adding rating", Toast.LENGTH_SHORT).show();
+                        if (callback != null) {
+                            callback.onError(error.getMessage());
+                        }
                     }
                 }
         ) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
-                headers.put("Content-Type", "application/json"); // Đảm bảo gửi request với JSON content type
+                headers.put("Authorization", "Bearer " + jwtToken);
+                headers.put("Content-Type", "application/json");
                 return headers;
             }
         };
 
-        // Thêm request vào hàng đợi
         requestQueue.add(jsonObjectRequest);
     }
+
 
 
 }

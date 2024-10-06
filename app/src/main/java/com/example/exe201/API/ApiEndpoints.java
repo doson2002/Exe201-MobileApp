@@ -3,7 +3,8 @@ package com.example.exe201.API;
 public class ApiEndpoints {
     // Địa chỉ cơ sở (base URL) của API
 
-    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
+//    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
+private static final String BASE_URL = "http://192.168.1.2:8080/api/v1/";
 
     // Các endpoint API
     public static final String CREATE_SUPPLIER_INFO = BASE_URL + "supplier_info/create";
@@ -53,6 +54,10 @@ public class ApiEndpoints {
     // Rating
  public static final String GET_RATING_BY_SUPPLIER_ID = BASE_URL + "order_ratings/get_rating_by_supplier_id";
     public static final String CREATE_RATING = BASE_URL + "order_ratings/add_rating";
+    public static final String GET_RATING_DETAIL = BASE_URL + "order_ratings/get_rating_detail";
+    public static final String GET_ALL_RATING = BASE_URL + "order_ratings/get_all_messages_by_stars";
+
+
 
     //Food order
     public static final String GET_ORDER_BY_USER_ID = BASE_URL + "food_orders/get_food_order_by_userId";
@@ -63,6 +68,12 @@ public class ApiEndpoints {
     // Report
     public static final String GET_REPORT_BY_DATE = BASE_URL + "report/report_for_partner_by_date?";
     public static final String GET_REPORT_BY_DATE_RANGE = BASE_URL + "report/report_for_partner_by_range_date?";
+
+  // Banner image
+  public static final String GET_ALL_BANNER_ACTIVED = BASE_URL + "image_banner/get_all_image_banners";
+
+  // FAQ
+  public static final String GET_ALL_FAQ = BASE_URL + "faq/get_all_faq";
 
 
 

@@ -61,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Spinner genderSpinner;
     Button sign_out_btn ;
     Uri imageUri;
+    private TextView tvFAQ;
     String imageUrl,fullName, phoneNumber, currentEmail;
     int gender;
 
@@ -80,6 +81,8 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.save_button);
         fbutton = findViewById(R.id.floatingActionButton);
 
+
+
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +91,8 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         // Lấy SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -371,6 +376,7 @@ public class ProfileActivity extends AppCompatActivity {
         editor.remove("img_url");
         editor.remove("gender");
         editor.remove("phone");
+        editor.remove("supplier_id");
         editor.apply();
 
         // Return User Back To Home:

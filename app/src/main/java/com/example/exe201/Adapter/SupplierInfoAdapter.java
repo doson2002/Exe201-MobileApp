@@ -97,7 +97,7 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
 
     // ViewHolder ánh xạ các thành phần UI từ layout item_food_item_customer.xml
     public static class SupplierInfoViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewSupplier;
+        ImageView imageViewSupplier,imgStarIcon;
         TextView textViewRestaurantName;
         TextView textViewTotalStar;
         TextView textViewCountReview;
@@ -111,6 +111,7 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
         public SupplierInfoViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewSupplier = itemView.findViewById(R.id.imageViewSupplier);
+            imgStarIcon = itemView.findViewById(R.id.imgStarIcon);
             textViewRestaurantName = itemView.findViewById(R.id.textViewRestaurantName);
             textViewTotalStar = itemView.findViewById(R.id.textViewTotalStar);
             textViewCountReview = itemView.findViewById(R.id.textViewCountReview);

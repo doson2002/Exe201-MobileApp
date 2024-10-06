@@ -52,9 +52,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total star"
+                    android:layout_gravity="center"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray"
                     />
+                <ImageView
+                    android:id="@+id/imgStarIcon"
+                    android:layout_width="25dp"
+                    android:layout_gravity="center"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_star_rate_foreground"
+                    android:textStyle="bold" />
                 <TextView
                     android:id="@+id/textViewCountReview"
                     android:layout_width="wrap_content"

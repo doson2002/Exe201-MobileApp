@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,373 +9,334 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="60dp"
         android:elevation="10dp"
         android:translationZ="10dp"
-        android:layout_marginVertical="60dp"
-        android:layout_marginHorizontal="30dp"
-        app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@android:color/white"> <!-- Đặt màu nền của CardView -->
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="10dp"> <!-- Đặt màu nền của CardView -->
 
         <AutoCompleteTextView
             android:id="@+id/searchAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:completionThreshold="1"
             android:drawableLeft="@drawable/ic_search_foreground"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Search Name"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:padding="10dp"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textColorHint="@color/light_black"
-            android:completionThreshold="1"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:visibility="visible"/>
+            android:visibility="visible" />
+
         <Button
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
-            android:background="@color/orange"
-            android:layout_gravity="end"
-            android:layout_marginTop="16dp" />
+            android:layout_gravity="center|end"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/button_background"
+            android:text="Search" />
     </androidx.cardview.widget.CardView>
-    <Button
-        android:id="@+id/test"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation Bar -->
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        >
-
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <FrameLayout
+            android:fillViewport="true">
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="130dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-
-                <!-- Toolbar (đặt dưới để nó nằm dưới CardView) -->
-
-                <!-- CardView chứa EditText -->
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="130dp">
+
+
+                    <!-- Toolbar (đặt dưới để nó nằm dưới CardView) -->
+
+                    <!-- CardView chứa EditText -->
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:background="@color/white"
+                        android:elevation="10dp"
+                        app:title=""
+                        app:titleTextColor="@color/black">
+                        <!-- ImageView để hiển thị icon với kích thước tùy chỉnh -->
+                        <ImageView
+                            android:id="@+id/favorite_icon"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="end"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginBottom="30dp"
+                            android:padding="7dp"
+                            android:src="@drawable/ic_favourites_foreground" />
+
+
+                    </androidx.appcompat.widget.Toolbar>
+
+
+                </FrameLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerSupplierTypes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:elevation="10dp"
-                    app:title=""
-                    app:titleTextColor="@color/black">
-                    <!-- ImageView để hiển thị icon với kích thước tùy chỉnh -->
-                    <ImageView
-                        android:id="@+id/favorite_icon"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="end"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:padding="7dp"
-                        android:src="@drawable/ic_favourites_foreground" />
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-
-                </androidx.appcompat.widget.Toolbar>
-
-
-
-
-
-
-            </FrameLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerSupplierTypes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="10dp"
-                >
-            <LinearLayout
-                android:id="@+id/linearLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:id="@+id/fastSaleTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="FAST SALE (Recycle food)"
-                    android:textColor="#FF9800"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/seeAllButtonFastSale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:text="See all >"
-                    android:textColor="#FF9800"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerBestFood"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:scrollbars="horizontal" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="10dp"
-                >
-            <!-- Food Regardless of the Weather Section -->
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/linearLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/foodWeatherTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="Food Regardless of the Weather"
-                    android:textColor="#FF9800"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/fastSaleTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="FAST SALE (Recycle food)"
+                            android:textColor="#FF9800"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/seeAllButtonWeather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:text="See all >"
-                    android:textColor="#FF9800"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                        <Button
+                            android:id="@+id/seeAllButtonFastSale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@android:color/transparent"
+                            android:text="See all >"
+                            android:textColor="#FF9800"
+                            android:textSize="12sp" />
+                    </LinearLayout>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_marginTop="40dp"
-                >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerBestFood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:scrollbars="horizontal" />
+                </androidx.cardview.widget.CardView>
 
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Image Cards -->
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/food" />
-
-
-                </LinearLayout>
-            </HorizontalScrollView>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="10dp"
-                >
-            <!-- Top Restaurant Rating Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/topRatingTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="Top Restaurant Rating 5* week"
-                    android:textColor="#FF9800"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/seeAllButtonTopRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:text="See all >"
-                    android:textColor="#FF9800"
-                    android:textSize="12sp" />
-            </LinearLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewSuppliers"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:scrollbars="horizontal" />
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white">
 
-            </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="10dp"
-                >
+                        <!-- Tiêu đề cho phần banner -->
+                        <TextView
+                            android:id="@+id/bannerTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Tiết kiệm bữa ăn cùng với FoodPT"
+                            android:textColor="#FF9800"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-            <!-- Recently Viewed Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/viewPager"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginTop="10dp"
+                            android:scrollbars="horizontal" />
 
-                <TextView
-                    android:id="@+id/recentlyViewedTitle"
-                    android:layout_width="wrap_content"
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="Recently Viewed"
-                    android:textColor="#FF9800"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white">
+                    <!-- Top Restaurant Rating Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/seeAllButtonRecentlyViewed"
-                    android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/topRatingTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Top Most Ordered Restaurants"
+                            android:textColor="#FF9800"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/seeAllButtonTopRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@android:color/transparent"
+                            android:text="See all >"
+                            android:textColor="#FF9800"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewSuppliers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:scrollbars="horizontal" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:text="See all >"
-                    android:textColor="#FF9800"
-                    android:textSize="12sp" />
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <!-- Recently Viewed Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/recentlyViewedTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Recently Viewed"
+                            android:textColor="#FF9800"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/seeAllButtonRecentlyViewed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@android:color/transparent"
+                            android:text="See all >"
+                            android:textColor="#FF9800"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:background="@color/white"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- Image Cards for Recently Viewed -->
+                            <ImageView
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_margin="5dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/food" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white">
+                    <!-- Hot Viewed Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/recentlymore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:text="Hot Viewed"
+                            android:textColor="#FF9800"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/addmore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@android:color/transparent"
+                            android:text="See all >"
+                            android:textColor="#FF9800"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:background="@color/white"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- Image Cards for Recently Viewed -->
+                            <ImageView
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_margin="5dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/food" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:scrollbars="none"
-                android:layout_marginTop="40dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Image Cards for Recently Viewed -->
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/food" />
-
-                </LinearLayout>
-            </HorizontalScrollView>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="10dp"
-                >
-            <!-- Hot Viewed Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/recentlymore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:text="Hot Viewed"
-                    android:textColor="#FF9800"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/addmore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:text="See all >"
-                    android:textColor="#FF9800"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:scrollbars="none"
-                android:layout_marginTop="40dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Image Cards for Recently Viewed -->
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/food" />
-
-                </LinearLayout>
-            </HorizontalScrollView>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
     </RelativeLayout>
 </FrameLayout>

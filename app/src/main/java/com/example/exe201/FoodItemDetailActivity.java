@@ -2,12 +2,15 @@ package com.example.exe201;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,11 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -61,7 +67,12 @@ public class FoodItemDetailActivity extends AppCompatActivity {
     LinearLayout saveButton;
     Uri imageUri;
     String imageUrl;
+    TextView selectedFoodTypesTextView;
+    private LinearLayout linearAddFoodType ;
     private List<FoodType> foodTypes;
+    private List<FoodType> selectedFoodTypes;
+    private boolean[] selectedItems;
+    private List<String> typeNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +95,93 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         fbutton = findViewById(R.id.floatingActionButton);
         saveButton = findViewById(R.id.save_button);
         backArrow = findViewById(R.id.back_arrow);
+        linearAddFoodType = findViewById(R.id.linearAddFoodType);
+        selectedFoodTypesTextView = findViewById(R.id.selected_food_types_text_view);
+
+
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Kết thúc Activity hiện tại và quay về Activity trước đó
                 finish();
+            }
+        });
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        int supplierId = sharedPreferences.getInt("supplier_id", -1);
+
+        linearAddFoodType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inflate the dialog layout
+                LayoutInflater inflater = LayoutInflater.from(FoodItemDetailActivity.this);
+                View dialogView = inflater.inflate(R.layout.dialog_add_food_type, null);
+
+
+                // Create the dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(FoodItemDetailActivity.this);
+                builder.setView(dialogView);
+
+                // Get references to the input fields
+                EditText editTextTypeName = dialogView.findViewById(R.id.editTextTypeName);
+                EditText editTextPosition = dialogView.findViewById(R.id.editTextPosition);
+
+                // Set up the dialog buttons
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Get the entered data
+                        String typeName = editTextTypeName.getText().toString().trim();
+                        int position = Integer.parseInt(editTextPosition.getText().toString().trim());
+                        // Get supplierInfoId from SharedPreferences
+
+                        // Check if supplierInfoId is valid
+                        if (supplierId != -1) {
+                            // Create a JSON object for the request
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                jsonBody.put("typeName", typeName);
+                                jsonBody.put("i", position);
+                                jsonBody.put("supplierInfoId", supplierId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Send the API request
+                            sendCreateFoodTypeRequest(jsonBody,jwtToken, supplierId);
+                        } else {
+                            Toast.makeText(FoodItemDetailActivity.this, "Error: Supplier ID not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // Create the dialog
+                AlertDialog dialog = builder.create();
+
+
+                // Set background color for the dialog window using color from colors.xml
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(
+                            ContextCompat.getColor(FoodItemDetailActivity.this, R.color.light_black) // Thay R.color.your_color_name bằng tên màu trong colors.xml
+                    ));
+                }
+
+                // Show the dialog
+                dialog.show();
+                // Set color for "Add" button
+                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setTextColor(ContextCompat.getColor(FoodItemDetailActivity.this, R.color.orange)); // Thay màu từ colors.xml
+
+                // Set color for "Cancel" button
+                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                negativeButton.setTextColor(ContextCompat.getColor(FoodItemDetailActivity.this, R.color.orange)); // Thay màu từ colors.xml
             }
         });
         if (typeSpinner == null) {
@@ -137,6 +230,25 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                 return false; // Trả về false để tiếp tục mở danh sách Spinner bình thường.
             }
         });
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Nếu người dùng chọn một loại thực phẩm khác
+                if (position >= 0) { // Kiểm tra nếu vị trí hợp lệ
+                    // Cập nhật UI của Spinner để hiển thị các loại thực phẩm đã chọn
+                    updateSpinnerText();
+
+                    // Cập nhật Adapter để hiển thị thay đổi
+                    TypeAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Khi không có gì được chọn, có thể không cần xử lý gì
+            }
+        });
+
         // Khi người dùng nhấn nút "Submit"
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +263,62 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         });
 
     }
+    private void sendCreateFoodTypeRequest(JSONObject jsonBody, String jwtToken, int supplierId) {
+        String url = ApiEndpoints.CREATE_FOOD_TYPE;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from API
+                        Toast.makeText(FoodItemDetailActivity.this, "Food type created successfully", Toast.LENGTH_SHORT).show();
+                        loadAllFoodTypes(supplierId, selectedFoodTypes);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(FoodItemDetailActivity.this, "Error creating food type", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(FoodItemDetailActivity.this).add(jsonObjectRequest);
+    }
+
+    // Phương thức để cập nhật hiển thị của Spinner
+    private void updateSpinnerText() {
+        StringBuilder selectedFoodTypes = new StringBuilder();
+        for (int i = 0; i < selectedItems.length; i++) {
+            if (selectedItems[i]) {
+                selectedFoodTypes.append(typeNames.get(i)).append(", "); // typeNames là danh sách tên loại thực phẩm
+            }
+        }
+
+        // Xóa dấu phẩy và khoảng trắng ở cuối nếu có
+        if (selectedFoodTypes.length() > 0) {
+            selectedFoodTypes.setLength(selectedFoodTypes.length() - 2); // Xóa dấu phẩy và khoảng trắng
+        }
+
+        // Cập nhật TextView
+        if (selectedFoodTypes.length() > 0) {
+            selectedFoodTypesTextView.setText("Loại thực phẩm đã chọn: " + selectedFoodTypes.toString());
+            selectedFoodTypesTextView.setVisibility(View.VISIBLE); // Hiện TextView nếu có item đã chọn
+        } else {
+            selectedFoodTypesTextView.setVisibility(View.GONE); // Ẩn TextView nếu không có item nào được chọn
+        }
+    }
+
     // Hàm để hiển thị ảnh từ URL với Glide
     private void displayImage(String imageUrl) {
         ImageView imageView = findViewById(R.id.imageView); // Thay thế bằng ID của ImageView bạn muốn hiển thị
@@ -224,7 +392,7 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                             setCategoryToSpinner(category);
                             // Cập nhật loại món ăn
                             JSONArray foodTypesJsonArray = response.getJSONArray("food_types");
-                            List<FoodType> selectedFoodTypes = new ArrayList<>();
+                             selectedFoodTypes = new ArrayList<>();
                             for (int i = 0; i < foodTypesJsonArray.length(); i++) {
                                 JSONObject foodTypeJson = foodTypesJsonArray.getJSONObject(i);
                                 selectedFoodTypes.add(new FoodType(foodTypeJson.getInt("id"), foodTypeJson.getString("typeName")));
@@ -339,8 +507,8 @@ public class FoodItemDetailActivity extends AppCompatActivity {
     }
 
     private void updateTypeSpinner(List<FoodType> allFoodTypes, List<FoodType> selectedFoodTypes) {
-        List<String> typeNames = new ArrayList<>();
-        boolean[] selectedItems = new boolean[allFoodTypes.size()];
+        typeNames = new ArrayList<>();
+         selectedItems = new boolean[allFoodTypes.size()];
 
         // Nếu danh sách rất lớn, hãy sử dụng Background Thread
         new Thread(new Runnable() {
@@ -372,7 +540,13 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                             Log.e("updateTypeSpinner", "Dữ liệu typeNames trống.");
                             return;
                         }
-                        TypeAdapter = new TypeSpinnerAdapter(FoodItemDetailActivity.this, typeNames, selectedItems);
+                        TypeAdapter = new TypeSpinnerAdapter(FoodItemDetailActivity.this, typeNames, selectedItems, new TypeSpinnerAdapter.OnSelectionChangeListener() {
+                            @Override
+                            public void onSelectionChanged(boolean[] selectedItems) {
+                                // Cập nhật văn bản hiển thị trong Spinner
+                                updateSpinnerText();
+                            }
+                        });
                         typeSpinner.setAdapter(TypeAdapter);
                         // Thiết lập đúng vị trí lựa chọn của Spinner nếu cần
                         for (int i = 0; i < selectedItems.length; i++) {
@@ -386,6 +560,8 @@ public class FoodItemDetailActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+
 
     // Hàm để gửi dữ liệu đến API
     private void sendDataToApi(String imgUrl) {
@@ -448,7 +624,13 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Xử lý kết quả thành công
-                        Toast.makeText(FoodItemDetailActivity.this, "Food item updated successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoodItemDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+
+                        // Chuyển hướng sang FoodItemActivity
+                        Intent intent = new Intent(FoodItemDetailActivity.this, FoodItemActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish(); // Đóng Activity hiện tại để không quay lại sau khi nhấn back
                     }
                 },
                 new Response.ErrorListener() {

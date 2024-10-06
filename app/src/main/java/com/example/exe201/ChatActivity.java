@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,8 +20,17 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.MessageAdapter;
 import com.example.exe201.DTO.ChatRealTime.Message;
+import com.example.exe201.DTO.SupplierInfo;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +38,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +57,9 @@ public class ChatActivity extends AppCompatActivity {
     private String role; // Role: customer or supplier
     private String chatId; // Chat ID
     private String receiverImageUrl;
-
+    private TextView textViewRestaurantName;
+    private String supplierImgUrl = "";
+    private String restaurantName = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +77,22 @@ public class ChatActivity extends AppCompatActivity {
         int supplierId = sharedPreferences.getInt("supplier_id", -1);
         role = sharedPreferences.getString("role", "ROLE_CUSTOMER"); // Mặc định là customer
         chatId = getIntent().getStringExtra("chatId");
+
+        SupplierInfo supplierChoseByCustomer = getIntent().getParcelableExtra("supplier");
+        assert supplierChoseByCustomer != null;
+        int supplierIdChoseByCustomer = supplierChoseByCustomer.getId();
         if(chatId ==null||chatId.isEmpty()){
-            chatId = "supplier_" + supplierId + "_customer_" + userId;
+            chatId = "supplier_" + supplierIdChoseByCustomer + "_customer_" + userId;
         }
+
+        textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
+        // Kiểm tra vai trò để gọi hàm lấy tên
+        if ("ROLE_CUSTOMER".equals(role)) {
+            getSupplierById(supplierIdChoseByCustomer);
+        } else if ("ROLE_PARTNER".equals(role)) {
+            getCustomerNameFromFirebase(supplierId,chatId);
+        }
+
         // Khởi tạo Firebase Database với chatId
         chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId);
 
@@ -93,9 +123,101 @@ public class ChatActivity extends AppCompatActivity {
         listenForNewMessages();
 
         // Gửi tin nhắn
-        findViewById(R.id.send_button).setOnClickListener(v -> sendMessage(supplierId, userId, fullName, imgUrl));
+        findViewById(R.id.send_button).setOnClickListener(v -> {
+            if (role.equals("ROLE_CUSTOMER")) {
+                // Nếu là khách hàng, gửi tin nhắn bình thường
+                sendMessage(supplierId, userId, fullName, imgUrl);
+            } else if (role.equals("ROLE_PARTNER")) {
+                // Nếu là đối tác, lấy userId từ chatRef
+                chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // Lấy userId từ chatId (ví dụ: supplier_1_customer_3)
+                            String[] parts = chatId.split("_");
+                            if (parts.length == 4) {
+                                // Lấy userId từ phần cuối của chuỗi
+                                int extractedUserId = Integer.parseInt(parts[3]); // Lấy giá trị "3"
+                                // Gọi hàm sendMessage với userId mới
+                                sendMessage(supplierId, extractedUserId, restaurantName, supplierImgUrl);
+                            }
+                        } else {
+                            Log.e("ChatActivity", "Chat reference does not exist.");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("ChatActivity", "Failed to retrieve data from chat reference", error.toException());
+                    }
+                });
+            }
+        });
     }
 
+    private void getSupplierById(int supplierId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+
+        String url = ApiEndpoints.GET_SUPPLIER_BY_ID + "/" + supplierId; // URL API với supplierId
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            restaurantName = response.getString("restaurant_name");
+                            textViewRestaurantName.setText(restaurantName); // Thiết lập tên nhà hàng vào TextView
+                            supplierImgUrl = response.getString("img_url");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ChatActivity.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errorMessage = "Error fetching data";
+                        if (error.networkResponse != null) {
+                            int statusCode = error.networkResponse.statusCode;
+                            errorMessage += " - Status code: " + statusCode;
+                        }
+                        Toast.makeText(ChatActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+        // Thêm request vào hàng đợi
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+
+    private void getCustomerNameFromFirebase(int supplierId , String chatId) {
+        DatabaseReference customerRef = FirebaseDatabase.getInstance().getReference("supplier_chats").child("supplier_" + supplierId).child(chatId);
+
+        customerRef.child("customerName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String customerName = dataSnapshot.getValue(String.class);
+                textViewRestaurantName.setText(customerName); // Thiết lập tên khách hàng vào TextView
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("ChatActivity", "Failed to get customer name", databaseError.toException());
+            }
+        });
+    }
     private void loadOldMessages() {
         // Tải tin nhắn cũ
         chatRef.child("messages").orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -159,7 +281,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     // Cập nhật thông tin chat cho supplier nếu là customer gửi
                     if (role.equals("ROLE_CUSTOMER")) {
-                        updateChatSummaryForSupplier(supplierId,fullName,imgUrl, text, timestamp);
+                        updateChatSummaryForSupplier(supplierId,customerId, fullName,imgUrl, text, timestamp);
                     }else if(role.equals("ROLE_PARTNER")){
                         updateChatSummaryForCustomer(customerId,fullName, imgUrl, text, timestamp);
                     }
@@ -177,9 +299,9 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void updateChatSummaryForSupplier(int supplierId,String fullName, String imgUrl, String lastMessage, long timestamp) {
+    private void updateChatSummaryForSupplier(int supplierId,int customerId, String fullName, String imgUrl, String lastMessage, long timestamp) {
         String supplierID = "supplier_" + supplierId;  // ID của supplier
-
+        String customerID = "customer_" + customerId;
         DatabaseReference supplierChatRef = FirebaseDatabase.getInstance()
                 .getReference("supplier_chats")
                 .child(supplierID)
@@ -187,8 +309,8 @@ public class ChatActivity extends AppCompatActivity {
 
         // Cập nhật thông tin chat
         Map<String, Object> updates = new HashMap<>();
-        updates.put("customerName", fullName);
-        updates.put("customerImageUrl", imgUrl);
+        updates.put("senderName", fullName);
+        updates.put("senderImageUrl", imgUrl);
         updates.put("lastMessage", lastMessage);
         updates.put("lastMessageTime", timestamp);
         supplierChatRef.updateChildren(updates);
@@ -206,6 +328,20 @@ public class ChatActivity extends AppCompatActivity {
                 Log.e("ChatActivity", "Failed to update unread count", error.toException());
             }
         });
+
+        DatabaseReference customerChatRef = FirebaseDatabase.getInstance()
+                .getReference("customer_chats")
+                .child(customerID)
+                .child(chatRef.getKey());
+
+        // Cập nhật thông tin chat
+        Map<String, Object> updateCustomer = new HashMap<>();
+        updateCustomer.put("senderName", restaurantName);
+        updateCustomer.put("senderImageUrl", supplierImgUrl);
+        updateCustomer.put("lastMessage", "");
+        updateCustomer.put("lastMessageTime", timestamp);
+        updateCustomer.put("unreadCount", 0);
+        customerChatRef.updateChildren(updateCustomer);
     }
     private void updateChatSummaryForCustomer(int customerId,String fullName, String imgUrl, String lastMessage, long timestamp) {
         String customerID = "customer_" + customerId;  // ID của supplier
@@ -217,8 +353,8 @@ public class ChatActivity extends AppCompatActivity {
 
         // Cập nhật thông tin chat
         Map<String, Object> updates = new HashMap<>();
-        updates.put("supplierName", fullName);
-        updates.put("supplierImageUrl", imgUrl);
+        updates.put("senderName", fullName);
+        updates.put("senderImageUrl", imgUrl);
         updates.put("lastMessage", lastMessage);
         updates.put("lastMessageTime", timestamp);
         customerChatRef.updateChildren(updates);

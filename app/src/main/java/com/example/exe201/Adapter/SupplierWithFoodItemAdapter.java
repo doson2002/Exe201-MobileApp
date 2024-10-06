@@ -13,21 +13,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierWithFoodItems;
 import com.example.exe201.R;
 import com.example.exe201.ShowFoodItemActivity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SupplierWithFoodItemAdapter extends RecyclerView.Adapter<SupplierWithFoodItemAdapter.MyViewHolder> {
 
     private List<SupplierWithFoodItems> supplierList;
     private Context context;
+    private HashMap<Integer, List<Menu>> cartMap = new HashMap<>();
+    private ImageView imgShowCart;
 
-    public SupplierWithFoodItemAdapter(List<SupplierWithFoodItems> supplierList,Context context) {
+    public SupplierWithFoodItemAdapter(List<SupplierWithFoodItems> supplierList,Context context,HashMap<Integer, List<Menu>> cartMap,
+                                       ImageView imgShowCart) {
         this.supplierList = supplierList;
         this.context = context;
+        this.cartMap = cartMap;
+        this.imgShowCart = imgShowCart;
     }
 
     @NonNull
@@ -62,7 +69,7 @@ public class SupplierWithFoodItemAdapter extends RecyclerView.Adapter<SupplierWi
             context.startActivity(intent);
         });
         // Setup RecyclerView cho danh sách món ăn của Supplier này
-        FoodItemGroupedBySupplierAdapter foodItemAdapter = new FoodItemGroupedBySupplierAdapter(supplierWithFoodItems.getFoodItems(),holder.itemView.getContext());
+        FoodItemGroupedBySupplierAdapter foodItemAdapter = new FoodItemGroupedBySupplierAdapter(supplierWithFoodItems.getFoodItems(),holder.itemView.getContext(),cartMap,imgShowCart);
         holder.recyclerViewFoodItems.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerViewFoodItems.setAdapter(foodItemAdapter);
     }

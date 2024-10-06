@@ -44,13 +44,6 @@
         android:layout_marginTop="10dp"
         android:gravity="center">
 
-        <Button
-            android:id="@+id/menuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Menu"
-            android:backgroundTint="#E0E0E0"
-            android:textColor="#000" />
 
         <Button
             android:id="@+id/placeButton"
@@ -94,11 +87,13 @@
 
         <RatingBar
             android:id="@+id/ratingBarInput"
-            style="?android:attr/ratingBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
+            android:progressDrawable="@drawable/ratingbar_states"
             android:stepSize="1.0"
+            android:minHeight="48dp"
+            android:minWidth="240dp"
             android:layout_gravity="center" />
 
         <Button

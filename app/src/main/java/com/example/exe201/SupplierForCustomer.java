@@ -32,6 +32,7 @@ import com.example.exe201.Adapter.SupplierInfoAdapter;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierType;
+import com.example.exe201.helpers.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,8 +94,10 @@ public class SupplierForCustomer extends AppCompatActivity {
         supplierInfoAdapter  = new SupplierInfoAdapter(supplierInfoList, this, new SupplierInfoAdapter.OnSupplierInfoClickListener(){
             @Override
             public void onSupplierInfoClick(SupplierInfo supplierInfo) {
+                // Lưu supplierInfo vào SharedPreferences
+                Utils.saveSupplierInfo(SupplierForCustomer.this, supplierInfo);
                 Intent intent = new Intent(SupplierForCustomer.this, ShowFoodItemActivity.class);
-                intent.putExtra("supplier",supplierInfo); // Truyền SupplierId qua Intent
+                intent.putExtra("supplier",supplierInfo); // Truyền Supplier qua Intent
                 startActivity(intent);
             }
         });
