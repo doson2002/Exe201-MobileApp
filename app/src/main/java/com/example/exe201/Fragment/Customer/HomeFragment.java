@@ -5,6 +5,8 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -41,12 +44,14 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
+import com.example.exe201.Adapter.BannerAdapter;
 import com.example.exe201.Adapter.FoodItemTopSoldAdapter;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
 
 import com.example.exe201.AddFoodItemActivity;
 import com.example.exe201.Adapter.TopSupplierRatingAdapter;
 import com.example.exe201.ChatActivity;
+import com.example.exe201.DTO.Banner;
 import com.example.exe201.DTO.FoodItemTopSold;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierType;
@@ -82,6 +87,14 @@ public class HomeFragment extends Fragment {
     private RecyclerView topSupplierRecyclerView;
     private TopSupplierRatingAdapter topSupplierAdapter;
     private List<SupplierInfo> supplierList;
+
+    private RecyclerView recyclerBanner;
+    private BannerAdapter bannerAdapter;
+    private List<Banner> bannerList;
+    private ViewPager2 viewPager;
+    private Handler handler;
+    private Runnable runnable;
+
     private int currentPage = 0;
     private int pageSize = 5; // Kích thước mỗi trang
     private boolean isLoading = false;
@@ -91,6 +104,31 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_home_page, container, false);
+        // handle load banner
+        viewPager = view.findViewById(R.id.viewPager);
+        bannerList = new ArrayList<>();
+        // Giả sử bạn đã gọi API và có dữ liệu trong bannerList
+        loadBanners();
+        // Hàm để tải dữ liệu từ API
+        bannerAdapter = new BannerAdapter(requireContext(), bannerList);
+        viewPager.setAdapter(bannerAdapter);
+
+        // Tự động chuyển đổi banner
+        handler = new Handler(Looper.getMainLooper());
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                int currentItem = viewPager.getCurrentItem();
+                if (currentItem == bannerList.size() - 1) {
+                    viewPager.setCurrentItem(0, false);
+                } else {
+                    viewPager.setCurrentItem(currentItem + 1, true);
+                }
+                handler.postDelayed(this, 5000); // Thay đổi 3000 thành khoảng thời gian bạn muốn
+            }
+        };
+        handler.postDelayed(runnable, 5000); // Bắt đầu tự động chuyển đổi sau 3 giây
+
 
         recyclerViewTopSold = view.findViewById(R.id.recyclerBestFood);
         recyclerViewTopSold.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
@@ -193,16 +231,6 @@ public class HomeFragment extends Fragment {
 
         recyclerViewSupplierTypes.setAdapter(supplierTypeAdapter);
 
-        // Tìm các thành phần UI như Button, ImageView ở đây
-        Button test = view.findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), ChatActivity.class); // Thay bằng activity của bạn
-                startActivity(intent);
-            }
-        });
 
         ImageView favoriteIcon = view.findViewById(R.id.favorite_icon);
         favoriteIcon.setOnClickListener(new View.OnClickListener() {
@@ -218,13 +246,57 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    private void loadBanners() {
+        String url = ApiEndpoints.GET_ALL_BANNER_ACTIVED; // Thay đổi thành URL của API
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("JwtToken", null);
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                int id = response.getJSONObject(i).getInt("id");
+                                String imageUrl = response.getJSONObject(i).getString("imageUrl");
+                                int position = response.getJSONObject(i).getInt("i");
+
+                                Banner banner = new Banner(id, imageUrl, position);
+                                bannerList.add(banner);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        bannerAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(requireContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonArrayRequest);
+    }
     private void fetchSuppliers(int page, int size) {
         isLoading = true;
         String url = ApiEndpoints.GET_TOP_RATING+ "?page=" + page + "&size=" + size;  // Địa chỉ API của bạn
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
         // Tạo một RequestQueue
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
 
         // Tạo một JsonObjectRequest để gọi API
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -299,7 +371,8 @@ public class HomeFragment extends Fragment {
                             supplierInfo.setId(supplierInfoJson.getInt("id"));
                             supplierInfo.setRestaurantName(supplierInfoJson.getString("restaurant_name"));
                             supplierInfo.setImgUrl(supplierInfoJson.getString("img_url"));
-
+                            supplierInfo.setTotalStarRating(supplierInfoJson.getDouble("total_star_rating"));
+                            supplierInfo.setTotalReviewCount(supplierInfoJson.getInt("total_review_count"));
                             foodItemTopSold.setSupplierInfo(supplierInfo);
                             foodItemTopSoldList.add(foodItemTopSold);
                         }
@@ -456,5 +529,10 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable); // Dừng tự động chuyển đổi khi Activity bị hủy
+    }
 
 }

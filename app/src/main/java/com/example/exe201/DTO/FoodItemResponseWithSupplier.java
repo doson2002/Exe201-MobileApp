@@ -1,24 +1,48 @@
 package com.example.exe201.DTO;
 
 public class FoodItemResponseWithSupplier {
-    private Long id;
+    private int id;
     private String foodName;
     private double price;
     private String imageUrl;
+    private int quantity;
+    private int supplierId;
 
 
-    public FoodItemResponseWithSupplier(Long id, String foodName, double price, String imageUrl) {
+    public FoodItemResponseWithSupplier(int id, String foodName, double price, String imageUrl, int quantity, int supplierId) {
         this.id = id;
         this.foodName = foodName;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.quantity = quantity;
+        this.supplierId = supplierId;
+
     }
 
-    public Long getId() {
+    public FoodItemResponseWithSupplier() {
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

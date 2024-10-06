@@ -5,24 +5,29 @@ import static android.content.ContentValues.TAG;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -50,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +70,10 @@ public class AddFoodItemActivity extends AppCompatActivity {
     Button saveButton;
     Uri imageUri;
     String imageUrl;
-    private List<FoodType> foodTypes;
+    TextView selectedFoodTypesTextView;
+    private List<FoodType> foodTypes = new ArrayList<>();
+    private boolean[] selectedItems;
+    private List<String> typeNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +86,13 @@ public class AddFoodItemActivity extends AppCompatActivity {
         fbutton = findViewById(R.id.floatingActionButton);
         saveButton = findViewById(R.id.save_button);
         linearAddFoodType = findViewById(R.id.linearAddFoodType);
+         selectedFoodTypesTextView = findViewById(R.id.selected_food_types_text_view);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
         int supplierId = sharedPreferences.getInt("supplier_id", -1);
+        loadAllFoodTypes(supplierId);
+
         linearAddFoodType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,14 +100,15 @@ public class AddFoodItemActivity extends AppCompatActivity {
                 LayoutInflater inflater = LayoutInflater.from(AddFoodItemActivity.this);
                 View dialogView = inflater.inflate(R.layout.dialog_add_food_type, null);
 
-
+                // Set background color for the dialogView
+                dialogView.setBackgroundColor(ContextCompat.getColor(AddFoodItemActivity.this, R.color.light_black)); // Thay bằng mã màu bạn muốn
                 // Create the dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddFoodItemActivity.this);
                 builder.setView(dialogView);
-
                 // Get references to the input fields
                 EditText editTextTypeName = dialogView.findViewById(R.id.editTextTypeName);
                 EditText editTextPosition = dialogView.findViewById(R.id.editTextPosition);
+                ImageView closeButton = dialogView.findViewById(R.id.close_button);
 
                 // Set up the dialog buttons
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -119,7 +132,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                             }
 
                             // Send the API request
-                            sendCreateFoodTypeRequest(jsonBody,jwtToken);
+                            sendCreateFoodTypeRequest(jsonBody,jwtToken, supplierId);
                         } else {
                             Toast.makeText(AddFoodItemActivity.this, "Error: Supplier ID not found.", Toast.LENGTH_SHORT).show();
                         }
@@ -133,8 +146,26 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     }
                 });
 
+                // Create the dialog
+                AlertDialog dialog = builder.create();
+                closeButton.setOnClickListener(v1 -> dialog.dismiss()); // Đóng dialog khi nhấn nút X
+
+                // Set background color for the dialog window using color from colors.xml
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(
+                            ContextCompat.getColor(AddFoodItemActivity.this, R.color.light_black) // Thay R.color.your_color_name bằng tên màu trong colors.xml
+                    ));
+                }
+
                 // Show the dialog
-                builder.create().show();
+                dialog.show();
+                // Set color for "Add" button
+                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setTextColor(ContextCompat.getColor(AddFoodItemActivity.this, R.color.orange)); // Thay màu từ colors.xml
+
+                // Set color for "Cancel" button
+                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                negativeButton.setTextColor(ContextCompat.getColor(AddFoodItemActivity.this, R.color.orange)); // Thay màu từ colors.xml
             }
         });
                 backArrow = findViewById(R.id.back_arrow);
@@ -150,7 +181,6 @@ public class AddFoodItemActivity extends AppCompatActivity {
             return;
         }
 
-        loadAllFoodTypes(supplierId);
 
         fbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,36 +197,56 @@ public class AddFoodItemActivity extends AppCompatActivity {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
 
+
+
         // Cập nhật Adapter cho categorySpinner
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.category_array));
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
-        // Lấy giá trị khi người dùng chọn
-        findViewById(R.id.save_button).setOnClickListener(view -> {
-            String selectedStatus = statusSpinner.getSelectedItem().toString();
-            String selectedCategory = categorySpinner.getSelectedItem().toString();
-            String selectedType = typeSpinner.getSelectedItem().toString();
-
-            // Hiển thị kết quả
-            Toast.makeText(this, "Status: " + selectedStatus + ", Category: " + selectedCategory + ", Type: " + selectedType, Toast.LENGTH_SHORT).show();
-        });
         typeSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // Sự kiện khi người dùng chạm vào Spinner (trước khi mở danh sách)
-                    Log.d("Spinner", "Spinner được chạm vào, chuẩn bị hiển thị danh sách.");
-                    // Nếu cần làm việc gì đó trước khi mở Spinner, thực hiện ở đây.
+                    // Nếu "Chọn loại thức ăn" là mục đầu tiên trong spinner, bạn có thể xóa nó tạm thời
+
                 }
-                return false; // Trả về false để tiếp tục mở danh sách Spinner bình thường.
+                return false; // Trả về false để cho phép Spinner xử lý sự kiện
             }
         });
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Nếu người dùng chọn một loại thực phẩm khác
+                if (position >= 0) { // Kiểm tra nếu vị trí hợp lệ
+                    // Cập nhật UI của Spinner để hiển thị các loại thực phẩm đã chọn
+                    updateSpinnerText();
+
+                    // Cập nhật Adapter để hiển thị thay đổi
+                    TypeAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Khi không có gì được chọn, có thể không cần xử lý gì
+            }
+        });
+
+
+
         // Khi người dùng nhấn nút "Submit"
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Lấy vị trí được chọn trong spinner
+                int selectedPosition = typeSpinner.getSelectedItemPosition();
 
+                // Kiểm tra nếu người dùng chưa chọn loại thức ăn
+                if (selectedPosition < 0) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng chọn loại thực phẩm", Toast.LENGTH_SHORT).show();
+                    return; // Không thực hiện tiếp nếu chưa chọn loại thức ăn
+                }
                 if (imageUri != null) {
                     uploadImageToFirebase(imageUri); // Upload ảnh lên Firebase
                 }else{
@@ -205,6 +255,30 @@ public class AddFoodItemActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Phương thức để cập nhật hiển thị của Spinner
+    private void updateSpinnerText() {
+        StringBuilder selectedFoodTypes = new StringBuilder();
+        for (int i = 0; i < selectedItems.length; i++) {
+            if (selectedItems[i]) {
+                selectedFoodTypes.append(typeNames.get(i)).append(", "); // typeNames là danh sách tên loại thực phẩm
+            }
+        }
+
+        // Xóa dấu phẩy và khoảng trắng ở cuối nếu có
+        if (selectedFoodTypes.length() > 0) {
+            selectedFoodTypes.setLength(selectedFoodTypes.length() - 2); // Xóa dấu phẩy và khoảng trắng
+        }
+
+        // Cập nhật TextView
+        if (selectedFoodTypes.length() > 0) {
+            selectedFoodTypesTextView.setText("Loại thực phẩm đã chọn: " + selectedFoodTypes.toString());
+            selectedFoodTypesTextView.setVisibility(View.VISIBLE); // Hiện TextView nếu có item đã chọn
+        } else {
+            selectedFoodTypesTextView.setVisibility(View.GONE); // Ẩn TextView nếu không có item nào được chọn
+        }
+    }
+
     private void uploadImageToFirebase(Uri uri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -230,7 +304,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void sendCreateFoodTypeRequest(JSONObject jsonBody, String jwtToken) {
+    private void sendCreateFoodTypeRequest(JSONObject jsonBody, String jwtToken, int supplierId) {
         String url = ApiEndpoints.CREATE_FOOD_TYPE;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -240,6 +314,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // Handle the response from API
                         Toast.makeText(AddFoodItemActivity.this, "Food type created successfully", Toast.LENGTH_SHORT).show();
+                        loadAllFoodTypes(supplierId);
                     }
                 },
                 new Response.ErrorListener() {
@@ -290,6 +365,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                             }
                             // Cập nhật dữ liệu cho spinner
                             updateTypeSpinner(foodTypes);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(AddFoodItemActivity.this, "Error parsing food types data", Toast.LENGTH_SHORT).show();
@@ -343,28 +419,37 @@ public class AddFoodItemActivity extends AppCompatActivity {
     }
 
     private void updateTypeSpinner(List<FoodType> allFoodTypes) {
-        List<String> typeNames = new ArrayList<>();
-        boolean[] selectedItems = new boolean[allFoodTypes.size()];
-
-        // Duyệt qua danh sách tất cả loại thực phẩm
+        // Tạo danh sách tên loại thực phẩm
+         typeNames = new ArrayList<>();
+         selectedItems = new boolean[allFoodTypes.size()];
+        Arrays.fill(selectedItems, false); // Đảm bảo tất cả đều là false
+        // Duyệt qua danh sách tất cả loại thực phẩm và thêm vào danh sách
         for (int i = 0; i < allFoodTypes.size(); i++) {
             FoodType foodType = allFoodTypes.get(i);
             typeNames.add(foodType.getTypeName());
-            // Bạn có thể sử dụng trạng thái mặc định (false) cho các mục không chọn
-            selectedItems[i] = false; // Mặc định là không được chọn
+            selectedItems[i] = false;
         }
 
         // Cập nhật Adapter
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TypeAdapter = new TypeSpinnerAdapter(AddFoodItemActivity.this, typeNames, selectedItems);
+                TypeAdapter = new TypeSpinnerAdapter(AddFoodItemActivity.this, typeNames, selectedItems, new TypeSpinnerAdapter.OnSelectionChangeListener() {
+                    @Override
+                    public void onSelectionChanged(boolean[] selectedItems) {
+                        // Cập nhật văn bản hiển thị trong Spinner
+                        updateSpinnerText();
+                    }
+                });
+
                 typeSpinner.setAdapter(TypeAdapter);
             }
         });
-
-
     }
+
+
+
+
     // Overloaded hàm sendDataToApi() khi không có imageUrl
     private void sendDataToApi() {
         sendDataToApi(""); // Gọi hàm chính với imageUrl trống hoặc mặc định
@@ -433,7 +518,16 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // Xử lý kết quả thành công
                         Toast.makeText(AddFoodItemActivity.this, "Tạo thực đơn mới thành công", Toast.LENGTH_SHORT).show();
+
+                        // Trả kết quả về cho Activity trước
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("isNewItemCreated", true); // Đánh dấu có item mới
+                        setResult(RESULT_OK, resultIntent);
+
+                        // Kết thúc Activity và quay lại trang trước đó
+                        finish();
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override

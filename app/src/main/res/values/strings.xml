@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Exe201</string>
+    <string name="app_name">FoodPT</string>
     <string name="welcome_msg">Welcome User</string>
 
     <string name="gender_prompt">Select Gender</string>

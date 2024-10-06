@@ -15,12 +15,12 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity Title"
+            android:text="Hoạt động"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:padding="16dp"
+            android:padding="20dp"
             android:background="#E0E0E0" />
 
         <!-- RecyclerView -->

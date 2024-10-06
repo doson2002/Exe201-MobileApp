@@ -58,4 +58,6 @@ dependencies {
     implementation(libs.ucrop)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+    implementation(libs.viewpager2)
+    implementation(libs.mpAndroidChart)
 }

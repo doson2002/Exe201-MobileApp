@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.exe201.API.ApiEndpoints;
+import com.example.exe201.ChatActivity;
+import com.example.exe201.FAQListActivity;
 import com.example.exe201.R;
+import com.example.exe201.ShowFoodItemActivity;
 import com.example.exe201.SignInActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,7 +54,7 @@ import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
-    ImageView backArrow;
+   private TextView tvFAQ;
     ShapeableImageView imageView;
     LinearLayout saveButton;
     FloatingActionButton fbutton;
@@ -77,17 +81,17 @@ public class ProfileFragment extends Fragment {
         saveButton = view.findViewById(R.id.save_button);
         fbutton = view.findViewById(R.id.floatingActionButton);
 
-        backArrow = view.findViewById(R.id.back_arrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
+        tvFAQ = view.findViewById(R.id.tvFAQ);
+        tvFAQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Kết thúc Fragment hiện tại và quay về Fragment trước đó
-                getActivity().getSupportFragmentManager().popBackStack();
+                Intent intent = new Intent(requireActivity(), FAQListActivity.class);
+                startActivity(intent);
             }
         });
 
         // Lấy SharedPreferences
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyAppPrefs", getActivity().MODE_PRIVATE);
 
         // Lấy dữ liệu từ SharedPreferences
         fullName = sharedPreferences.getString("full_name", "");

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,6 +72,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
     private List<FoodItemResponseWithSupplier> foodItemOfferedList = new ArrayList<>();
     private ImageView backArrow, imageViewSupplier;
     private ImageView imgShowCart;
+    private Button buttonChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +132,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         // Bước 1: Lấy TextView cần hiển thị tên nhà cung cấp
         TextView textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         TextView textViewReviews = findViewById(R.id.textViewReviews);
-
+        TextView textViewStarAverage = findViewById(R.id.textViewStarAverage);
 
 
         int supplierId = supplierInfo.getId();
@@ -150,8 +152,10 @@ public class ShowFoodItemActivity extends AppCompatActivity{
             // Bước 3: Lấy tên nhà cung cấp từ SupplierInfo và thiết lập cho TextView
             String supplierName = supplierInfo.getRestaurantName();
             int totalRating = supplierInfo.getTotalReviewCount();
+            double starAverage = supplierInfo.getTotalStarRating();
             textViewReviews.setText(String.format("(%d ratings)", totalRating));
             textViewRestaurantName.setText(supplierName);
+            textViewStarAverage.setText(String.format("%.1f", starAverage));
         } else {
             // Nếu supplierInfo null, bạn có thể hiển thị thông báo lỗi hoặc tên mặc định
             textViewRestaurantName.setText("Unknown Supplier");
@@ -163,6 +167,15 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         foodAdapter = new FoodItemCustomerAdapter(foodItemList, this,cartMap, imgShowCart);
 
         // Thiết lập sự kiện OnClickListener cho basketLayout
+        buttonChat = findViewById(R.id.buttonChat);
+        buttonChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShowFoodItemActivity.this, ChatActivity.class);
+                intent.putExtra("supplier", supplierInfo);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -344,7 +357,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(horizontalLayoutManager);
 
         // Thiết lập Adapter
-        foodItemOfferedAdapter = new FoodItemGroupedBySupplierAdapter(foodItemOfferedList,this);
+        foodItemOfferedAdapter = new FoodItemGroupedBySupplierAdapter(foodItemOfferedList,this,cartMap,imgShowCart);
         recyclerView.setAdapter(foodItemOfferedAdapter);
 
         // Fetch data và cập nhật vào RecyclerView
@@ -380,12 +393,14 @@ public class ShowFoodItemActivity extends AppCompatActivity{
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject foodItemObj = response.getJSONObject(i);
-                                Long id = foodItemObj.getLong("id");
+                                int id = foodItemObj.getInt("id");
                                 String foodName = foodItemObj.getString("food_name");
                                 String imgUrl = foodItemObj.getString("image_url");
                                 double price = foodItemObj.getDouble("price");
+                                int quantity = foodItemObj.getInt("quantity");
+                                int supplierId = foodItemObj.getInt("supplier_id");
 
-                                FoodItemResponseWithSupplier foodItem = new FoodItemResponseWithSupplier(id, foodName, price, imgUrl);
+                                FoodItemResponseWithSupplier foodItem = new FoodItemResponseWithSupplier(id, foodName, price, imgUrl, quantity, supplierId);
                                 foodItemOfferedList.add(foodItem);
                             }
 

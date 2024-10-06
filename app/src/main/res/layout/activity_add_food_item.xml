@@ -164,6 +164,16 @@
                 android:background="@drawable/edit_text_border"
                 android:prompt="@string/food_type_prompt"
                 android:layout_marginTop="16dp" />
+            <TextView
+                android:id="@+id/selected_food_types_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selected Food Types:"
+                android:background="@drawable/edit_text_border"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="16dp"
+                android:visibility="gone"/> <!-- Ẩn đi ban đầu -->
          <LinearLayout
              android:id="@+id/linearAddFoodType"
              android:layout_width="match_parent"

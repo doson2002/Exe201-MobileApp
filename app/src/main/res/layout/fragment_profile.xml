@@ -8,17 +8,7 @@
     android:background="@color/white"
     tools:context=".ProfileActivity">
 
-    <!-- ImageView for Back Arrow, đặt ở góc trái trên -->
-    <ImageView
-        android:id="@+id/back_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Back Arrow"
-        android:src="@drawable/baseline_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="16dp"
-        android:layout_margin="16dp" />
+
     <!-- ImageView for Right Icon, đặt ở góc phải trên -->
     <LinearLayout
         android:id="@+id/save_button"
@@ -43,7 +33,7 @@
             android:id="@+id/save_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="Lưu"
             android:textColor="@android:color/black"
             android:gravity="center" />
     </LinearLayout>
@@ -100,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="8dp"
-            android:text="0 points"
+            android:text="0 điểm"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/imageView"
@@ -130,7 +120,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="Tên"
+                android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
@@ -147,7 +138,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mobile Number"
+                android:text="Số điện thoại"
+                android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:paddingTop="16dp" />
@@ -164,8 +156,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter your email address"
+                android:text="Địa chỉ email"
                 android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp" />
 
@@ -181,7 +174,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gender"
+                android:textSize="18sp"
+                android:text="Giới tính"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:paddingTop="16dp" />
@@ -199,23 +193,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profiles"
+                android:text="Hỗ trợ"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:paddingTop="16dp" />
 
             <TextView
-                android:id="@+id/add_business_profile"
+                android:id="@+id/tvFAQ"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add a business profile"
+                android:text="Trung tâm trợ giúp"
                 android:textColor="@android:color/holo_blue_light"
                 android:paddingTop="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Linked Accounts"
+                android:text="Liên kết tài khoản"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:paddingTop="16dp" />

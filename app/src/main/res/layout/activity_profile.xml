@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
@@ -199,7 +199,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profiles"
+                android:text="Hỗ trợ"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:paddingTop="16dp" />
@@ -208,7 +208,7 @@
                 android:id="@+id/add_business_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add a business profile"
+                android:text="Trung tâm trợ giúp"
                 android:textColor="@android:color/holo_blue_light"
                 android:paddingTop="8dp" />
 
@@ -252,7 +252,7 @@
                     android:id="@+id/sign_out_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/alt_btn_styling"
+                    android:background="@color/orange"
                     android:padding="10dp"
                     android:text="Đăng Xuất"
                     android:textSize="20sp"

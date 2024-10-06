@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/light_grey"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -26,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Customer Name"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="16sp" />
 
@@ -36,6 +38,7 @@
             android:text="Last message here"
             android:textSize="14sp"
             android:maxLines="1"
+            android:textColor="@color/black"
             android:ellipsize="end" />
     </LinearLayout>
 
@@ -57,11 +60,11 @@
             android:id="@+id/textUnreadCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
             android:background="@drawable/circle_background"
             android:padding="4dp"
+            android:text="1"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:visibility="visible" /> <!-- Sẽ hiển thị khi có tin chưa đọc -->
+            android:visibility="gone" /> <!-- Sẽ hiển thị khi có tin chưa đọc -->
     </LinearLayout>
 </LinearLayout>

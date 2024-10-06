@@ -20,11 +20,13 @@ public class TypeSpinnerAdapter extends BaseAdapter {
     private Context context;
     private List<String> items;
     private boolean[] selectedItems;
+    private OnSelectionChangeListener listener;
 
-    public TypeSpinnerAdapter(Context context, List<String> items, boolean[] selectedItems) {
+    public TypeSpinnerAdapter(Context context, List<String> items, boolean[] selectedItems,OnSelectionChangeListener listener) {
         this.context = context;
         this.items = items;
         this.selectedItems = selectedItems;
+        this.listener = listener;
     }
 
     @Override
@@ -66,11 +68,17 @@ public class TypeSpinnerAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Cập nhật trạng thái đã chọn trong mảng selectedItems
                 selectedItems[position] = isChecked;
+                // Gọi callback để thông báo thay đổi
+                if (listener != null) {
+                    listener.onSelectionChanged(selectedItems);
+                }
             }
         });
 
         return convertView;
     }
+
+
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -81,5 +89,8 @@ public class TypeSpinnerAdapter extends BaseAdapter {
     // Phương thức trả về trạng thái các mục đã chọn
     public boolean[] getSelectedItems() {
         return selectedItems;
+    }
+    public interface OnSelectionChangeListener {
+        void onSelectionChanged(boolean[] selectedItems);
     }
 }

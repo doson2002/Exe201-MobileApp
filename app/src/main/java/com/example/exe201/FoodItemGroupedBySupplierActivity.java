@@ -1,5 +1,6 @@
 package com.example.exe201;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.SupplierWithFoodItemAdapter;
 import com.example.exe201.DTO.FoodItemResponseWithSupplier;
+import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.DTO.SupplierWithFoodItems;
 import com.example.exe201.Decorations.CustomItemDecoration;
@@ -47,6 +49,8 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
     private RecyclerView recyclerViewGroupedBySupplier;
     private SupplierWithFoodItemAdapter supplierAdapter;
     private List<SupplierWithFoodItems> supplierWithFoodItemsList = new ArrayList<>();
+    private ImageView imgShowCart;
+    private HashMap<Integer, List<Menu>> cartMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,15 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
         String keyword = getIntent().getStringExtra("keyword");
         searchFoodItems(keyword);
 
+        imgShowCart= findViewById(R.id.imgShowCart);
+        imgShowCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodItemGroupedBySupplierActivity.this, SupplierCartActivity.class);
+                intent.putExtra("cart_map",  cartMap); // Truyền cartMap
+                startActivity(intent);
+            }
+        });
 
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +90,7 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
         int spacingInPixels = (int) (20 * getResources().getDisplayMetrics().density);
         // Setup RecyclerView và Adapter
         recyclerViewGroupedBySupplier.setLayoutManager(new LinearLayoutManager(this));
-        supplierAdapter = new SupplierWithFoodItemAdapter(supplierWithFoodItemsList, this);
+        supplierAdapter = new SupplierWithFoodItemAdapter(supplierWithFoodItemsList, this, cartMap,imgShowCart);
         recyclerViewGroupedBySupplier.setAdapter(supplierAdapter);
         // Thêm khoảng cách giữa các item
         recyclerViewGroupedBySupplier.addItemDecoration(new CustomItemDecoration(spacingInPixels));
@@ -143,9 +156,9 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
                             // Lấy chi tiết SupplierInfo từ "user" và "supplierType"
                             JSONObject userJson = supplierInfoJson.getJSONObject("user");
                             JSONObject supplierTypeJson = supplierInfoJson.getJSONObject("supplierType");
-
+                            int supplierId = supplierInfoJson.getInt("id");
                             SupplierInfo supplierInfo = new SupplierInfo(
-                                    supplierInfoJson.getInt("id"),
+                                    supplierId,
                                     supplierInfoJson.getString("restaurantName"),
                                     supplierInfoJson.getString("imgUrl"),
                                     supplierInfoJson.getDouble("totalStarRating"),
@@ -160,10 +173,12 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
 
                                 // Tạo FoodItemResponse từ các thông tin trả về
                                 FoodItemResponseWithSupplier foodItemResponse = new FoodItemResponseWithSupplier(
-                                        foodItemJson.getLong("id"),
+                                        foodItemJson.getInt("id"),
                                         foodItemJson.getString("food_name"),
                                         foodItemJson.getDouble("price"),
-                                        foodItemJson.getString("image_url")
+                                        foodItemJson.getString("image_url"),
+                                        foodItemJson.getInt("quantity_add"),
+                                        supplierId
                                 );
                                 foodItemResponses.add(foodItemResponse);
                             }

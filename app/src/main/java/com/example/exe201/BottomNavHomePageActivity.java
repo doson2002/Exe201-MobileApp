@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.exe201.Fragment.Customer.ActivityFragment;
+import com.example.exe201.Fragment.Customer.CustomerMessageFragment;
 import com.example.exe201.Fragment.Customer.HomeFragment;
 import com.example.exe201.Fragment.Customer.NotificationFragment;
 import com.example.exe201.Fragment.Customer.ProfileFragment;
@@ -41,7 +42,7 @@ public class BottomNavHomePageActivity extends AppCompatActivity {
                         replaceFragment(new ActivityFragment());
                         break;
                     case R.id.action_notifications:
-                        replaceFragment(new NotificationFragment());
+                        replaceFragment(new CustomerMessageFragment());
                         break;
                     case R.id.action_profile:
                         replaceFragment(new ProfileFragment());

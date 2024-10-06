@@ -33,6 +33,24 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         return new ReviewViewHolder(view);
     }
 
+    // Hàm cập nhật danh sách đánh giá khi có dữ liệu mới
+    public void updateRatings(List<Rating> newRatingList) {
+        this.ratingList.clear(); // Xóa danh sách cũ
+        this.ratingList.addAll(newRatingList); // Thêm danh sách mới
+        notifyDataSetChanged(); // Thông báo rằng dữ liệu đã thay đổi
+    }
+
+    // Thêm phương thức addRating để thêm đánh giá mới
+    public void addRating(Rating rating) {
+        ratingList.add(rating);
+        notifyItemInserted(ratingList.size() - 1); // Thông báo RecyclerView có item mới
+    }
+    // Interface for callback
+    public interface AddRatingCallback {
+        void onSuccess();
+        void onError(String errorMessage);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         Rating rating = ratingList.get(position);

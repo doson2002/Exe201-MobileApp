@@ -144,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/blue"
+                android:background="@color/light_orange"
                 android:padding="16dp"
                 android:layout_margin="10dp"
                >

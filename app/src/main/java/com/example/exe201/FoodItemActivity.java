@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -54,7 +55,9 @@ public class FoodItemActivity extends AppCompatActivity {
     private FloatingActionButton fabAddFood;
     private FoodItemAdapter foodItemAdapter;
     private List<FoodItem> foodItems;
-   Button viewDetailButton;
+    private static final int REQUEST_CODE_ADD_FOOD = 1001; // Hằng số định nghĩa request code
+
+    Button viewDetailButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class FoodItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FoodItemActivity.this, AddFoodItemActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ADD_FOOD);
             }
         });
 
@@ -231,5 +234,22 @@ public class FoodItemActivity extends AppCompatActivity {
         foodItemAdapter = new FoodItemAdapter(foodItems,this );
         recyclerViewMenu.setAdapter(foodItemAdapter);
         foodItemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_FOOD && resultCode == RESULT_OK && data != null) {
+            boolean isNewItemCreated = data.getBooleanExtra("isNewItemCreated", false);
+            if (isNewItemCreated) {
+                // Lấy lại danh sách thực đơn từ server
+                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                int supplierId = sharedPreferences.getInt("supplier_id", -1);
+                if (supplierId != -1) {
+                    // Gọi lại API để cập nhật danh sách
+                    fetchFoodItemsBySupplierId(supplierId);
+                }
+            }
+        }
     }
 }

@@ -17,6 +17,9 @@
     <color name="colorHint">#888888</color> <!-- Màu hint (xám) -->
     <color name="colorText">#000000</color> <!-- Màu text (đen) -->
     <color name="orange">#FF5722</color>
+    <color name="light_orange">#E26238</color>
+    <color name="yellow">#FFEB3B</color>
+
 
 
 
