@@ -45,8 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="90dp"
-        android:background="@color/yellow"
-        android:textColor="@color/black"
+        android:background="@drawable/time_button_background"
+        android:textColor="@color/white"
         android:text="Chọn giờ mở cửa"
         android:layout_marginTop="16dp"
         android:layout_gravity="center" /> <!-- Căn giữa -->
@@ -65,16 +65,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Chọn giờ đóng cửa"
-        android:background="@color/yellow"
-        android:textColor="@color/black"
+        android:background="@drawable/time_button_background"
+        android:textColor="@color/white"
         android:layout_marginHorizontal="90dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:layout_gravity="center" /> <!-- Căn giữa -->
 
     <Button
         android:id="@+id/save_button_time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="Lưu"
         android:background="@drawable/button_background"
         android:layout_marginTop="16dp"

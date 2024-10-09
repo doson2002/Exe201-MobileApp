@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_home"
         android:icon="@drawable/ic_home_foreground"
+        app:icon="@drawable/nav_home_selector"
         android:title="Trang Chủ" />
     <item
         android:id="@+id/action_activity"
         android:icon="@drawable/baseline_pending_actions_24"
-        android:title="Hoạt động" />
+        android:title="Hoạt động"
+        app:icon="@drawable/nav_activity_selector"/>
+
     <item
         android:id="@+id/action_notifications"
         android:icon="@drawable/ic_notification_foreground"
         android:title="Thông báo"
+        app:icon="@drawable/nav_notification_selector"
         />
 
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/ic_account_foreground"
-        android:title="Hồ sơ" />
+        android:title="Hồ sơ"
+        app:icon="@drawable/nav_account_selector"
+        />
 </menu>

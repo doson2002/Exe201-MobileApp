@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.exe201.ChatActivity;
 import com.example.exe201.DTO.ChatRealTime.MessageSender;
 import com.example.exe201.R;
@@ -62,6 +64,7 @@ public class ManageMessageSenderAdapter extends RecyclerView.Adapter<ManageMessa
         // Load image using Picasso or Glide
         Glide.with(context)
                 .load(message.getSenderImageUrl())
+                .circleCrop()
                 .into(holder.customerImage);
 
         holder.itemView.setOnClickListener(v -> {

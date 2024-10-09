@@ -4,7 +4,7 @@ public class ApiEndpoints {
     // Địa chỉ cơ sở (base URL) của API
 
 //    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
-private static final String BASE_URL = "http://192.168.19.3:8080/api/v1/";
+private static final String BASE_URL = "http://192.168.1.5:8080/api/v1/";
 
     // Các endpoint API
     public static final String CREATE_SUPPLIER_INFO = BASE_URL + "supplier_info/create";
@@ -43,6 +43,8 @@ private static final String BASE_URL = "http://192.168.19.3:8080/api/v1/";
     public static final String GET_SUPPLIER_BY_ID  = BASE_URL + "supplier_info/get_supplier_by_id";
     public static final String UPDATE_SUPPLIER  = BASE_URL + "supplier_info/update";
     public static final String GET_TOP_RATING  = BASE_URL + "supplier_info/top";
+    public static final String GET_ALL_SUPPLIERS = BASE_URL + "supplier_info/get_all_suppliers";
+
 
 
     //Food type
@@ -63,6 +65,8 @@ private static final String BASE_URL = "http://192.168.19.3:8080/api/v1/";
     public static final String GET_ORDER_BY_USER_ID = BASE_URL + "food_orders/get_food_order_by_userId";
     public static final String GET_ORDER_DETAIL = BASE_URL + "food_orders/get_food_order_by_id";
     public static final String CREATE_ORDER = BASE_URL + "food_orders/create";
+    public static final String UPDATE_PAYMENT_STATUS = BASE_URL + "food_orders/update_payment_status";
+    public static final String DELETE_FOOD_ORDER = BASE_URL + "food_orders/delete";
 
 
     // Report

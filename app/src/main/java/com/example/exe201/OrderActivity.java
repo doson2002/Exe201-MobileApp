@@ -37,7 +37,9 @@ import com.example.exe201.DTO.FoodOrderItemResponse;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.OrderRequest;
 import com.example.exe201.DTO.SupplierInfo;
+import com.example.exe201.helpers.GoogleSheetsService;
 import com.example.exe201.helpers.Utils;
+import com.google.api.services.sheets.v4.model.ValueRange;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,10 +47,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +73,9 @@ public class OrderActivity extends AppCompatActivity {
     private Button createOrderButton;
     private RequestQueue requestQueue;
     private String paymentMethod = "";
+    private double totalPrice = 0;
+    private String contentBank = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +102,9 @@ public class OrderActivity extends AppCompatActivity {
                     // Thực hiện xử lý khi chọn Cash
                     paymentMethod= "Tiền mặt";
                 } else if (checkedId == R.id.radioVnpay) {
-                    Log.d("RadioButton", "VNPay selected");
+                    Log.d("RadioButton", "banking payment selected");
                     // Thực hiện xử lý khi chọn VNPay
-                    paymentMethod= "vnpay";
+                    paymentMethod= "Chuyển khoản";
                 }
             }
         });
@@ -188,8 +195,10 @@ public class OrderActivity extends AppCompatActivity {
 
         totalAmountView.setText(String.format("%,.0fđ", totalAmount));
         totalItemsView.setText(String.format("%d món", totalItems));
+
+        totalPrice = totalAmount;
     }
-    private double totalPrice = 0.0;
+
     public void updateTotalPrice(double newTotalPrice) {
         Log.d("OrderActivity", "Updating total price in Activity: " + newTotalPrice);
         totalPrice = newTotalPrice;
@@ -309,8 +318,24 @@ public class OrderActivity extends AppCompatActivity {
         String url = ApiEndpoints.CREATE_ORDER;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, orderData,
                 response -> {
+
                     // Xử lý khi tạo order thành công
                     Toast.makeText(OrderActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
+                    // Lấy id của order mới được tạo
+                    JSONObject foodOrder = response.optJSONObject("foodOrder");
+// Lấy giá trị orderTime
+                    long orderTimeMillis = foodOrder.optLong("orderTime");
+
+// Chuyển đổi sang định dạng dd-MM-yyyy hh:mm:ss
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+                    Date orderDate = new Date(orderTimeMillis);
+                    String formattedOrderTime = sdf.format(orderDate);
+                    int orderId = 0;
+                    if (foodOrder != null) {
+                        orderId = foodOrder.optInt("id"); // Lấy id từ foodOrder
+                        contentBank = "FOODPT " + orderId; // Cập nhật contentBank với id của order mới
+                    }
+
                     // Xóa các item trong cartMap dựa trên supplierId
                     if (cartMap.containsKey(supplierId)) {
                         cartMap.remove(supplierId);
@@ -320,8 +345,19 @@ public class OrderActivity extends AppCompatActivity {
                     String updatedCartMapJson = gson.toJson(cartMap);
                     editor.putString("cart_map", updatedCartMapJson);
                     editor.apply();
-                    Intent intent = new Intent(this, BottomNavHomePageActivity.class); // Thay bằng activity của bạn
-                    startActivity(intent);
+                    if (paymentMethod.equals("Tiền mặt")) {
+                        Intent intent = new Intent(OrderActivity.this, CreateOrderSuccessActivity.class);
+                        startActivity(intent);
+                    } else if (paymentMethod.equals("Chuyển khoản")) {
+                        Intent intent = new Intent(OrderActivity.this, PaymentDetailActivity.class);
+
+                        updateGoogleSheet(totalPrice,contentBank);
+                        intent.putExtra("totalPrice",totalPrice);
+                        intent.putExtra("contentBank", contentBank);
+                        intent.putExtra("orderTime", orderTimeMillis);
+                        intent.putExtra("orderId", orderId);
+                        startActivity(intent);
+                    }
                     },
                 error -> {
                     // Xử lý khi có lỗi
@@ -342,6 +378,60 @@ public class OrderActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonObjectRequest);
     }
+
+    public void updateGoogleSheet(double totalPrice, String contentBank) {
+        new Thread(() -> {
+            try {
+                // Lấy access token từ GoogleSheetsService
+                String accessToken = new GoogleSheetsService(OrderActivity.this).getAccessToken();
+
+                // Tạo ValueRange
+                ValueRange valueRange = new ValueRange();
+                valueRange.setRange("qr!B6:B7");  // Dải dữ liệu mà bạn muốn cập nhật
+                valueRange.setValues(Arrays.asList(
+                        Arrays.asList(totalPrice),   // Giá trị ở ô B6
+                        Arrays.asList(contentBank)   // Giá trị ở ô B7
+                ));
+
+                // Chuyển đổi ValueRange thành JSONObject
+                JSONObject body = new JSONObject();
+                body.put("range", valueRange.getRange());
+                body.put("values", new JSONArray(valueRange.getValues()));
+
+                // URL API Google Sheets
+                String url = "https://sheets.googleapis.com/v4/spreadsheets/1jwyONxe8utnzD9rgKu7urVQxkS0q78mr7QCbYJ9p9IM/values/qr!B6:B7?valueInputOption=RAW";
+
+                // Gọi API sử dụng Volley
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, body,
+                        response -> {
+                            // Xử lý khi thành công
+                            Log.d("API", "Success: " + response.toString());
+                        },
+                        error -> {
+                            // Xử lý khi có lỗi
+                            Log.e("API", "Error: " + error.toString());
+                        }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/json");
+                        headers.put("Authorization", "Bearer " + accessToken); // Thêm accessToken vào headers
+                        return headers;
+                    }
+                };
+
+                // Thêm request vào RequestQueue
+                RequestQueue requestQueue = Volley.newRequestQueue(OrderActivity.this);
+                requestQueue.add(jsonObjectRequest);
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                Log.e("API", "Error: " + e.getMessage());
+            }
+        }).start();
+    }
+
+
     // Hàm để lấy thời gian hiện tại dưới dạng chuỗi ISO-8601
     private String getCurrentTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());

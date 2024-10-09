@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class FAQListActivity extends AppCompatActivity {
     private FAQAdapter faqAdapter;
     private RecyclerView faqRecyclerView;
     private SearchView searchView;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,14 @@ public class FAQListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_faqlist);
 
         requestQueue = Volley.newRequestQueue(this);
+
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         faqList = new ArrayList<>();
 
         // Setup RecyclerView

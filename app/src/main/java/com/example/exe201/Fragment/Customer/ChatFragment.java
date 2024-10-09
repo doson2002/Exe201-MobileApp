@@ -39,7 +39,7 @@ public class ChatFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_message_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_message_list_for_customer, container, false);
 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         int customerId = sharedPreferences.getInt("user_id", -1);

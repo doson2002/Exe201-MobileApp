@@ -36,10 +36,10 @@ public class CustomerMessageFragment extends Fragment {
                 (tab, position) -> {
                     switch (position) {
                         case 0:
-                            tab.setText("Chat");
+                            tab.setText("Trò chuyện");
                             break;
                         case 1:
-                            tab.setText("Notification");
+                            tab.setText("Thông báo");
                             break;
                     }
                 }).attach();
