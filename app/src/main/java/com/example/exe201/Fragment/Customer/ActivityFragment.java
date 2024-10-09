@@ -23,6 +23,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.FoodOrderAdapter;
 import com.example.exe201.DTO.FoodOrder;
+import com.example.exe201.Decorations.CustomItemDecoration;
+import com.example.exe201.Decorations.ItemDecorationDividerForActivity;
 import com.example.exe201.R;
 
 import org.json.JSONArray;
@@ -142,10 +144,10 @@ public class ActivityFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 // Add a divider between RecyclerView items
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                new LinearLayoutManager(getActivity()).getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        // Add a custom divider with margin
+        int marginStart = 50; // Ví dụ: bạn có thể đặt giá trị này phù hợp với yêu cầu
+        int marginEnd = 50; // Ví dụ: bạn có thể đặt giá trị này phù hợp với yêu cầu
+        recyclerView.addItemDecoration(new ItemDecorationDividerForActivity(getActivity(), R.drawable.divider, marginStart, marginEnd));
         return view;
     }
 }

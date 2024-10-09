@@ -191,7 +191,7 @@
                     android:id="@+id/recyclerViewCart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                     />
             <!-- Phần Payment Details -->
             <TextView
 
@@ -236,7 +236,7 @@
                         android:id="@+id/radioVnpay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VnPay"
+                        android:text="Chuyển khoản"
                         android:buttonTint="@color/black"
                         android:drawableRight="@drawable/vnpay"
                         android:layout_marginLeft="10dp"

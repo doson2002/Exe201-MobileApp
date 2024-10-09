@@ -1,5 +1,6 @@
 package com.example.exe201.Fragment.Customer;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -45,7 +48,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.BannerAdapter;
+import com.example.exe201.Adapter.BannerAdapter1;
 import com.example.exe201.Adapter.FoodItemTopSoldAdapter;
+import com.example.exe201.Adapter.SupplierInfoAdapter;
 import com.example.exe201.Adapter.SupplierTypeAdapter;
 
 import com.example.exe201.AddFoodItemActivity;
@@ -58,7 +63,9 @@ import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.FoodItemGroupedBySupplierActivity;
 import com.example.exe201.ProfileActivity;
 import com.example.exe201.R;
+import com.example.exe201.ShowFoodItemActivity;
 import com.example.exe201.SupplierForCustomer;
+import com.example.exe201.helpers.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,12 +95,20 @@ public class HomeFragment extends Fragment {
     private TopSupplierRatingAdapter topSupplierAdapter;
     private List<SupplierInfo> supplierList;
 
+
     private RecyclerView recyclerBanner;
     private BannerAdapter bannerAdapter;
+    private BannerAdapter1 bannerAdapter1;
     private List<Banner> bannerList;
-    private ViewPager2 viewPager;
+    private List<Banner> bannerList1;
+
+    private ViewPager2 viewPager, viewPager1;
     private Handler handler;
     private Runnable runnable;
+
+    private SupplierInfoAdapter supplierInfoAdapter;
+    private List<SupplierInfo> supplierInfoList = new ArrayList<>();
+    private RecyclerView recyclerViewSuppliers;
 
     private int currentPage = 0;
     private int pageSize = 5; // Kích thước mỗi trang
@@ -104,11 +119,25 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_home_page, container, false);
+
+        // Find the ImageView by ID
+        ImageView imageViewIcon1 = view.findViewById(R.id.imageViewIcon1);
+        ImageView imageViewIcon2 = view.findViewById(R.id.imageViewIcon2);
+        ImageView imageViewIcon3 = view.findViewById(R.id.imageViewIcon3);
+        ImageView imageViewIcon4 = view.findViewById(R.id.imageViewIcon4);
+        // Load the scale animation
+        Animation scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.scale);
+        // Start the animation
+        imageViewIcon1.startAnimation(scaleAnimation);
+        imageViewIcon2.startAnimation(scaleAnimation);
+        imageViewIcon3.startAnimation(scaleAnimation);
+        imageViewIcon4.startAnimation(scaleAnimation);
+
         // handle load banner
         viewPager = view.findViewById(R.id.viewPager);
         bannerList = new ArrayList<>();
         // Giả sử bạn đã gọi API và có dữ liệu trong bannerList
-        loadBanners();
+        loadBanners(1);
         // Hàm để tải dữ liệu từ API
         bannerAdapter = new BannerAdapter(requireContext(), bannerList);
         viewPager.setAdapter(bannerAdapter);
@@ -123,6 +152,32 @@ public class HomeFragment extends Fragment {
                     viewPager.setCurrentItem(0, false);
                 } else {
                     viewPager.setCurrentItem(currentItem + 1, true);
+                }
+                handler.postDelayed(this, 5000); // Thay đổi 3000 thành khoảng thời gian bạn muốn
+            }
+        };
+        handler.postDelayed(runnable, 5000); // Bắt đầu tự động chuyển đổi sau 3 giây
+
+
+
+        viewPager1 = view.findViewById(R.id.viewPager1);
+        bannerList1 = new ArrayList<>();
+        // Giả sử bạn đã gọi API và có dữ liệu trong bannerList
+        loadBanners(2);
+        // Hàm để tải dữ liệu từ API
+        bannerAdapter1 = new BannerAdapter1(requireContext(), bannerList1);
+        viewPager1.setAdapter(bannerAdapter1);
+
+        // Tự động chuyển đổi banner
+        handler = new Handler(Looper.getMainLooper());
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                int currentItem = viewPager.getCurrentItem();
+                if (currentItem == bannerList.size() - 1) {
+                    viewPager1.setCurrentItem(0, false);
+                } else {
+                    viewPager1.setCurrentItem(currentItem + 1, true);
                 }
                 handler.postDelayed(this, 5000); // Thay đổi 3000 thành khoảng thời gian bạn muốn
             }
@@ -243,12 +298,27 @@ public class HomeFragment extends Fragment {
 
         loadAllSupplierTypes();
 
+        recyclerViewSuppliers = view.findViewById(R.id.recyclerViewSupplier);
+        loadAllSuppliers(currentPage, pageSize);
+
+        supplierInfoAdapter  = new SupplierInfoAdapter(supplierInfoList, requireContext(), new SupplierInfoAdapter.OnSupplierInfoClickListener(){
+            @Override
+            public void onSupplierInfoClick(SupplierInfo supplierInfo) {
+                // Lưu supplierInfo vào SharedPreferences
+                Utils.saveSupplierInfo(requireContext(), supplierInfo);
+                Intent intent = new Intent(requireActivity(), ShowFoodItemActivity.class);
+                intent.putExtra("supplier",supplierInfo); // Truyền Supplier qua Intent
+                startActivity(intent);
+            }
+        });
+        recyclerViewSuppliers.setAdapter(supplierInfoAdapter);
+
 
         return view;
     }
 
-    private void loadBanners() {
-        String url = ApiEndpoints.GET_ALL_BANNER_ACTIVED; // Thay đổi thành URL của API
+    private void loadBanners(int bannerType) {
+        String url = ApiEndpoints.GET_ALL_BANNER_ACTIVED + "?bannerType=" + bannerType; // Thay đổi thành URL của API
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
@@ -256,19 +326,39 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                int id = response.getJSONObject(i).getInt("id");
-                                String imageUrl = response.getJSONObject(i).getString("imageUrl");
-                                int position = response.getJSONObject(i).getInt("i");
+                        if (bannerType == 1) {
+                            // Nếu bannerType là 1, xử lý với BannerAdapter
+                            bannerList.clear();
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    int id = response.getJSONObject(i).getInt("id");
+                                    String imageUrl = response.getJSONObject(i).getString("imageUrl");
+                                    int position = response.getJSONObject(i).getInt("i");
 
-                                Banner banner = new Banner(id, imageUrl, position);
-                                bannerList.add(banner);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                    Banner banner = new Banner(id, imageUrl, position);
+                                    bannerList.add(banner);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                            bannerAdapter.notifyDataSetChanged();
+                        } else {
+                            // Nếu bannerType không phải 1, xử lý với BannerAdapter1
+                            bannerList1.clear();
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    int id = response.getJSONObject(i).getInt("id");
+                                    String imageUrl = response.getJSONObject(i).getString("imageUrl");
+                                    int position = response.getJSONObject(i).getInt("i");
+
+                                    Banner banner1 = new Banner(id, imageUrl, position);
+                                    bannerList1.add(banner1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            bannerAdapter1.notifyDataSetChanged();
                         }
-                        bannerAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -527,6 +617,76 @@ public class HomeFragment extends Fragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);
     }
+
+    private void loadAllSuppliers(int page, int size) {
+        String url = ApiEndpoints.GET_ALL_SUPPLIERS + "?page=" + page + "&size=" + size; // Thêm phân trang vào URL
+        isLoading = true;
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Lấy danh sách suppliers từ JSON response
+                            JSONArray suppliersArray = response.getJSONArray("suppliers");
+                            supplierInfoList.clear();
+
+                            for (int i = 0; i < suppliersArray.length(); i++) {
+                                JSONObject foodItemJson = suppliersArray.getJSONObject(i);
+                                int id = foodItemJson.getInt("id");
+                                String restaurantName = foodItemJson.getString("restaurant_name");
+                                String imageUrl = foodItemJson.optString("img_url", ""); // sử dụng optString để tránh lỗi null
+                                double totalStarRating = foodItemJson.getDouble("total_star_rating");
+                                int totalReviewCount = foodItemJson.getInt("total_review_count");
+
+                                // Lấy thông tin SupplierType
+                                JSONObject supplierTypeJson = foodItemJson.getJSONObject("supplier_type");
+                                int supplierTypeId = supplierTypeJson.getInt("id");
+                                String typeName = supplierTypeJson.getString("typeName");
+                                String typeImgUrl = supplierTypeJson.getString("imgUrl");
+
+                                SupplierType supplierType = new SupplierType(supplierTypeId, typeName, typeImgUrl);
+
+                                // Thêm SupplierInfo vào danh sách
+                                supplierInfoList.add(new SupplierInfo(id, restaurantName, imageUrl, totalStarRating, totalReviewCount, supplierType));
+                            }
+
+                            // Cập nhật danh sách trong RecyclerView
+                            supplierInfoAdapter.updateSupplierInfoList(supplierInfoList);
+
+                            // Kiểm tra xem đã đạt đến trang cuối chưa
+                            int totalPages = response.getInt("totalPages");
+                            isLastPage = page >= totalPages - 1;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } finally {
+                            isLoading = false;
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error fetching suppliers", error);
+                        isLoading = false;
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
+    }
+
 
 
     @Override

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Hình nền khi item được chọn -->
+    <item android:drawable="@drawable/bottom_nav_selected_bg" android:state_checked="true" />
+    <!-- Không có hình nền khi item không được chọn -->
+    <item android:drawable="@android:color/transparent" />
+</selector>

@@ -45,7 +45,7 @@ public class TopFoodItemAdapter extends RecyclerView.Adapter<TopFoodItemAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         FoodItemReport product = productList.get(position);
         holder.tvProductName.setText(product.getName());
-        holder.tvQuantitySold.setText("Quantity Sold: " + product.getQuantitySold());
+        holder.tvQuantitySold.setText("Đã bán: " + product.getQuantitySold());
         // Load image using your preferred image loader library like Glide or Picasso
         // Example: Glide.with(context).load(product.getImageUrl()).into(holder.imgProduct);
         // Thiết lập Glide để bo tròn 4 góc

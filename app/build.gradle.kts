@@ -34,11 +34,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+    }
+
 }
 
 dependencies {
 
-    implementation(libs.appcompat)
+    implementation(libs.appcompat) {
+        exclude(group = "com.google.guava")
+    }
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
@@ -46,6 +53,8 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.recyclerview)
     implementation(libs.firebase.database)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -60,4 +69,11 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.viewpager2)
     implementation(libs.mpAndroidChart)
+
+    implementation(libs.google.api.services.sheets) {
+        exclude(group = "com.google.guava")
+    }
+
+    implementation(libs.google.auth.library.oauth2.http)
+
 }

@@ -5,11 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login"
+    android:background="@color/white"
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="217dp"
+        android:layout_height="148dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logofoodpt" />
     <!-- Welcome Text -->
     <TextView
         android:id="@+id/textView2"
@@ -18,7 +28,7 @@
         android:text="@string/welcome_msg"
         android:textColor="@color/black"
         android:textSize="40sp"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="90dp" />
 
     <!-- Sign Up Button -->
     <Button

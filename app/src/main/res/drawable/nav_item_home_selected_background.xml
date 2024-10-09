@@ -1,0 +1,14 @@
+<!-- res/drawable/nav_item_home_selected_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/white" /> <!-- Màu trắng cho hình tròn -->
+            <size android:width="60dp" android:height="60dp"/> <!-- Kích thước hình tròn -->
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <bitmap
+            android:src="@drawable/ic_home_foreground"
+        android:gravity="center"/>
+    </item>
+</layer-list>

@@ -60,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView textViewRestaurantName;
     private String supplierImgUrl = "";
     private String restaurantName = "";
+    private int supplierIdChoseByCustomer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +80,30 @@ public class ChatActivity extends AppCompatActivity {
         chatId = getIntent().getStringExtra("chatId");
 
         SupplierInfo supplierChoseByCustomer = getIntent().getParcelableExtra("supplier");
-        assert supplierChoseByCustomer != null;
-        int supplierIdChoseByCustomer = supplierChoseByCustomer.getId();
+        if(supplierChoseByCustomer!=null){
+           int supplierChose = supplierChoseByCustomer.getId();
+            supplierIdChoseByCustomer = supplierChose;
+        }else if (chatId !=null) {
+            String[] parts = chatId.split("_");
+            // Kiểm tra số phần tử để đảm bảo tách thành công
+            if (parts.length >= 4) {
+                // Tách supplierIdChoseByCustomer và chuyển đổi sang int
+                try {
+                    supplierIdChoseByCustomer = Integer.parseInt(parts[1]); // phần tử thứ 1 là supplierIdChoseByCustomer
+
+                } catch (NumberFormatException e) {
+                    // Xử lý trường hợp không thể chuyển đổi sang int
+                    System.out.println("Không thể chuyển đổi supplierIdChoseByCustomer sang kiểu int");
+                }
+            } else {
+                // Xử lý trường hợp không tách được
+                System.out.println("chatId không hợp lệ");
+            }
+        }
         if(chatId ==null||chatId.isEmpty()){
             chatId = "supplier_" + supplierIdChoseByCustomer + "_customer_" + userId;
         }
+
 
         textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         // Kiểm tra vai trò để gọi hàm lấy tên
