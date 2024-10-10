@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -85,6 +86,17 @@ public class OrderActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order);
 
+        View rootView = findViewById(R.id.root_view);
+        // Thiết lập WindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                // Áp dụng padding để tránh bị thanh hệ thống che
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                return insets.consumeSystemWindowInsets();
+            }
+        });
         SupplierInfo supplierInfoChose = Utils.getSupplierInfo(this);
         textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         textViewRestaurantName.setText(supplierInfoChose.getRestaurantName());

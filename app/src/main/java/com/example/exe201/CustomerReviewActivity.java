@@ -18,6 +18,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,7 +59,17 @@ public class CustomerReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_review);
-
+        View rootView = findViewById(R.id.root_view);
+        // Thiết lập WindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                // Áp dụng padding để tránh bị thanh hệ thống che
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                return insets.consumeSystemWindowInsets();
+            }
+        });
         ImageView back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
