@@ -18,6 +18,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPasswordChangePassActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordVerifyOtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordSendOtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SetupMapForPartnerActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateOrderSuccessActivity"
             android:exported="false" />
         <activity

@@ -33,6 +33,7 @@ import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.CartAdapter;
 import com.example.exe201.DTO.CartFoodItem;
 import com.example.exe201.DTO.FoodItem;
+import com.example.exe201.DTO.FoodOrder;
 import com.example.exe201.DTO.FoodOrderItemResponse;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.OrderRequest;
@@ -69,13 +70,15 @@ public class OrderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private ImageView backArrow;
-    private TextView textViewEditAddress, textViewRestaurantName;
+    private TextView textViewEditAddress, textViewRestaurantName, textViewShippingFee, textViewAddFoodItem;
     private Button createOrderButton;
     private RequestQueue requestQueue;
     private String paymentMethod = "";
     private double totalPrice = 0;
     private String contentBank = "";
-
+    private double distance = 0;
+    private double shippingFee = 0 ;
+    private double totalPriceOrder =  0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +88,15 @@ public class OrderActivity extends AppCompatActivity {
         SupplierInfo supplierInfoChose = Utils.getSupplierInfo(this);
         textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         textViewRestaurantName.setText(supplierInfoChose.getRestaurantName());
-
         createOrderButton = findViewById(R.id.createOrderButton);
+        textViewShippingFee = findViewById(R.id.textViewShippingFee);
+        textViewAddFoodItem = findViewById(R.id.textViewAddFoodItem);
+
+        distance = supplierInfoChose.getDistance();
+        shippingFee = calculateShippingFee(distance);
+        textViewShippingFee.setText(String.format("%,.0fđ", shippingFee));
+
+
 
         // Tìm RadioGroup và các RadioButton
         RadioGroup paymentOptions = findViewById(R.id.paymentOptions);
@@ -130,6 +140,16 @@ public class OrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(OrderActivity.this, MapsActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_MAP); // Gọi MapsActivity
+            }
+        });
+
+
+        textViewAddFoodItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderActivity.this, ShowFoodItemActivity.class);
+                intent.putExtra("supplier", supplierInfoChose);
+                startActivity(intent); // Gọi MapsActivity
             }
         });
 
@@ -178,6 +198,20 @@ public class OrderActivity extends AppCompatActivity {
             Log.d("CartList", "No items in cart");
         }
     }
+    public double calculateShippingFee(double distance) {
+        double baseFee = 20000; // Mức phí cơ bản cho khoảng cách ngắn
+        double extraFeePerKm = 7000; // Phí thêm cho mỗi km sau một khoảng cách nhất định
+        double thresholdDistance = 3; // Khoảng cách giới hạn cho mức phí cơ bản
+
+        if (distance <= thresholdDistance) {
+            return baseFee;
+        } else {
+            return baseFee + (distance - thresholdDistance) * extraFeePerKm;
+        }
+    }
+    public double getShippingFee() {
+        return shippingFee;
+    }
 
     // Phương thức cập nhật lại tổng số tiền và số lượng sau khi thay đổi trong giỏ hàng
     private void updateCartList() {
@@ -196,7 +230,9 @@ public class OrderActivity extends AppCompatActivity {
         totalAmountView.setText(String.format("%,.0fđ", totalAmount));
         totalItemsView.setText(String.format("%d món", totalItems));
 
-        totalPrice = totalAmount;
+        // Cập nhật totalPrice với phí ship
+        totalPrice = totalAmount + shippingFee;
+        updateTotalPrice(totalPrice); // Cập nhật giá trị mới của totalPrice vào UI
     }
 
     public void updateTotalPrice(double newTotalPrice) {
@@ -244,24 +280,24 @@ public class OrderActivity extends AppCompatActivity {
     }
 
 
-    // Phương thức để lấy giỏ hàng từ SharedPreferences
-    private List<Menu> getCartItemsFromSharedPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        String json = sharedPreferences.getString("cart_map", null);
-
-        if (json != null) {
-            Type type = new TypeToken<HashMap<Integer, List<Menu>>>() {}.getType();
-            HashMap<Integer, List<Menu>> cartMap = new Gson().fromJson(json, type);
-
-            List<Menu> allItems = new ArrayList<>();
-            for (List<Menu> items : cartMap.values()) {
-                allItems.addAll(items);
-            }
-            return allItems;
-        } else {
-            return new ArrayList<>();
-        }
-    }
+//    // Phương thức để lấy giỏ hàng từ SharedPreferences
+//    private List<Menu> getCartItemsFromSharedPreferences() {
+//        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+//        String json = sharedPreferences.getString("cart_map", null);
+//
+//        if (json != null) {
+//            Type type = new TypeToken<HashMap<Integer, List<Menu>>>() {}.getType();
+//            HashMap<Integer, List<Menu>> cartMap = new Gson().fromJson(json, type);
+//
+//            List<Menu> allItems = new ArrayList<>();
+//            for (List<Menu> items : cartMap.values()) {
+//                allItems.addAll(items);
+//            }
+//            return allItems;
+//        } else {
+//            return new ArrayList<>();
+//        }
+//    }
     private void createOrder() throws JSONException {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
@@ -309,6 +345,7 @@ public class OrderActivity extends AppCompatActivity {
         foodOrderDTO.put("payment_status", 1); // Thanh toán chưa hoàn thành
         foodOrderDTO.put("user_id", userId); // Cập nhật user_id thực tế
         foodOrderDTO.put("supplier_id", supplierId);
+        foodOrderDTO.put("shipping_fee", shippingFee);
 
         orderData.put("orderRequests", orderRequestsArray);
         orderData.put("foodOrderDTO", foodOrderDTO);
@@ -322,19 +359,35 @@ public class OrderActivity extends AppCompatActivity {
                     // Xử lý khi tạo order thành công
                     Toast.makeText(OrderActivity.this, "Order created successfully", Toast.LENGTH_SHORT).show();
                     // Lấy id của order mới được tạo
-                    JSONObject foodOrder = response.optJSONObject("foodOrder");
-// Lấy giá trị orderTime
-                    long orderTimeMillis = foodOrder.optLong("orderTime");
+                    JSONObject foodOrderJson = response.optJSONObject("foodOrder");
 
-// Chuyển đổi sang định dạng dd-MM-yyyy hh:mm:ss
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-                    Date orderDate = new Date(orderTimeMillis);
-                    String formattedOrderTime = sdf.format(orderDate);
+                    int id = foodOrderJson.optInt("id");
+                    double totalPriceItem = foodOrderJson.optDouble("totalPrice");
+                    int totalItems = foodOrderJson.optInt("totalItems");
+                    String orderStatus = foodOrderJson.optString("status");
+                    long orderTime = foodOrderJson.optLong("orderTime");
+                    String formattedOrderTime = formatOrderTime(orderTime);
+                    JSONObject supplierJson = foodOrderJson.optJSONObject("supplierInfo");
+                    String foodImage = supplierJson.optString("imgUrl");
+                    String restaurantName = supplierJson.optString("restaurantName");
+                    double shippingFee = foodOrderJson.optDouble("shippingFee");
+
+                    totalPriceOrder = totalPriceItem+ shippingFee;;
+
+                    // Tạo đối tượng FoodOrder
+                    FoodOrder foodOrder = new FoodOrder(id, foodImage, restaurantName, totalPriceItem, totalItems, orderStatus, formattedOrderTime);
+                    foodOrder.setShippingFee(shippingFee);
+// Lấy giá trị orderTime
+                    long orderTimeMillis = foodOrderJson.optLong("orderTime");
+
                     int orderId = 0;
-                    if (foodOrder != null) {
-                        orderId = foodOrder.optInt("id"); // Lấy id từ foodOrder
+                    if (foodOrderJson != null) {
+                        orderId = foodOrderJson.optInt("id"); // Lấy id từ foodOrder
+
                         contentBank = "FOODPT " + orderId; // Cập nhật contentBank với id của order mới
                     }
+
+
 
                     // Xóa các item trong cartMap dựa trên supplierId
                     if (cartMap.containsKey(supplierId)) {
@@ -347,12 +400,13 @@ public class OrderActivity extends AppCompatActivity {
                     editor.apply();
                     if (paymentMethod.equals("Tiền mặt")) {
                         Intent intent = new Intent(OrderActivity.this, CreateOrderSuccessActivity.class);
+                        intent.putExtra("foodOrder", foodOrder);
                         startActivity(intent);
                     } else if (paymentMethod.equals("Chuyển khoản")) {
                         Intent intent = new Intent(OrderActivity.this, PaymentDetailActivity.class);
 
                         updateGoogleSheet(totalPrice,contentBank);
-                        intent.putExtra("totalPrice",totalPrice);
+                        intent.putExtra("totalPrice",totalPriceOrder);
                         intent.putExtra("contentBank", contentBank);
                         intent.putExtra("orderTime", orderTimeMillis);
                         intent.putExtra("orderId", orderId);
@@ -452,6 +506,12 @@ public class OrderActivity extends AppCompatActivity {
         }
     }
 
+    // Hàm định dạng thời gian từ timestamp
+    private String formatOrderTime(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, h:mm a", Locale.getDefault());
+        Date date = new Date(timestamp);
+        return sdf.format(date);
+    }
     @Override
     public void onBackPressed() {
         Intent resultIntent = new Intent();

@@ -94,20 +94,13 @@
 
                 <!-- Thông tin nhà hàng -->
                 <TextView
-                    android:id="@+id/textViewPriceDelivery"
+                    android:id="@+id/textViewDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tiền delivery"
+                    android:text="5 km"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray" />
-                <!-- Thời gian giao hàng -->
-                <TextView
-                    android:id="@+id/textViewDeliveryTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="From 35 mins"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_green_dark" />
+
 
                 <!-- Thông tin giảm giá -->
                 <TextView
@@ -116,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:text="Giảm 10.000đ"
                     android:textSize="14sp"
-                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColor="@android:color/holo_green_dark"
                     android:layout_marginStart="10dp" />
             </LinearLayout>
 
@@ -143,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:text="10% off"
                     android:textSize="14sp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/holo_orange_dark"
                     android:layout_marginStart="10dp" />
             </LinearLayout>
         </LinearLayout>

@@ -1,0 +1,9 @@
+<View android:id="@+id/lock_graphi"
+    android:layout_width="218.43dp"
+    android:layout_height="264.6dp"
+    android:layout_alignParentLeft="true"
+    android:layout_marginLeft="109.57dp"
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="209.4dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+

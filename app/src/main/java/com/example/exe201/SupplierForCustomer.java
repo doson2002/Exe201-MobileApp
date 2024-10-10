@@ -52,6 +52,7 @@ public class SupplierForCustomer extends AppCompatActivity {
     private SupplierInfoAdapter supplierInfoAdapter;
     private List<SupplierType> supplierTypeList = new ArrayList<>();
     private List<SupplierInfo> supplierInfoList = new ArrayList<>();
+    private double distance = 0.0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +180,9 @@ public class SupplierForCustomer extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
+        // Lấy latitude và longitude của người dùng từ SharedPreferences
+        double userLatitude = sharedPreferences.getFloat("latitude", 0.0f);
+        double userLongitude = sharedPreferences.getFloat("longitude", 0.0f);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
@@ -188,14 +192,19 @@ public class SupplierForCustomer extends AppCompatActivity {
                         try {
                             supplierInfoList.clear();
                             for (int i = 0; i < response.length(); i++) {
-                                JSONObject foodItemJson = response.getJSONObject(i);
-                                int id = foodItemJson.getInt("id");
-                                String restaurantName = foodItemJson.getString("restaurant_name");
-                                String imageUrl = foodItemJson.getString("img_url");
-                                double totalStarRating = foodItemJson.getDouble("total_star_rating");
-                                int totalReviewCount = foodItemJson.getInt("total_review_count");
+                                JSONObject supplierJson = response.getJSONObject(i);
+                                int id = supplierJson.getInt("id");
+                                String restaurantName = supplierJson.getString("restaurant_name");
+                                String imageUrl = supplierJson.getString("img_url");
+                                double totalStarRating = supplierJson.getDouble("total_star_rating");
+                                int totalReviewCount = supplierJson.getInt("total_review_count");
+                                double latitude = supplierJson.getDouble("latitude");
+                                double longitude = supplierJson.getDouble("longitude");
+                                // Tính khoảng cách
+                                 distance = calculateDistance(userLatitude, userLongitude, latitude, longitude);
+
                                 // Lấy thông tin SupplierInfo
-                                JSONObject supplierTypeJson = foodItemJson.getJSONObject("supplier_type");
+                                JSONObject supplierTypeJson = supplierJson.getJSONObject("supplier_type");
                                 int supplierTypeId = supplierTypeJson.getInt("id");
                                 String typeName = supplierTypeJson.getString("typeName");
                                 String imgUrl = supplierTypeJson.getString("imgUrl");
@@ -203,8 +212,12 @@ public class SupplierForCustomer extends AppCompatActivity {
 
                                 SupplierType supplierType= new SupplierType(supplierTypeId, typeName, imgUrl);
 
+                                SupplierInfo supplierInfo = new SupplierInfo(id, restaurantName,  imageUrl, totalStarRating, totalReviewCount, supplierType);
+                                supplierInfo.setLatitude(latitude);
+                                supplierInfo.setLatitude(longitude);
+                                supplierInfo.setDistance(distance);
                                 // Thêm SupplierInfo vào danh sách
-                                supplierInfoList.add(new SupplierInfo(id, restaurantName,  imageUrl, totalStarRating, totalReviewCount, supplierType));
+                                supplierInfoList.add(supplierInfo);
                             }
 
                             // Cập nhật danh sách món ăn trong RecyclerView
@@ -232,6 +245,20 @@ public class SupplierForCustomer extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(this).add(jsonArrayRequest);
+    }
+    // Hàm tính khoảng cách giữa hai điểm
+    private double calculateDistance(double userLat, double userLng, double supplierLat, double supplierLng) {
+        final int R = 6371; // Radius of the earth in km
+
+        double latDistance = Math.toRadians(supplierLat - userLat);
+        double lonDistance = Math.toRadians(supplierLng - userLng);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+                Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(supplierLat)) *
+                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // convert to km
+
+        return distance;
     }
     @Override
     public void onBackPressed() {

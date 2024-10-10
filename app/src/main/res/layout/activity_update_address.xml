@@ -84,7 +84,24 @@
         android:textColorHint="@color/light_purple"
         android:hint="Địa chỉ cụ thể, số nhà"
         android:background="@drawable/edit_text_border"/>
+    <TextView
+        android:id="@+id/tvAddressMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vị trí trên bản đồ"
+        android:textColor="@color/blue1"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:layout_marginTop="24dp" />
 
+    <TextView
+        android:id="@+id/tvAddressMapChose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="220/20 Vo Van hat"
+        android:textColor="@color/blue1"
+        android:textSize="15sp"
+        android:layout_marginTop="24dp" />
     <Space
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -102,4 +119,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/address_input" />
+
+
 </LinearLayout>

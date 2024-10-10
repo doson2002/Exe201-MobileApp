@@ -76,4 +76,6 @@ dependencies {
 
     implementation(libs.google.auth.library.oauth2.http)
 
+    implementation(libs.android.maps.utils)
+
 }

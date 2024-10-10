@@ -13,6 +13,7 @@ public class FoodOrder implements Parcelable {
     private int totalItems; // Tổng số món
     private String orderStatus; // Trạng thái đơn hàng
     private String orderTime; // Thời gian đặt hàng
+    private double shippingFee;
 
     public FoodOrder(int id, String foodImage, String restaurantName, double totalPrice, int totalItems, String orderStatus, String orderTime) {
         this.id = id;
@@ -24,6 +25,41 @@ public class FoodOrder implements Parcelable {
         this.orderTime = orderTime;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFoodImage(String foodImage) {
+        this.foodImage = foodImage;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
 
     public int getId() {
         return id;
@@ -37,6 +73,7 @@ public class FoodOrder implements Parcelable {
         totalItems = in.readInt();
         orderStatus = in.readString();
         orderTime = in.readString();
+        shippingFee = in.readDouble();
     }
 
     public static final Creator<FoodOrder> CREATOR = new Creator<FoodOrder>() {
@@ -89,5 +126,6 @@ public class FoodOrder implements Parcelable {
         parcel.writeInt(totalItems);
         parcel.writeString(orderStatus);
         parcel.writeString(orderTime);
+        parcel.writeDouble(shippingFee);
     }
 }
