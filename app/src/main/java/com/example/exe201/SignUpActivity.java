@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -54,6 +55,11 @@ public class SignUpActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         confirm_password= findViewById(R.id.confirm_password);
         gender = findViewById(R.id.gender_spinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.gender_array, R.layout.gender_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gender.setAdapter(adapter);
         // Hook Sign Up Button:
         sign_up_btn = findViewById(R.id.sign_up_btn);
         sign_up_btn.setOnClickListener(new View.OnClickListener() {

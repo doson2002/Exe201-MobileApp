@@ -70,8 +70,7 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
         holder.textViewTotalStar.setText(String.valueOf(supplierInfo.getTotalStarRating()));
         holder.textViewCountReview.setText("("+ String.valueOf(supplierInfo.getTotalReviewCount()) + ")");
         holder.textViewRestaurantType.setText(supplierInfo.getSupplierType().getTypeName());
-        holder.textViewPriceDelivery.setText("From " +supplierInfo.getTotalReviewCount() + " mins");
-        holder.textViewDeliveryTime.setText(String.valueOf(supplierInfo.getTotalReviewCount()));
+        holder.textViewDistance.setText(String.format("%.1f km", supplierInfo.getDistance()));
         holder.textViewDiscountInfo.setText(supplierInfo.getRestaurantName());
         holder.textViewPromo1.setText(supplierInfo.getRestaurantName());
         holder.textViewPromo2.setText(supplierInfo.getRestaurantName());
@@ -102,9 +101,8 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
         TextView textViewTotalStar;
         TextView textViewCountReview;
         TextView textViewRestaurantType;
-        TextView textViewPriceDelivery;
+        TextView textViewDistance;
         TextView textViewDiscountInfo;
-        TextView textViewDeliveryTime;
         TextView textViewPromo1;
         TextView textViewPromo2;
 
@@ -116,9 +114,8 @@ public class SupplierInfoAdapter extends RecyclerView.Adapter<SupplierInfoAdapte
             textViewTotalStar = itemView.findViewById(R.id.textViewTotalStar);
             textViewCountReview = itemView.findViewById(R.id.textViewCountReview);
             textViewRestaurantType = itemView.findViewById(R.id.textViewRestaurantType);
-            textViewPriceDelivery = itemView.findViewById(R.id.textViewPriceDelivery);
+            textViewDistance = itemView.findViewById(R.id.textViewDistance);
             textViewDiscountInfo = itemView.findViewById(R.id.textViewDiscountInfo);
-            textViewDeliveryTime = itemView.findViewById(R.id.textViewDeliveryTime);
             textViewPromo1 = itemView.findViewById(R.id.textViewPromo1);
             textViewPromo2 = itemView.findViewById(R.id.textViewPromo2);
         }

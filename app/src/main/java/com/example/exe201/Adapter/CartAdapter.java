@@ -167,6 +167,9 @@ public class CartAdapter extends ListAdapter<Menu, CartAdapter.CartViewHolder> {
         // Ví dụ: ((OrderActivity) context).updateTotalPrice(totalPrice);
         // Nếu bạn có một phương thức để cập nhật giá trị này trong Activity/Fragment
         if (context instanceof OrderActivity) {
+            double shippingFee = orderActivity.getShippingFee(); // Phương thức để lấy phí ship từ OrderActivity
+            // Cộng phí ship vào tổng tiền
+            totalPrice += shippingFee;
             ((OrderActivity) context).updateTotalPrice(totalPrice);
         }
     }

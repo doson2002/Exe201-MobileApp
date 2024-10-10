@@ -80,6 +80,15 @@ private static final String BASE_URL = "http://192.168.1.5:8080/api/v1/";
   public static final String GET_ALL_FAQ = BASE_URL + "faq/get_all_faq";
     public static final String GET_FAQ_DETAIL = BASE_URL + "faq/get_faq_detail";
 
+    //ForgotPassword
+    public static final String FORGOT_PASSWORD_SEND_OTP = BASE_URL + "forgot_password/send_otp";
+
+    public static final String FORGOT_PASSWORD_VERIFY_OTP = BASE_URL + "forgot_password/verify_otp";
+    public static final String FORGOT_PASSWORD_CHANGE_PASSWORD = BASE_URL + "forgot_password/change_password";
+
+
+
+
 
 
 

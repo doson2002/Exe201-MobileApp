@@ -10,12 +10,22 @@
     android:background="@color/white"
     tools:context=".SignUpActivity">
 
+    <ImageView
+        android:id="@+id/lockIcon"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/logofoodpt"
+        android:contentDescription="Lock Icon"
+        android:padding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <!-- CardView bao quanh toàn bộ phần nội dung -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -24,8 +34,8 @@
         app:cardElevation="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lockIcon">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,6 +77,7 @@
                     android:id="@+id/gender_spinner"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/edit_text_border"
                     android:entries="@array/gender_array"
@@ -121,6 +132,7 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
                     android:background="@drawable/edit_text_border"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"

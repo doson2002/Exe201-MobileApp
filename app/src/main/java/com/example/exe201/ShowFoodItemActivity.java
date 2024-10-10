@@ -73,6 +73,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
     private ImageView backArrow, imageViewSupplier;
     private ImageView imgShowCart;
     private Button buttonChat;
+    private double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,13 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         setContentView(R.layout.activity_show_food_item);
 
         SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
+        if(supplierInfo!=null){
+            latitude = supplierInfo.getLatitude();
+            longitude = supplierInfo.getLongitude();
+        }else{
+            Toast.makeText(ShowFoodItemActivity.this, "Opsssss! Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
         imgShowCart= findViewById(R.id.imgShowCart);
@@ -126,13 +134,16 @@ public class ShowFoodItemActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // Quay lại trang trước
-                onBackPressed();
+                Intent intent = new Intent(ShowFoodItemActivity.this, SupplierForCustomer.class);
+                startActivity(intent);
             }
         });
         // Bước 1: Lấy TextView cần hiển thị tên nhà cung cấp
         TextView textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         TextView textViewReviews = findViewById(R.id.textViewReviews);
         TextView textViewStarAverage = findViewById(R.id.textViewStarAverage);
+        TextView textViewDeliveryInfo = findViewById(R.id.textViewDeliveryInfo);
+
 
 
         int supplierId = supplierInfo.getId();
@@ -153,9 +164,11 @@ public class ShowFoodItemActivity extends AppCompatActivity{
             String supplierName = supplierInfo.getRestaurantName();
             int totalRating = supplierInfo.getTotalReviewCount();
             double starAverage = supplierInfo.getTotalStarRating();
-            textViewReviews.setText(String.format("(%d ratings)", totalRating));
+            double distance = supplierInfo.getDistance();
+            textViewReviews.setText(String.format("(%d đánh giá)", totalRating));
             textViewRestaurantName.setText(supplierName);
             textViewStarAverage.setText(String.format("%.1f", starAverage));
+            textViewDeliveryInfo.setText(String.format("%.1f km", distance));
         } else {
             // Nếu supplierInfo null, bạn có thể hiển thị thông báo lỗi hoặc tên mặc định
             textViewRestaurantName.setText("Unknown Supplier");

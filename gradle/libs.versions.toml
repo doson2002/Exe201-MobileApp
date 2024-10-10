@@ -27,7 +27,7 @@ navigationFragment = "2.8.2"
 navigationUi = "2.8.2"
 google-api-services-sheets = "v4-rev612-1.25.0"
 google-auth-library-oauth2-http = "1.3.0"
-
+android-maps-utils = "2.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -58,6 +58,7 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 google-api-services-sheets = { group = "com.google.apis", name = "google-api-services-sheets", version.ref = "google-api-services-sheets" }
 
 google-auth-library-oauth2-http = { group = "com.google.auth", name = "google-auth-library-oauth2-http", version.ref = "google-auth-library-oauth2-http" }
+android-maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "android-maps-utils" }
 
 
 [plugins]

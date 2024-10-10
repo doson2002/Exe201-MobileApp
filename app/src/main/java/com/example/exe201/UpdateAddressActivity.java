@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -45,6 +46,7 @@ import java.util.Map;
 public class UpdateAddressActivity extends AppCompatActivity {
 
 
+    private static final int REQUEST_CODE_MAP = 1;
     private Spinner spinnerTinh, spinnerQuan, spinnerPhuong;
     private ArrayAdapter<TinhThanh> adapterTinh;
     private ArrayAdapter<Quan>       adapterQuan;
@@ -61,6 +63,10 @@ public class UpdateAddressActivity extends AppCompatActivity {
     private String fullAddress;
     private Button submitButton;
     private ImageView backArrow;
+    private TextView tvAddressMap, tvAddressMapChose;
+
+    private double latitude = 0;
+    private double longitude = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +84,13 @@ public class UpdateAddressActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         int supplierId = sharedPreferences.getInt("supplier_id", -1);
 
+
+
+
         addressInput = findViewById(R.id.address_input);
         submitButton = findViewById(R.id.submit_button);
+        tvAddressMap = findViewById(R.id.tvAddressMap);
+        tvAddressMapChose = findViewById(R.id.tvAddressMapChose);
         // Get the data passed from the first Activity
 
         // Ánh xạ Spinner
@@ -174,11 +185,18 @@ public class UpdateAddressActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        tvAddressMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UpdateAddressActivity.this, SetupMapForPartnerActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_MAP); // Gọi Activity thứ hai
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendDataToApi(supplierId);
+                sendDataToApi(supplierId,latitude, longitude);
             }
         });
     }
@@ -297,7 +315,7 @@ public class UpdateAddressActivity extends AppCompatActivity {
     }
 
     // Gửi dữ liệu đến API
-    private void sendDataToApi(int supplierId) {
+    private void sendDataToApi(int supplierId,double latitude, double longitude) {
         String url = ApiEndpoints.UPDATE_SUPPLIER + "/" + supplierId; ; // API URL
         RequestQueue queue = Volley.newRequestQueue(UpdateAddressActivity.this);
 
@@ -314,6 +332,8 @@ public class UpdateAddressActivity extends AppCompatActivity {
             fullAddress = selectedTinh + " - " + selectedQuan + " - " + selectedPhuong + "-" + address;
             jsonBody.put("address", fullAddress);
             jsonBody.put("user_id", userId); // Giá trị user_id dạng int
+            jsonBody.put("latitude", latitude); // Gửi vĩ độ
+            jsonBody.put("longitude", longitude); // Gửi kinh độ
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -349,5 +369,22 @@ public class UpdateAddressActivity extends AppCompatActivity {
 
         // Thêm request vào queue
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Kiểm tra requestCode và resultCode
+        if (requestCode == REQUEST_CODE_MAP && resultCode == RESULT_OK) {
+            // Lấy địa chỉ được chọn từ MapsActivity
+            if (data != null) {
+                String selectedAddress = data.getStringExtra("selected_address");
+                 latitude = data.getDoubleExtra("selected_latitude", 0.0);
+                 longitude = data.getDoubleExtra("selected_longitude", 0.0);
+                tvAddressMapChose.setText(selectedAddress);
+
+            }
+        }
     }
 }

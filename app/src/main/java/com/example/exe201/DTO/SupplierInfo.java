@@ -12,6 +12,9 @@ public class SupplierInfo implements Parcelable {
     private double totalStarRating;
     private int totalReviewCount;
     private SupplierType supplierType;
+    private double latitude;
+    private double longitude;
+    private double distance;
 
 
     public SupplierInfo(int id, String restaurantName, String imgUrl
@@ -26,6 +29,30 @@ public class SupplierInfo implements Parcelable {
     }
 
     public SupplierInfo() {
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public void setId(int id) {
@@ -74,6 +101,9 @@ public class SupplierInfo implements Parcelable {
         imgUrl = in.readString();
         totalStarRating = in.readDouble();
         totalReviewCount = in.readInt();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        distance = in.readDouble();
     }
 
     public static final Creator<SupplierInfo> CREATOR = new Creator<SupplierInfo>() {
@@ -107,5 +137,8 @@ public class SupplierInfo implements Parcelable {
         parcel.writeString(imgUrl);
         parcel.writeDouble(totalStarRating);
         parcel.writeInt(totalReviewCount);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeDouble(distance);
     }
 }

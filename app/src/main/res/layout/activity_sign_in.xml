@@ -25,7 +25,7 @@
         android:layout_width="217dp"
         android:layout_height="148dp"
         android:layout_marginTop="120dp"
-        app:srcCompat="@drawable/foodptlogo" />
+        app:srcCompat="@drawable/logofoodpt" />
 
     <TextView
         android:id="@+id/textView2"
@@ -44,7 +44,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/input_text_field_styling"
         android:layout_height="55dp"
-        android:textColorHint="@color/light_black"
+        android:textColorHint="@color/colorHint"
         android:hint="Email"
         android:textColor="@color/black"
         android:textAlignment="center" />
@@ -53,7 +53,7 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:textColorHint="@color/light_black"
+        android:textColorHint="@color/colorHint"
         android:layout_marginTop="7dp"
         android:paddingLeft="10dp"
         android:inputType="textPassword"
@@ -79,21 +79,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/go_to_sign_up"
-        android:textColor="@color/blue"
+        android:textColor="@color/light_orange"
         android:textSize="18sp"
         android:onClick="goToSignUpAct" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Forgot password? Click here"
+            android:textColor="@color/light_orange"
+            android:textSize="18sp"
+            android:onClick="goToForgotPassword" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/green"
-        android:onClick="goToHome"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        android:text="Back To Home"
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+
 
 </LinearLayout>
 
