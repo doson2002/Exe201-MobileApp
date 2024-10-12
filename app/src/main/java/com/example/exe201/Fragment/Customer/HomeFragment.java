@@ -441,6 +441,8 @@ public class HomeFragment extends Fragment {
         // Thêm request vào queue
         queue.add(jsonObjectRequest);
     }
+
+
     private void fetchFoodItemsTopSold() {
         String url = ApiEndpoints.GET_FOOD_ITEMS_TOP_SOLD;
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -623,6 +625,8 @@ public class HomeFragment extends Fragment {
         isLoading = true;
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
+        double userLatitude = sharedPreferences.getFloat("latitude", 0.0f);
+        double userLongitude = sharedPreferences.getFloat("longitude", 0.0f);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
@@ -635,15 +639,19 @@ public class HomeFragment extends Fragment {
                             supplierInfoList.clear();
 
                             for (int i = 0; i < suppliersArray.length(); i++) {
-                                JSONObject foodItemJson = suppliersArray.getJSONObject(i);
-                                int id = foodItemJson.getInt("id");
-                                String restaurantName = foodItemJson.getString("restaurant_name");
-                                String imageUrl = foodItemJson.optString("img_url", ""); // sử dụng optString để tránh lỗi null
-                                double totalStarRating = foodItemJson.getDouble("total_star_rating");
-                                int totalReviewCount = foodItemJson.getInt("total_review_count");
+                                JSONObject suppliersJson = suppliersArray.getJSONObject(i);
+                                int id = suppliersJson.getInt("id");
+                                String restaurantName = suppliersJson.getString("restaurant_name");
+                                String imageUrl = suppliersJson.optString("img_url", ""); // sử dụng optString để tránh lỗi null
+                                double totalStarRating = suppliersJson.getDouble("total_star_rating");
+                                int totalReviewCount = suppliersJson.getInt("total_review_count");
+                                double latitude = suppliersJson.getDouble("latitude");
+                                double longitude = suppliersJson.getDouble("longitude");
 
+                                // Tính khoảng cách
+                                double distance = calculateDistance(userLatitude, userLongitude, latitude, longitude);
                                 // Lấy thông tin SupplierType
-                                JSONObject supplierTypeJson = foodItemJson.getJSONObject("supplier_type");
+                                JSONObject supplierTypeJson = suppliersJson.getJSONObject("supplier_type");
                                 int supplierTypeId = supplierTypeJson.getInt("id");
                                 String typeName = supplierTypeJson.getString("typeName");
                                 String typeImgUrl = supplierTypeJson.getString("imgUrl");
@@ -651,7 +659,13 @@ public class HomeFragment extends Fragment {
                                 SupplierType supplierType = new SupplierType(supplierTypeId, typeName, typeImgUrl);
 
                                 // Thêm SupplierInfo vào danh sách
-                                supplierInfoList.add(new SupplierInfo(id, restaurantName, imageUrl, totalStarRating, totalReviewCount, supplierType));
+                                SupplierInfo supplierInfo = new SupplierInfo(id, restaurantName, imageUrl, totalStarRating, totalReviewCount, supplierType);
+                                supplierInfo.setLatitude(latitude);
+                                supplierInfo.setLongitude(longitude);
+                                supplierInfo.setDistance(distance);
+
+                                supplierInfoList.add(supplierInfo);
+
                             }
 
                             // Cập nhật danh sách trong RecyclerView
@@ -687,6 +701,19 @@ public class HomeFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
     }
 
+    private double calculateDistance(double userLat, double userLng, double supplierLat, double supplierLng) {
+        final int R = 6371; // Radius of the earth in km
+
+        double latDistance = Math.toRadians(supplierLat - userLat);
+        double lonDistance = Math.toRadians(supplierLng - userLng);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+                Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(supplierLat)) *
+                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // convert to km
+
+        return distance;
+    }
 
 
     @Override

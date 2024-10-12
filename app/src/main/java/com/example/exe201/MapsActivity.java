@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,13 +41,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationClient;
     private Marker currentMarker; // Biến để lưu trữ marker hiện tại
     private String selectedAddress = "";
-
-
+    private LatLng selectedLatLng;
+    private double latitudeSupplier = 0;
+    private double longitudeSupplier = 0;
+    private float distanceInKm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Intent intent = getIntent();
+        latitudeSupplier = intent.getDoubleExtra("latitudeSupplier",0);
+        longitudeSupplier = intent.getDoubleExtra("longitudeSupplier",0);
 
         // Khởi tạo FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -68,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Tạo Intent để chứa dữ liệu trả về
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("selected_address", selectedAddress); // Đưa địa chỉ vị trí hiện tại vào Intent
-
+                resultIntent.putExtra("distance", distanceInKm);
                 // Đặt kết quả và đóng Activity
                 setResult(RESULT_OK, resultIntent);
                 finish(); // Đóng Activity và trở về Activity trước
@@ -97,6 +104,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             // Thêm marker mới tại vị trí click
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí đã click"));
+            // Giả sử tọa độ của supplier đã được lấy từ supplierInfoChose
+            LatLng supplierLocation = new LatLng(latitudeSupplier, longitudeSupplier);
+            selectedLatLng = latLng; // Lưu tọa độ được chọn
+
+            // Tính khoảng cách theo kilomet
+            distanceInKm = calculateDistanceInKm(selectedLatLng, supplierLocation);
+
+            // Hiển thị khoảng cách
+            Toast.makeText(this, "Khoảng cách tới supplier: " + distanceInKm + " km", Toast.LENGTH_LONG).show();
             // Hiển thị địa chỉ vị trí click vào TextView
             TextView locationDetailsTextView = findViewById(R.id.location_details);
             getAddressFromLatLng(latLng, locationDetailsTextView);
@@ -116,6 +132,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         }
+    }
+    private float calculateDistanceInKm(LatLng userLocation, LatLng supplierLocation) {
+        float[] results = new float[1];
+
+        // Tính khoảng cách giữa hai tọa độ
+        Location.distanceBetween(
+                userLocation.latitude, userLocation.longitude,  // Tọa độ của người dùng
+                supplierLocation.latitude, supplierLocation.longitude,  // Tọa độ của supplier
+                results);
+
+        return results[0] / 1000;  // Trả về kết quả khoảng cách theo km
     }
 
 

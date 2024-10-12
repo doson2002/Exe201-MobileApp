@@ -53,8 +53,7 @@ public class SupplierWithFoodItemAdapter extends RecyclerView.Adapter<SupplierWi
         holder.textViewRestaurantName.setText(supplierInfo.getRestaurantName());
         holder.textViewTotalStar.setText(String.format("%.1f", supplierInfo.getTotalStarRating()));
         holder.textViewCountReview.setText("("+ String.valueOf(supplierInfo.getTotalReviewCount()) + ")");
-        holder.textViewPriceDelivery.setText("From " +supplierInfo.getTotalReviewCount() + " mins");
-        holder.textViewDeliveryTime.setText(String.valueOf(supplierInfo.getTotalReviewCount()));
+        holder.textViewDistance.setText(String.format("%.1f km", supplierInfo.getDistance()));
         holder.textViewDiscountInfo.setText(supplierInfo.getRestaurantName());
         holder.textViewPromo1.setText(supplierInfo.getRestaurantName());
         holder.textViewPromo2.setText(supplierInfo.getRestaurantName());
@@ -84,9 +83,8 @@ public class SupplierWithFoodItemAdapter extends RecyclerView.Adapter<SupplierWi
         TextView textViewRestaurantName;
         TextView textViewTotalStar;
         TextView textViewCountReview;
-        TextView textViewPriceDelivery;
+        TextView textViewDistance;
         TextView textViewDiscountInfo;
-        TextView textViewDeliveryTime;
         TextView textViewPromo1;
         TextView textViewPromo2;
         RecyclerView recyclerViewFoodItems;
@@ -97,9 +95,8 @@ public class SupplierWithFoodItemAdapter extends RecyclerView.Adapter<SupplierWi
             textViewRestaurantName = itemView.findViewById(R.id.textViewRestaurantName);
             textViewTotalStar = itemView.findViewById(R.id.textViewTotalStar);
             textViewCountReview = itemView.findViewById(R.id.textViewCountReview);
-            textViewPriceDelivery = itemView.findViewById(R.id.textViewPriceDelivery);
+            textViewDistance = itemView.findViewById(R.id.textViewDistance);
             textViewDiscountInfo = itemView.findViewById(R.id.textViewDiscountInfo);
-            textViewDeliveryTime = itemView.findViewById(R.id.textViewDeliveryTime);
             textViewPromo1 = itemView.findViewById(R.id.textViewPromo1);
             textViewPromo2 = itemView.findViewById(R.id.textViewPromo2);
             recyclerViewFoodItems = itemView.findViewById(R.id.recyclerViewFoodItems);

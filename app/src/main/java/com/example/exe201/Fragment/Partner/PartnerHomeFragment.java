@@ -61,6 +61,7 @@ import com.example.exe201.DTO.SupplierType;
 import com.example.exe201.FoodItemActivity;
 import com.example.exe201.FoodItemGroupedBySupplierActivity;
 import com.example.exe201.ProfileActivity;
+import com.example.exe201.PromotionActivity;
 import com.example.exe201.R;
 import com.example.exe201.RatingChartActivity;
 import com.example.exe201.ReportForPartnerActivity;
@@ -86,7 +87,7 @@ import java.util.Map;
 public class PartnerHomeFragment extends Fragment {
     private TextView openTimeTextView, closeTimeTextView;
     private LocalTime openTime, closeTime;
-    private LinearLayout timeIcon, reportIcon, menuIcon, addressIcon, ratingIcon, partnerInfoIcon;
+    private LinearLayout timeIcon, reportIcon, menuIcon, addressIcon, ratingIcon, partnerInfoIcon, promotion_icon;
     private ImageView accountIcon;
     ImageView imageView;
     FloatingActionButton buttonUploadImage;
@@ -121,6 +122,7 @@ public class PartnerHomeFragment extends Fragment {
         timeIcon = view.findViewById(R.id.time_icon);
         ratingIcon = view.findViewById(R.id.ratingIcon);
         partnerInfoIcon = view.findViewById(R.id.partnerInfoIcon);
+        promotion_icon = view.findViewById(R.id.promotion_icon);
 
         // Account icon click listener
         accountIcon.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +179,14 @@ public class PartnerHomeFragment extends Fragment {
         partnerInfoIcon.setOnClickListener(view1 -> {
 
             showPartnerInfoDialog(supplierId, userId);
+        });
+
+        promotion_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PromotionActivity.class);
+                startActivity(intent);
+            }
         });
 
 
@@ -378,6 +388,10 @@ public class PartnerHomeFragment extends Fragment {
                 return headers;
             }
         };
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         queue.add(jsonObjectRequest);
     }
@@ -442,7 +456,10 @@ public class PartnerHomeFragment extends Fragment {
                 return headers;
             }
         };
-
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjectRequest);
     }
 
@@ -495,7 +512,10 @@ public class PartnerHomeFragment extends Fragment {
                 return headers;
             }
         };
-
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Thêm request vào queue
         queue.add(jsonObjectRequest);
@@ -554,6 +574,10 @@ public class PartnerHomeFragment extends Fragment {
                 return headers;
             }
         };
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Thêm yêu cầu vào hàng đợi của Volley
         Volley.newRequestQueue(getActivity()).add(jsonObjectRequest);

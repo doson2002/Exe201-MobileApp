@@ -80,6 +80,8 @@ public class OrderActivity extends AppCompatActivity {
     private double distance = 0;
     private double shippingFee = 0 ;
     private double totalPriceOrder =  0;
+    private double latitudeSupplier = 0 ;
+    private double longitudeSupplier = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +100,15 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
         SupplierInfo supplierInfoChose = Utils.getSupplierInfo(this);
+        if(supplierInfoChose==null){
+            return;
+        }else{
+            latitudeSupplier = supplierInfoChose.getLatitude();
+            longitudeSupplier = supplierInfoChose.getLongitude();
+        }
+
+
+
         textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         textViewRestaurantName.setText(supplierInfoChose.getRestaurantName());
         createOrderButton = findViewById(R.id.createOrderButton);
@@ -151,6 +162,8 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrderActivity.this, MapsActivity.class);
+                intent.putExtra("latitudeSupplier", latitudeSupplier);
+                intent.putExtra("longitudeSupplier", longitudeSupplier);
                 startActivityForResult(intent, REQUEST_CODE_MAP); // Gọi MapsActivity
             }
         });
@@ -210,6 +223,7 @@ public class OrderActivity extends AppCompatActivity {
             Log.d("CartList", "No items in cart");
         }
     }
+
     public double calculateShippingFee(double distance) {
         double baseFee = 20000; // Mức phí cơ bản cho khoảng cách ngắn
         double extraFeePerKm = 7000; // Phí thêm cho mỗi km sau một khoảng cách nhất định
@@ -514,6 +528,14 @@ public class OrderActivity extends AppCompatActivity {
                 String selectedAddress = data.getStringExtra("selected_address");
                 // Cập nhật địa chỉ đã chọn vào textViewDeliveryAddress
                 textViewDeliveryAddress.setText(selectedAddress);
+
+                distance = data.getDoubleExtra("distance", 0);
+                // Tính lại phí vận chuyển dựa trên khoảng cách mới
+                shippingFee = calculateShippingFee(distance);
+                // Cập nhật phí vận chuyển vào textViewShippingFee
+                textViewShippingFee.setText(String.format("%,.0fđ", shippingFee));
+
+                updateCartList();
             }
         }
     }

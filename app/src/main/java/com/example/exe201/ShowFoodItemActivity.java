@@ -148,8 +148,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // Quay lại trang trước
-                Intent intent = new Intent(ShowFoodItemActivity.this, SupplierForCustomer.class);
-                startActivity(intent);
+                onBackPressed();
             }
         });
         // Bước 1: Lấy TextView cần hiển thị tên nhà cung cấp

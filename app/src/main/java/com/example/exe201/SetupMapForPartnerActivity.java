@@ -150,11 +150,16 @@ public class SetupMapForPartnerActivity extends AppCompatActivity implements OnM
 
             // Thêm marker mới tại vị trí click
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí đã click"));
+
+            // Lưu tọa độ được chọn
+            selectedLatLng = latLng;  // Lưu lại LatLng vị trí đã click
+
             // Hiển thị địa chỉ vị trí click vào TextView
             TextView locationDetailsTextView = findViewById(R.id.location_details);
             getAddressFromLatLng(latLng, locationDetailsTextView);
         });
     }
+
 
     // Hàm này để lấy vị trí hiện tại và hiển thị lên textView
     private void getCurrentLocation() {

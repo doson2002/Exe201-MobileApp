@@ -3,8 +3,8 @@ package com.example.exe201.API;
 public class ApiEndpoints {
     // Địa chỉ cơ sở (base URL) của API
 
-    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
-//private static final String BASE_URL = "http://192.168.1.5:8080/api/v1/";
+//    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
+private static final String BASE_URL = "http://192.168.1.3:8080/api/v1/";
 
     // Các endpoint API
     public static final String CREATE_SUPPLIER_INFO = BASE_URL + "supplier_info/create";
@@ -86,6 +86,9 @@ public class ApiEndpoints {
     public static final String FORGOT_PASSWORD_VERIFY_OTP = BASE_URL + "forgot_password/verify_otp";
     public static final String FORGOT_PASSWORD_CHANGE_PASSWORD = BASE_URL + "forgot_password/change_password";
 
+
+    //Promotion
+    public static final String CREATE_PROMOTION = BASE_URL + "promotions/create";
 
 
 

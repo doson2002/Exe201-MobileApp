@@ -214,7 +214,7 @@ public class SupplierForCustomer extends AppCompatActivity {
 
                                 SupplierInfo supplierInfo = new SupplierInfo(id, restaurantName,  imageUrl, totalStarRating, totalReviewCount, supplierType);
                                 supplierInfo.setLatitude(latitude);
-                                supplierInfo.setLatitude(longitude);
+                                supplierInfo.setLongitude(longitude);
                                 supplierInfo.setDistance(distance);
                                 // Thêm SupplierInfo vào danh sách
                                 supplierInfoList.add(supplierInfo);

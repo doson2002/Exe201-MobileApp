@@ -127,6 +127,9 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
         String url = ApiEndpoints.GET_FOOD_ITEM_GROUPED_BY_SUPPLIER_ID + keyword;
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JwtToken", null);
+        // Lấy latitude và longitude của người dùng từ SharedPreferences
+        double userLatitude = sharedPreferences.getFloat("latitude", 0.0f);
+        double userLongitude = sharedPreferences.getFloat("longitude", 0.0f);
 
         if (token == null) {
             Log.e("SearchFoodItems", "Token is null, user might not be logged in.");
@@ -152,18 +155,29 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
 
                             // Lấy thông tin SupplierInfo
                             JSONObject supplierInfoJson = supplierWithFoodItemsJson.getJSONObject("supplierInfo");
-
+                            String restaurantName = supplierInfoJson.getString("restaurantName");
+                            String imgUrl =   supplierInfoJson.getString("imgUrl");
+                            double totalStarRating = supplierInfoJson.getDouble("totalStarRating");
+                            int totalReviewCount = supplierInfoJson.getInt("totalReviewCount");
+                            double latitude = supplierInfoJson.getDouble("latitude");
+                            double longitude = supplierInfoJson.getDouble("longitude");
+                            // Tính khoảng cách
+                            double distance = calculateDistance(userLatitude, userLongitude, latitude, longitude);
                             // Lấy chi tiết SupplierInfo từ "user" và "supplierType"
                             JSONObject userJson = supplierInfoJson.getJSONObject("user");
                             JSONObject supplierTypeJson = supplierInfoJson.getJSONObject("supplierType");
                             int supplierId = supplierInfoJson.getInt("id");
                             SupplierInfo supplierInfo = new SupplierInfo(
                                     supplierId,
-                                    supplierInfoJson.getString("restaurantName"),
-                                    supplierInfoJson.getString("imgUrl"),
-                                    supplierInfoJson.getDouble("totalStarRating"),
-                                    supplierInfoJson.getInt("totalReviewCount")
+                                    restaurantName,
+                                    imgUrl,
+                                    totalStarRating,
+                                    totalReviewCount
                             );
+
+                            supplierInfo.setLatitude(latitude);
+                            supplierInfo.setLongitude(longitude);
+                            supplierInfo.setDistance(distance);
 
                             // Lấy danh sách FoodItems
                             JSONArray foodItemsJsonArray = supplierWithFoodItemsJson.getJSONArray("foodItems");
@@ -214,6 +228,20 @@ public class FoodItemGroupedBySupplierActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    // Hàm tính khoảng cách giữa hai điểm
+    private double calculateDistance(double userLat, double userLng, double supplierLat, double supplierLng) {
+        final int R = 6371; // Radius of the earth in km
+
+        double latDistance = Math.toRadians(supplierLat - userLat);
+        double lonDistance = Math.toRadians(supplierLng - userLng);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+                Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(supplierLat)) *
+                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // convert to km
+
+        return distance;
+    }
 
 
 }
