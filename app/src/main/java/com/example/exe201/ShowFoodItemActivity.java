@@ -19,6 +19,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
@@ -80,7 +81,18 @@ public class ShowFoodItemActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_food_item);
-
+// Lấy root view
+        View rootView = findViewById(R.id.root_view);
+        // Thiết lập WindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                // Áp dụng padding để tránh bị thanh hệ thống che
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                return insets.consumeSystemWindowInsets();
+            }
+        });
         SupplierInfo supplierInfo = getIntent().getParcelableExtra("supplier");
         if(supplierInfo!=null){
             latitude = supplierInfo.getLatitude();
@@ -100,6 +112,8 @@ public class ShowFoodItemActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
+
 
         searchBarContainer = findViewById(R.id.searchBarContainer);
         nestedScrollView = findViewById(R.id.nestedScrollViewContent);
@@ -134,8 +148,7 @@ public class ShowFoodItemActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // Quay lại trang trước
-                Intent intent = new Intent(ShowFoodItemActivity.this, SupplierForCustomer.class);
-                startActivity(intent);
+                onBackPressed();
             }
         });
         // Bước 1: Lấy TextView cần hiển thị tên nhà cung cấp

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -79,13 +80,35 @@ public class OrderActivity extends AppCompatActivity {
     private double distance = 0;
     private double shippingFee = 0 ;
     private double totalPriceOrder =  0;
+    private double latitudeSupplier = 0 ;
+    private double longitudeSupplier = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order);
 
+        View rootView = findViewById(R.id.root_view);
+        // Thiết lập WindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                // Áp dụng padding để tránh bị thanh hệ thống che
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                return insets.consumeSystemWindowInsets();
+            }
+        });
         SupplierInfo supplierInfoChose = Utils.getSupplierInfo(this);
+        if(supplierInfoChose==null){
+            return;
+        }else{
+            latitudeSupplier = supplierInfoChose.getLatitude();
+            longitudeSupplier = supplierInfoChose.getLongitude();
+        }
+
+
+
         textViewRestaurantName = findViewById(R.id.textViewRestaurantName);
         textViewRestaurantName.setText(supplierInfoChose.getRestaurantName());
         createOrderButton = findViewById(R.id.createOrderButton);
@@ -139,6 +162,8 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrderActivity.this, MapsActivity.class);
+                intent.putExtra("latitudeSupplier", latitudeSupplier);
+                intent.putExtra("longitudeSupplier", longitudeSupplier);
                 startActivityForResult(intent, REQUEST_CODE_MAP); // Gọi MapsActivity
             }
         });
@@ -198,6 +223,7 @@ public class OrderActivity extends AppCompatActivity {
             Log.d("CartList", "No items in cart");
         }
     }
+
     public double calculateShippingFee(double distance) {
         double baseFee = 20000; // Mức phí cơ bản cho khoảng cách ngắn
         double extraFeePerKm = 7000; // Phí thêm cho mỗi km sau một khoảng cách nhất định
@@ -502,6 +528,14 @@ public class OrderActivity extends AppCompatActivity {
                 String selectedAddress = data.getStringExtra("selected_address");
                 // Cập nhật địa chỉ đã chọn vào textViewDeliveryAddress
                 textViewDeliveryAddress.setText(selectedAddress);
+
+                distance = data.getDoubleExtra("distance", 0);
+                // Tính lại phí vận chuyển dựa trên khoảng cách mới
+                shippingFee = calculateShippingFee(distance);
+                // Cập nhật phí vận chuyển vào textViewShippingFee
+                textViewShippingFee.setText(String.format("%,.0fđ", shippingFee));
+
+                updateCartList();
             }
         }
     }

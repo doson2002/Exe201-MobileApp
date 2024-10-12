@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="16dp">
+    <!-- Nút và hình ảnh phía bên phải -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <!-- Hình ảnh món ăn -->
+        <ImageView
+            android:id="@+id/foodImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"
+            android:background="@drawable/rounded_border"
+            android:clipToOutline="true"
+            android:contentDescription="Food Image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Nút "Xem chi tiết" -->
+        <Button
+            android:id="@+id/btnViewDetails"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:text="Chi tiết"
+            android:textColor="@color/black"
+            android:background="@drawable/time_button_background"
+            app:layout_constraintTop_toBottomOf="@id/foodImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Thông tin món ăn -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <!-- Tên món ăn nằm sát mép trên -->
+        <TextView
+            android:id="@+id/foodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mã code khuyến mãi"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Giá món ăn nằm ngay dưới tên món ăn -->
+        <TextView
+            android:id="@+id/discountAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giảm 10% hóa đơn"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/foodName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Số lượng món ăn -->
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Mô tả"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/discountAmount"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Nút và hình ảnh phía bên phải -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- ImageView biểu tượng cho dấu (-) để xóa món -->
+        <ImageView
+            android:id="@+id/imgRemovePromotion"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Xóa món ăn"
+            android:src="@drawable/ic_remove_no_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <!-- Hình ngôi sao dưới nút "Xem chi tiết" -->
+        <ImageView
+            android:id="@+id/starIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/baseline_star_border_24"
+            android:contentDescription="Ngôi sao ưu tiên"
+            app:layout_constraintTop_toBottomOf="@id/imgRemovePromotion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

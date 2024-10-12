@@ -44,7 +44,13 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, BottomNavPartnerHomeActivity.class);
                     startActivity(intent);
                     finish();  // Kết thúc MainActivity
-                } else {
+                }else if (role != null && role.equalsIgnoreCase("ROLE_ADMIN")) {
+                    // Người dùng là Partner -> chuyển tới PartnerHomePageActivity
+                    Intent intent = new Intent(MainActivity.this, BottomNavPartnerHomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }// Kết thúc MainActivity
+                else {
                     // Nếu role không hợp lệ hoặc không tìm thấy, giữ lại ở MainActivity
                     // Không làm gì cả, giữ nguyên ở MainActivity
                 }

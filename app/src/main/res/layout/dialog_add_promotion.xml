@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_dialog_background"
+    android:padding="16dp">
+
+    <!-- Spinner to select discount type -->
+    <!-- TextView (hoặc Button) để mở PopupWindow thay cho Spinner -->
+    <TextView
+        android:id="@+id/textViewDiscountType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Discount Type"
+        android:textColorHint="@color/colorHint"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext_forgotpw"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:drawableEnd="@drawable/baseline_keyboard_arrow_down_24" />
+
+    <!-- EditText for discount value, visibility will be toggled -->
+    <EditText
+        android:id="@+id/editTextDiscountPercentage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorHint"
+        android:textColor="@color/black"
+        android:hint="Enter Discount Percentage"
+        android:inputType="numberDecimal"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editTextFixedDiscountAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Fixed Discount Amount"
+        android:textColorHint="@color/colorHint"
+        android:textColor="@color/black"
+        android:inputType="numberDecimal"
+        android:visibility="gone" />
+
+    <!-- EditText for description -->
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorHint"
+        android:hint="Enter Description"
+        android:inputType="textMultiLine" />
+    <!-- CheckBox for status -->
+    <CheckBox
+        android:id="@+id/checkBoxPromotionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Active"
+        android:checked="true" />
+    <!-- Buttons to confirm or cancel -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_background"
+            android:text="Hủy" />
+
+        <Button
+            android:id="@+id/buttonConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/button_background"
+            android:text="Thêm mã khuyến mãi" />
+
+    </LinearLayout>
+</LinearLayout>

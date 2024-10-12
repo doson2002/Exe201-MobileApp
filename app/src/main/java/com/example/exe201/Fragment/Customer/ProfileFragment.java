@@ -366,6 +366,9 @@ public class ProfileFragment extends Fragment {
         editor.remove("img_url");
         editor.remove("gender");
         editor.remove("phone");
+        editor.remove("longitude");
+        editor.remove("latitude");
+        editor.remove("distance");
         editor.apply();
 
         // Return User Back To Home:

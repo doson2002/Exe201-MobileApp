@@ -98,7 +98,7 @@
         android:id="@+id/tvAddressMapChose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="220/20 Vo Van hat"
+        android:text=""
         android:textColor="@color/blue1"
         android:textSize="15sp"
         android:layout_marginTop="24dp" />
