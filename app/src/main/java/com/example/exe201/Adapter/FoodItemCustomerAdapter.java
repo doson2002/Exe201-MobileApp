@@ -48,16 +48,30 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
 
     }
 
-    // Cập nhật giỏ hàng với cartMap
-    public void updateCartMap(int supplierId, List<Menu> updatedCartList) {
-        cartMap.put(supplierId, updatedCartList);
-        notifyDataSetChanged();
-    }
+//    // Cập nhật giỏ hàng với cartMap
+//    public void updateCartMap(int supplierId, List<Menu> updatedCartList) {
+//        cartMap.put(supplierId, updatedCartList);
+//        notifyDataSetChanged();
+//    }
+//    // Phương thức để filter theo keyword
+//    public void filter(String keyword) {
+//        filteredList.clear();
+//        if (keyword.isEmpty()) {
+//            filteredList.addAll(foodItemList); // Hiển thị lại toàn bộ nếu không có keyword
+//        } else {
+//            for (Menu item : foodItemList) {
+//                if (item.getName().toLowerCase().contains(keyword.toLowerCase())) {
+//                    filteredList.add(item);
+//                }
+//            }
+//        }
+//        notifyDataSetChanged(); // Cập nhật RecyclerView
+//    }
 
-    // Lấy danh sách món ăn trong giỏ hàng cho nhà cung cấp cụ thể
-    public List<Menu> getCartList(int supplierId) {
-        return cartMap.getOrDefault(supplierId, new ArrayList<>());
-    }
+//    // Lấy danh sách món ăn trong giỏ hàng cho nhà cung cấp cụ thể
+//    public List<Menu> getCartList(int supplierId) {
+//        return cartMap.getOrDefault(supplierId, new ArrayList<>());
+//    }
     // Phương thức để lấy cartMap
     public Map<Integer, List<Menu>> getCartMap() {
         return this.cartMap;
@@ -194,6 +208,11 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
         }
 
 
+    }
+    // Thêm phương thức updateData
+    public void updateData(List<Menu> newFoodItems) {
+        this.foodItemList.clear();
+        this.foodItemList.addAll(newFoodItems);
     }
     public interface MenuListClickListener{
         public void onAddToCartClick(Menu menu);

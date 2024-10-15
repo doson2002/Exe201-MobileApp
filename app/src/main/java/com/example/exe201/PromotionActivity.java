@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -32,23 +35,50 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
+import com.example.exe201.Adapter.PromotionAdapter;
+import com.example.exe201.DTO.PromotionResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PromotionActivity extends AppCompatActivity {
     private FloatingActionButton fabAddPromotion;
     private RequestQueue requestQueue; // Volley RequestQueue để xử lý API
+    private RecyclerView recyclerView;
+    private PromotionAdapter adapter;
+    private List<PromotionResponse> promotionList;
+    private ImageView back_arrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promotion);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("JwtToken", null);
+        int supplierId = sharedPreferences.getInt("supplier_id", 0);
 
+        back_arrow = findViewById(R.id.back_arrow);
+        back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        recyclerView = findViewById(R.id.recyclerViewPromotion);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        promotionList = new ArrayList<>();
+        adapter = new PromotionAdapter(this, promotionList);
+        recyclerView.setAdapter(adapter);
+
+        loadPromotions(supplierId, jwtToken);
         // Khởi tạo RequestQueue cho Volley
         requestQueue = Volley.newRequestQueue(this);
 
@@ -59,6 +89,52 @@ public class PromotionActivity extends AppCompatActivity {
                 openAddPromotionDialog();
             }
         });
+    }
+    private void loadPromotions(int supplierId, String jwtToken) {
+        String url = ApiEndpoints.GET_ALL_PROMOTION + "/" + supplierId; // Đặt URL API đúng
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray contentArray = response.getJSONArray("content");
+                        for (int i = 0; i < contentArray.length(); i++) {
+                            JSONObject promotionObj = contentArray.getJSONObject(i);
+
+                            PromotionResponse promotion = new PromotionResponse();
+                            promotion.setId(promotionObj.getInt("id"));
+                            promotion.setCode(promotionObj.getString("code"));
+                            promotion.setDescription(promotionObj.getString("description"));
+                            promotion.setStatus(promotionObj.getBoolean("status"));
+                            promotion.setDiscountPercentage(promotionObj.getDouble("discount_percentage"));
+                            promotion.setFixedDiscountAmount(promotionObj.getDouble("fixed_discount_amount"));
+                            promotion.setSupplierId(promotionObj.getLong("supplier_id"));
+
+                            promotionList.add(promotion);
+                        }
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Toast.makeText(PromotionActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + jwtToken); // Thêm token vào header
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+
+        Volley.newRequestQueue(this).add(request);
     }
 
     private void openAddPromotionDialog() {
@@ -159,7 +235,9 @@ public class PromotionActivity extends AppCompatActivity {
             jsonObject.put("supplier_id", supplierId);  // Thay bằng supplierId thực tế
             jsonObject.put("discount_percentage", discountPercentage);
             jsonObject.put("fixed_discount_amount", fixedDiscountAmount);
+            jsonObject.put("promotion_type", 2);
             jsonObject.put("description", description);
+
             jsonObject.put("status", isActive);
         } catch (JSONException e) {
             e.printStackTrace();

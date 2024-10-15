@@ -47,7 +47,6 @@
         android:id="@+id/recyclerViewGroupedBySupplier"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/linearTop"
         app:layout_constraintBottom_toTopOf="@id/outerBasketLayout"
@@ -62,17 +61,18 @@
         android:background="@android:color/white"
         android:elevation="10dp"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/imgShowCart"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:contentDescription="show cart"
+            android:layout_gravity="end"
             android:elevation="20dp"
             android:src="@drawable/baseline_add_shopping_cart_24"
             android:visibility="visible" />

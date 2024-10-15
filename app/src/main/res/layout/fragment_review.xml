@@ -1,0 +1,53 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Nội dung cho Reviews -->
+
+    <!-- RecyclerView for the reviews -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviewRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Section for adding new review -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/editReviewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:hint="Nhập bình luận của bạn"
+            android:textColorHint="@color/black"
+            />
+
+        <RatingBar
+            android:id="@+id/ratingBarInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressDrawable="@drawable/ratingbar_states"
+            android:stepSize="1.0"
+            android:minHeight="48dp"
+            android:minWidth="240dp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/submitReviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gửi đánh giá"
+            android:layout_gravity="end"
+            android:backgroundTint="#FF8C00"
+            android:textColor="#fff"/>
+    </LinearLayout>
+</LinearLayout>

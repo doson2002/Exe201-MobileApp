@@ -77,5 +77,11 @@ dependencies {
     implementation(libs.google.auth.library.oauth2.http)
 
     implementation(libs.android.maps.utils)
+    implementation(libs.places)
+    implementation(libs.osmdroid.android)
+    implementation(libs.osmdroid.geopackage)
+    implementation(libs.osmdroid.wms)
+
+
 
 }

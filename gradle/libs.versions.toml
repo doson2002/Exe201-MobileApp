@@ -28,6 +28,10 @@ navigationUi = "2.8.2"
 google-api-services-sheets = "v4-rev612-1.25.0"
 google-auth-library-oauth2-http = "1.3.0"
 android-maps-utils = "2.2.1"
+places = "2.4.0"
+osmdroid-android = "6.1.10"
+osmdroid-geopackage = "6.1.10"
+osmdroid-wms = "6.1.10"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -59,7 +63,10 @@ google-api-services-sheets = { group = "com.google.apis", name = "google-api-ser
 
 google-auth-library-oauth2-http = { group = "com.google.auth", name = "google-auth-library-oauth2-http", version.ref = "google-auth-library-oauth2-http" }
 android-maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "android-maps-utils" }
-
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
+osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid-android" }
+osmdroid-geopackage = { group = "org.osmdroid", name = "osmdroid-geopackage", version.ref = "osmdroid-geopackage" }
+osmdroid-wms = { group = "org.osmdroid", name = "osmdroid-wms", version.ref = "osmdroid-wms" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

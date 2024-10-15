@@ -5,6 +5,9 @@ import static androidx.core.location.LocationManagerCompat.getCurrentLocation;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
@@ -14,8 +17,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +38,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.exe201.databinding.ActivityMapsBinding;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,12 +58,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng selectedLatLng;
     private double latitudeSupplier = 0;
     private double longitudeSupplier = 0;
-    private float distanceInKm;
+    private double distanceInKm;
+    private PlacesClient placesClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        View rootView = findViewById(R.id.root_view);
+        // Thiết lập WindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                // Áp dụng padding để tránh bị thanh hệ thống che
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                return insets.consumeSystemWindowInsets();
+            }
+        });
+
 
         Intent intent = getIntent();
         latitudeSupplier = intent.getDoubleExtra("latitudeSupplier",0);
@@ -81,7 +109,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 finish(); // Đóng Activity và trở về Activity trước
             }
         });
+        // Khai báo EditText
+        EditText searchLocationEditText = findViewById(R.id.searchLocation);
+
+// Lắng nghe sự thay đổi trong EditText
+        searchLocationEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Không cần xử lý
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Kiểm tra xem người dùng đã nhập đủ dài chưa để bắt đầu tìm kiếm
+                if (s.length() > 2) { // Ví dụ, chỉ tìm kiếm nếu người dùng nhập hơn 2 ký tự
+                    searchLocation(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Không cần xử lý
+            }
+        });
+
     }
+    private void searchLocation(String location) {
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                // Di chuyển camera đến vị trí tìm được
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                // Đánh dấu vị trí
+                if (currentMarker != null) {
+                    currentMarker.remove();
+                }
+                currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                selectedLatLng = latLng; // Lưu tọa độ được chọn
+                // Cập nhật địa chỉ đã chọn
+                selectedAddress = address.getAddressLine(0);
+                TextView locationDetailsTextView = findViewById(R.id.location_details);
+                locationDetailsTextView.setText(selectedAddress);
+                // Log kiểm tra nếu tìm thấy địa chỉ
+                Log.d("SearchLocation", "Found address: " + selectedAddress);
+
+                // Hiển thị thông báo khi tìm thấy địa chỉ
+                Toast.makeText(this, selectedAddress, Toast.LENGTH_SHORT).show();
+
+            } else {
+               return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi khi tìm kiếm địa chỉ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     // Xử lý bản đồ khi đã sẵn sàng
     @Override

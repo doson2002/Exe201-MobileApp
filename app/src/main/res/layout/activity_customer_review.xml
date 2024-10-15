@@ -9,15 +9,18 @@
     android:background="@color/white"
     tools:context=".CustomerReviewActivity">
 
-    <LinearLayout
-        android:id="@+id/linearTop"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:background="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
+
+        <!-- Image of the pizza (supplier image) -->
+        <ImageView
+            android:id="@+id/supplierImgUrl"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@color/blue" />
+
         <!-- ImageView for Back Arrow, đặt ở góc trái trên -->
         <ImageView
             android:id="@+id/back_arrow"
@@ -26,16 +29,10 @@
             android:contentDescription="Back Arrow"
             android:src="@drawable/baseline_arrow_back_24"
             android:padding="16dp"
+            android:layout_gravity="top|start"
             android:layout_margin="16dp" />
 
-    </LinearLayout>
-    <!-- Image of the pizza -->
-    <ImageView
-        android:id="@+id/supplierImgUrl"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@color/blue" />
+    </FrameLayout>
 
     <!-- Menu, Place, Reviews Toggle -->
     <LinearLayout
@@ -50,61 +47,25 @@
             android:id="@+id/placeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edittext_forgotpw"
             android:text="Place"
-            android:backgroundTint="#E0E0E0"
-            android:textColor="#000" />
+            />
 
         <Button
             android:id="@+id/reviewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edittext_forgotpw"
             android:text="Reviews"
-            android:backgroundTint="#FF8C00"
-            android:textColor="#fff" />
+             />
     </LinearLayout>
 
-    <!-- RecyclerView for the reviews -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reviewRecyclerView"
+    <!-- Container to hold the fragments -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!-- Section for adding new review -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <EditText
-            android:id="@+id/editReviewText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:hint="Nhập bình luận của bạn"
-            android:textColorHint="@color/black"
-            />
-
-        <RatingBar
-            android:id="@+id/ratingBarInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:progressDrawable="@drawable/ratingbar_states"
-            android:stepSize="1.0"
-            android:minHeight="48dp"
-            android:minWidth="240dp"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/submitReviewButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gửi đánh giá"
-            android:layout_gravity="end"
-            android:backgroundTint="#FF8C00"
-            android:textColor="#fff"/>
-    </LinearLayout>
+        android:layout_weight="1"/>
 
 </LinearLayout>

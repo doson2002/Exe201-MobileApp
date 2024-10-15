@@ -29,6 +29,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.exe201.API.ApiEndpoints;
 import com.example.exe201.Adapter.CartAdapter;
@@ -38,6 +39,7 @@ import com.example.exe201.DTO.FoodOrder;
 import com.example.exe201.DTO.FoodOrderItemResponse;
 import com.example.exe201.DTO.Menu;
 import com.example.exe201.DTO.OrderRequest;
+import com.example.exe201.DTO.PromotionResponse;
 import com.example.exe201.DTO.SupplierInfo;
 import com.example.exe201.helpers.GoogleSheetsService;
 import com.example.exe201.helpers.Utils;
@@ -65,6 +67,7 @@ public class OrderActivity extends AppCompatActivity {
 
 
     private static final int REQUEST_CODE_MAP = 1;
+    private static final int REQUEST_CODE_APPLY_PROMOTION = 2; // Có thể thay đổi theo nhu cầu
     private TextView textViewDeliveryAddress;
     private List<Menu> cartList;
     private List<FoodOrderItemResponse> reOrderList;
@@ -72,16 +75,21 @@ public class OrderActivity extends AppCompatActivity {
     private CartAdapter cartAdapter;
     private ImageView backArrow;
     private TextView textViewEditAddress, textViewRestaurantName, textViewShippingFee, textViewAddFoodItem;
-    private Button createOrderButton;
+    private Button createOrderButton ,buttonApplyOffers;
     private RequestQueue requestQueue;
     private String paymentMethod = "";
     private double totalPrice = 0;
     private String contentBank = "";
     private double distance = 0;
     private double shippingFee = 0 ;
+    private double voucherAmount = 0 ;
     private double totalPriceOrder =  0;
     private double latitudeSupplier = 0 ;
     private double longitudeSupplier = 0;
+    private boolean isFromApplyPromotion = false;
+
+
+    private PromotionResponse selectedPromotion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +195,14 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
+        buttonApplyOffers = findViewById(R.id.buttonApplyOffers);
+        buttonApplyOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderActivity.this, ApplyPromotionActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_APPLY_PROMOTION);            }
+        });
+
         // Khởi tạo hoặc lấy dữ liệu giỏ hàng ở đây
 //        cartList = getCartItemsFromSharedPreferences();
 
@@ -257,7 +273,7 @@ public class OrderActivity extends AppCompatActivity {
         totalItemsView.setText(String.format("%d món", totalItems));
 
         // Cập nhật totalPrice với phí ship
-        totalPrice = totalAmount + shippingFee;
+        totalPrice = totalAmount + shippingFee - voucherAmount;
         updateTotalPrice(totalPrice); // Cập nhật giá trị mới của totalPrice vào UI
     }
 
@@ -274,7 +290,6 @@ public class OrderActivity extends AppCompatActivity {
 
 
     }
-    // Phương thức cập nhật lại cartMap và lưu vào SharedPreferences
     // Phương thức cập nhật lại cartMap và lưu vào SharedPreferences cho một supplierId cụ thể
     public void updateCartMap(int supplierId, List<Menu> updatedCartList) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
@@ -398,7 +413,10 @@ public class OrderActivity extends AppCompatActivity {
                     String restaurantName = supplierJson.optString("restaurantName");
                     double shippingFee = foodOrderJson.optDouble("shippingFee");
 
-                    totalPriceOrder = totalPriceItem+ shippingFee;;
+                    if (selectedPromotion != null) {
+                        applyPromotion(response.optInt("id"), selectedPromotion.getId(), token);
+                    }
+                    totalPriceOrder = totalPriceItem+ shippingFee - voucherAmount;
 
                     // Tạo đối tượng FoodOrder
                     FoodOrder foodOrder = new FoodOrder(id, foodImage, restaurantName, totalPriceItem, totalItems, orderStatus, formattedOrderTime);
@@ -443,6 +461,35 @@ public class OrderActivity extends AppCompatActivity {
                     // Xử lý khi có lỗi
                     Toast.makeText(OrderActivity.this, "Error creating order", Toast.LENGTH_SHORT).show();
                 }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        if (token != null) {
+                            headers.put("Authorization", "Bearer " + token);
+                        }
+                        headers.put("Content-Type", "application/json");
+                        return headers;
+                    }
+                };
+
+        // Thêm request vào RequestQueue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonObjectRequest);
+    }
+    private void applyPromotion(int foodOrderId, long promotionId, String token) {
+        // Tạo đối tượng cho API apply promotion
+        String url = ApiEndpoints.APPLY_PROMOTION + "?foodOrderId=" + foodOrderId + "&promotionId=" + promotionId;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    // Xử lý khi áp dụng khuyến mãi thành công
+                    Toast.makeText(OrderActivity.this, "Promotion applied successfully", Toast.LENGTH_SHORT).show();
+                    // Xử lý phản hồi từ API nếu cần
+                },
+                error -> {
+                    // Xử lý khi có lỗi
+                    Toast.makeText(OrderActivity.this, "Error applying promotion", Toast.LENGTH_SHORT).show();
+                }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -454,9 +501,10 @@ public class OrderActivity extends AppCompatActivity {
             }
         };
 
+
         // Thêm request vào RequestQueue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(stringRequest);
     }
 
     public void updateGoogleSheet(double totalPrice, String contentBank) {
@@ -511,6 +559,12 @@ public class OrderActivity extends AppCompatActivity {
         }).start();
     }
 
+    public double calculateVoucherAmount(PromotionResponse promotionResponse) {
+        double voucherAmount = 0; // Mức phí cơ bản cho khoảng cách ngắn
+        voucherAmount = promotionResponse.getFixedDiscountAmount() + promotionResponse.getDiscountPercentage()*totalPrice;
+        return voucherAmount;
+
+    }
 
     // Hàm để lấy thời gian hiện tại dưới dạng chuỗi ISO-8601
     private String getCurrentTime() {
@@ -529,13 +583,24 @@ public class OrderActivity extends AppCompatActivity {
                 // Cập nhật địa chỉ đã chọn vào textViewDeliveryAddress
                 textViewDeliveryAddress.setText(selectedAddress);
 
-                distance = data.getDoubleExtra("distance", 0);
+                 distance = data.getDoubleExtra("distance", 0);
                 // Tính lại phí vận chuyển dựa trên khoảng cách mới
                 shippingFee = calculateShippingFee(distance);
                 // Cập nhật phí vận chuyển vào textViewShippingFee
                 textViewShippingFee.setText(String.format("%,.0fđ", shippingFee));
 
                 updateCartList();
+            }
+        }
+        if (requestCode == REQUEST_CODE_APPLY_PROMOTION && resultCode == RESULT_OK) {
+            isFromApplyPromotion = true; // Đánh dấu rằng bạn đang quay lại từ trang ApplyPromotion
+            if (data != null) {
+                 selectedPromotion = data.getParcelableExtra("promotion");
+                // Xử lý promotionId tại đây
+                // Ví dụ: cập nhật giao diện hoặc thông báo cho người dùng
+                voucherAmount = calculateVoucherAmount(selectedPromotion);
+                updateCartList();
+                Toast.makeText(this, "Voucher đã áp dụng: " + selectedPromotion.getCode(), Toast.LENGTH_SHORT).show();
             }
         }
     }
