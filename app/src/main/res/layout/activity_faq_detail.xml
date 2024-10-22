@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/root_view"
     tools:context=".FaqDetailActivity">
 
     <LinearLayout
@@ -28,7 +29,7 @@
         <EditText
             android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/search_background"
             android:layout_marginTop="20dp"
@@ -37,7 +38,8 @@
             android:hint="Nhập từ khóa, nội dung cần tìm"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
-            android:textColorHint="@color/light_black" />
+            android:textColorHint="@color/light_black"
+            />
     </LinearLayout>
 
     <!-- Title TextView -->

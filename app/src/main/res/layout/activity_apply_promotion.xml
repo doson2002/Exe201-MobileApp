@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:id="@+id/root_view"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -71,8 +72,8 @@
         android:text="Only select 1 voucher"
         android:padding="8dp"
         android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textColor="@android:color/darker_gray" />
+        android:textStyle="normal"
+        android:textColor="@android:color/black" />
 
     <!-- Danh sách voucher -->
     <androidx.recyclerview.widget.RecyclerView

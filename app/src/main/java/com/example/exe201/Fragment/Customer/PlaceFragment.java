@@ -49,6 +49,6 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
 
         // Move the camera to the store location and add a marker
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLocation, 15)); // Zoom level 15
-        googleMap.addMarker(new MarkerOptions().position(storeLocation).title("Cửa hàng của bạn"));
+        googleMap.addMarker(new MarkerOptions().position(storeLocation).title("Vị trí cửa hàng"));
     }
 }

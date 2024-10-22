@@ -13,7 +13,8 @@
     <string name="go_to_sign_in">Already have account? Sign In</string>
     <!--    For Sign Up Page/ Activity-->
     <string name="go_to_sign_up">Don\'t have account? Sign Up</string>
-    <string name="MAPS_API_KEY">AIzaSyANQr-g03d3urFyh8ZB7icQqADkL2V50cg</string>
+    <string name="MAPS_API_KEY">AIzaSyDunPQAsRhc7Y0ZHDLxglB7BQ2GXLQ1uCA</string>
+    <string name="MAP_BOX_ACCESS_TOKEN">sk.eyJ1IjoiZG9zb24yMDAyMjAiLCJhIjoiY20yYmtvM2hoMDVmMTJqc2Z4Y2p4NjRhYiJ9.As07FwXjW3JYoSv46WEyTA</string>
 
 
     <string-array name="gender_array">

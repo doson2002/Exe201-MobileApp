@@ -79,7 +79,6 @@ public class ApplyPromotionActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
 
-        setContentView(R.layout.activity_apply_promotion);
         recyclerView = findViewById(R.id.recyclerViewVouchers);
         editTextVoucherCode = findViewById(R.id.editTextVoucherCode);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

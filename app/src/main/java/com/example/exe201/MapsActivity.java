@@ -38,10 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.exe201.databinding.ActivityMapsBinding;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.net.PlacesClient;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double latitudeSupplier = 0;
     private double longitudeSupplier = 0;
     private double distanceInKm;
-    private PlacesClient placesClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

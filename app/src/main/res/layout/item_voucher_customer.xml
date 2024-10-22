@@ -18,6 +18,7 @@
         <ImageView
             android:id="@+id/imageViewVoucherIcon"
             android:layout_width="match_parent"
+            android:background="@color/orange"
             android:layout_height="match_parent"
             android:contentDescription="Voucher Icon" />
 
@@ -29,7 +30,7 @@
             android:gravity="center"
             android:text="15% OFF"
             android:textSize="15sp"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@android:color/white"
             android:layout_gravity="center"
         android:background="@android:color/transparent" />
     </FrameLayout>
@@ -45,6 +46,7 @@
             android:id="@+id/textViewCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="mã code"
             android:textStyle="bold" />
 
@@ -53,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Voucher Description"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/textViewValue"
@@ -68,5 +70,6 @@
     <RadioButton
         android:id="@+id/radioButtonSelectVoucher"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/black"/>
 </LinearLayout>
