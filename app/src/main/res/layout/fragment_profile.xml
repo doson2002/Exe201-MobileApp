@@ -215,6 +215,7 @@
                 android:paddingTop="16dp" />
             <!-- Tài khoản liên kết -->
             <LinearLayout
+                android:id="@+id/linearFb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

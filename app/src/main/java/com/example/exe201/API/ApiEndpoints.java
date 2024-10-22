@@ -3,8 +3,8 @@ package com.example.exe201.API;
 public class ApiEndpoints {
     // Địa chỉ cơ sở (base URL) của API
 
-//    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
-private static final String BASE_URL = "http://192.168.1.3:8080/api/v1/";
+    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
+//private static final String BASE_URL = "http://192.168.1.2:8080/api/v1/";
 
     // Các endpoint API
     public static final String CREATE_SUPPLIER_INFO = BASE_URL + "supplier_info/create";
@@ -89,6 +89,12 @@ private static final String BASE_URL = "http://192.168.1.3:8080/api/v1/";
 
     //Promotion
     public static final String CREATE_PROMOTION = BASE_URL + "promotions/create";
+    public static final String GET_ALL_PROMOTION = BASE_URL + "promotions/get_all_promotions";
+    public static final String UPDATE_STATUS = BASE_URL + "promotions/update_status";
+    public static final String APPLY_PROMOTION = BASE_URL + "promotions/apply_promotion";
+
+
+
 
 
 

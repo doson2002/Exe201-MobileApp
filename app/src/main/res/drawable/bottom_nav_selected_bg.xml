@@ -6,8 +6,8 @@
         <shape android:shape="oval">
             <solid android:color="#B8ACAC"/> <!-- màu xám -->
             <size
-                android:width="100dp"
-                android:height="40dp"/> <!-- chiều rộng của hình xám -->
+                android:width="70dp"
+                android:height="30dp"/> <!-- chiều rộng của hình xám -->
         </shape>
     </item>
 
@@ -16,8 +16,8 @@
         <shape android:shape="oval">
             <solid android:color="#FFFFFF"/> <!-- màu trắng -->
             <size
-                android:width="60dp"
-                android:height="60dp"/> <!-- kích thước hình tròn -->
+                android:width="40dp"
+                android:height="40dp"/> <!-- kích thước hình tròn -->
         </shape>
     </item>
 

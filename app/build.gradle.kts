@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -26,9 +27,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -42,7 +45,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat) {
         exclude(group = "com.google.guava")
     }
@@ -65,8 +67,6 @@ dependencies {
     implementation(libs.circleimageview)
     implementation(libs.gson)
     implementation(libs.ucrop)
-    implementation(libs.play.services.maps)
-    implementation(libs.play.services.location)
     implementation(libs.viewpager2)
     implementation(libs.mpAndroidChart)
 
@@ -77,5 +77,11 @@ dependencies {
     implementation(libs.google.auth.library.oauth2.http)
 
     implementation(libs.android.maps.utils)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+//    implementation(libs.android)
+
 
 }
+

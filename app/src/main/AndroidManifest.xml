@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,7 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Exe201"
         android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup"
         tools:targetApi="31">
+
+        <activity
+            android:name=".ApplyPromotionActivity"
+            android:exported="false" />
         <activity
             android:name=".PromotionActivity"
             android:exported="false" />
@@ -88,7 +93,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/MAPS_API_KEY" />
-
+        <meta-data
+            android:name="com.mapbox.mapboxsdk.token"
+            android:value="@string/MAP_BOX_ACCESS_TOKEN" />
         <activity
             android:name=".MapsActivity"
             android:exported="false"
@@ -108,21 +115,14 @@
         <activity
             android:name=".SupplierForCustomer"
             android:exported="false" />
-        <activity
-            android:name=".FoodForCustomerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TimePickerActivity"
-            android:exported="false" />
+
         <activity
             android:name=".FoodItemDetailActivity"
             android:exported="false" />
         <activity
             android:name=".FoodItemActivity"
             android:exported="false" />
-        <activity
-            android:name=".PartnerHomePageActivity"
-            android:exported="false" />
+
         <activity
             android:name=".HomePageActivity"
             android:exported="false" />

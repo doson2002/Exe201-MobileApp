@@ -1,0 +1,75 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <!-- Container cho hình ảnh và giá trị giảm giá -->
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/colorHint"
+        android:layout_marginEnd="8dp">
+
+        <!-- Hình ảnh đại diện voucher -->
+        <ImageView
+            android:id="@+id/imageViewVoucherIcon"
+            android:layout_width="match_parent"
+            android:background="@color/orange"
+            android:layout_height="match_parent"
+            android:contentDescription="Voucher Icon" />
+
+        <!-- TextView hiển thị giá trị giảm giá nằm đè lên ImageView -->
+        <TextView
+            android:id="@+id/textViewDiscountValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="15% OFF"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+        android:background="@android:color/transparent" />
+    </FrameLayout>
+
+    <!-- Thông tin voucher -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="mã code"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewVoucherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voucher Description"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/textViewValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="giảm 15%"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Radio Button chọn voucher -->
+    <RadioButton
+        android:id="@+id/radioButtonSelectVoucher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/black"/>
+</LinearLayout>

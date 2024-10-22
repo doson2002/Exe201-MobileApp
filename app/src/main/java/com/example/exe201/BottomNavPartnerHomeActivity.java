@@ -45,6 +45,9 @@ public class BottomNavPartnerHomeActivity extends AppCompatActivity {
                     case R.id.nav_message:
                         replaceFragment(new MessageFragment());
                         break;
+                    case R.id.nav_account:
+                        replaceFragment(new ProfileFragment());
+                        break;
 
                 }
                 return true;

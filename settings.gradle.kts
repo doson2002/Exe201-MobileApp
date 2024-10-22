@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         google {
@@ -19,6 +20,17 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://jitpack.io")
         }
+        maven { // Thêm kho lưu trữ Mapbox ở đây
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            credentials {
+                username = "mapbox"
+                password = providers.gradleProperty("MAPBOX_ACCESS_TOKEN").get()
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+
     }
 }
 

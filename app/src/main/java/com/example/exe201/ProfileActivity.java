@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     ImageView  backArrow;
     ShapeableImageView imageView;
-    LinearLayout saveButton;
+    LinearLayout saveButton,linearFb;
     FloatingActionButton fbutton;
     private EditText nameInput, phoneInput, emailInput;
     private Spinner genderSpinner;
@@ -102,6 +102,9 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+
 
 
 
