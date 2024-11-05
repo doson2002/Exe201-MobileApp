@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     android:background="@color/light_black">
 
 
@@ -21,9 +22,9 @@
             android:id="@+id/back_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             android:contentDescription="Back Arrow"
-            android:padding="16dp"
+            android:padding="7dp"
             android:src="@drawable/baseline_arrow_back_24" />
         <!-- Tên quán ăn, địa chỉ và thông tin tổng quan -->
         <TextView
@@ -33,8 +34,9 @@
             android:text="Giỏ hàng của tôi"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:padding="16dp"
+            android:padding="7dp"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
             android:textColor="@android:color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -49,7 +49,7 @@
                             android:drawableLeft="@drawable/ic_search_foreground"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
-                            android:hint="Tìm kiếm theo tên"
+                            android:hint="Tìm kiếm"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
                             android:padding="10dp"
@@ -124,6 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:padding="10dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -143,6 +144,7 @@
                             android:layout_gravity="end"
                             android:background="@android:color/transparent"
                             android:text="See all >"
+                            android:visibility="gone"
                             android:textColor="#A8A6A4"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -166,6 +168,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="10dp"
                         android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -187,6 +190,7 @@
                             android:layout_gravity="end"
                             android:background="@android:color/transparent"
                             android:text="See all >"
+                            android:visibility="gone"
                             android:textColor="#A8A6A4"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -211,7 +215,7 @@
                     <!-- Left Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:layout_weight="1"
                         android:layout_margin="8dp"
                         app:cardBackgroundColor="@color/green"
@@ -220,7 +224,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="16dp">
+                            android:padding="5dp">
 
                             <!-- Title -->
                             <TextView
@@ -228,6 +232,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="Món ăn dưới 30K"
+                                android:gravity="center"
+                                android:layout_marginTop="13dp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -240,6 +246,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Tiết kiệm mỗi ngày"
                                 android:textColor="@color/black"
+                                android:gravity="center"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvCard1"
                                 app:layout_constraintEnd_toStartOf="@+id/imageViewIcon1"/>
@@ -261,7 +268,7 @@
                     <!-- Right Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:layout_weight="1"
                         android:layout_margin="8dp"
                         app:cardBackgroundColor="@color/blue"
@@ -270,14 +277,17 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="16dp">
+                            android:padding="5dp">
 
                             <!-- Title -->
                             <TextView
                                 android:id="@+id/tvCard2"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="Quán ăn siêu đỉnh"
+                                android:layout_marginTop="13dp"
+
+                                android:gravity="center"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -286,10 +296,11 @@
 
                             <!-- Subtitle -->
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="Thử ngay hôm nay!"
                                 android:textColor="@color/black"
+                                android:gravity="center"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCard2"
                                 app:layout_constraintEnd_toStartOf="@id/imageViewIcon2"/>
@@ -321,7 +332,7 @@
                     <androidx.cardview.widget.CardView
 
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/light_orange"
                         android:layout_margin="8dp"
@@ -330,14 +341,16 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="16dp">
+                            android:padding="5dp">
 
                             <!-- Title -->
                             <TextView
                                 android:id="@+id/tvCard3"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Pizza &amp; Fast Food"
+                                android:text="Fresh Food"
+                                android:layout_marginTop="13dp"
+                                android:gravity="center"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -348,7 +361,8 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="từ mọi thương hiệu"
+                                android:text="Mọi sản phẩm"
+                                android:gravity="center"
                                 android:textColor="@color/black"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvCard3"
@@ -371,7 +385,7 @@
                     <!-- Right Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/yellow"
                         android:layout_margin="8dp"
@@ -380,14 +394,16 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="16dp">
+                            android:padding="5dp">
 
                             <!-- Title -->
                             <TextView
                                 android:id="@+id/tvCard4"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Giảm giá cực sốc!"
+                                android:text="Giảm giá sốc!"
+                                android:gravity="center"
+                                android:layout_marginTop="13dp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -398,8 +414,9 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Giảm lên đến 30%"
+                                android:text="Lên đến 30%"
                                 android:textColor="@color/black"
+                                android:gravity="center"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCard4"
                                 app:layout_constraintEnd_toStartOf="@id/imageViewIcon4"

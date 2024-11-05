@@ -142,8 +142,26 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
                 />
+            <!-- Tên -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Mô tả"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-            <!-- Số điện thoại -->
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                />
+
+
+            <!-- Quantity -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

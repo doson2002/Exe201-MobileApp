@@ -1,0 +1,89 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+
+        <LinearLayout
+            android:id="@+id/linearClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/close_button"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_close_foreground"
+                android:contentDescription="Close" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textViewSelectBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Chọn ngân hàng"
+            android:textColorHint="@color/colorHint"
+            android:padding="12dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/rounded_edittext_forgotpw"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:drawableEnd="@drawable/baseline_keyboard_arrow_down_24" />
+
+        <EditText
+            android:id="@+id/editTextSTK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:hint="Nhập STK"
+            android:layout_margin="15dp"
+            android:textColorHint="@color/colorHint"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Nhập tên chủ TK"
+            android:inputType="text" />
+        <!-- Buttons to confirm or cancel -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_background"
+                android:text="Hủy" />
+
+            <Button
+                android:id="@+id/buttonConfirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/button_background"
+                android:text="Cập Nhật" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

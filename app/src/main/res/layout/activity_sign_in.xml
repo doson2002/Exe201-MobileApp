@@ -22,16 +22,15 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="217dp"
-        android:layout_height="148dp"
-        android:layout_marginTop="120dp"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
         app:srcCompat="@drawable/logofoodpt" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="Sign In"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -64,15 +63,15 @@
 
     <Button
         android:id="@+id/sign_in_btn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Sign In"
-        android:layout_marginHorizontal="80dp"
+        android:textSize="18dp"
+        android:text="Đăng nhập"
         android:padding="18dp"
         android:background="@drawable/button_background"
         android:textFontWeight="700"
-        android:textColor="@color/dark_royal_purple" />
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="match_parent"
@@ -86,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Forgot password? Click here"
+            android:text="Quên mật khẩu? Click vào đây"
             android:textColor="@color/light_orange"
             android:textSize="18sp"
             android:onClick="goToForgotPassword" />

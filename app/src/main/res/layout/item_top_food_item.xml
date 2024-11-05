@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:text="Product Name"
         android:padding="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:textStyle="bold"

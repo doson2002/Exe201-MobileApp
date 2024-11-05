@@ -62,20 +62,13 @@
         android:elevation="8dp"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/current_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ho Chi Minh City Student Cultural House"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/location_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Luu Huu Phuoc, P. Dong Hoa, Binh Duong"
+            android:text=""
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="14sp"/>
 
@@ -84,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp">
+            android:paddingTop="10dp">
 
 
 
@@ -104,11 +97,12 @@
                     android:id="@+id/currentLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Luu Huu Phuoc Gate"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:paddingStart="10dp"/>
             </LinearLayout>
+
 
             <!-- Choose location button -->
             <Button

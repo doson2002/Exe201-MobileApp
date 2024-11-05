@@ -12,9 +12,8 @@
 
     <ImageView
         android:id="@+id/lockIcon"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
         android:src="@drawable/logofoodpt"
         android:contentDescription="Lock Icon"
         android:padding="8dp"
@@ -49,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:text="Create an account"
+                android:text="Tạo tài khoản"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
@@ -105,6 +104,7 @@
                 android:background="@drawable/edit_text_border"
                 android:hint="Phone"
                 android:paddingLeft="10dp"
+                android:inputType="phone"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/darker_gray" />
 
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background"
                 android:padding="16dp"
-                android:text="Register"
+                android:text="Đăng ký"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 

@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 android:background="@color/white">
 
                 <ImageView
@@ -80,7 +80,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="220/20 Vo Van Hat St."
+                    android:text="Địa chỉ nhận đơn"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:ellipsize="end"
@@ -91,7 +91,7 @@
                     android:id="@+id/textViewEditAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edit"
+                    android:text="Chỉnh sửa"
                     android:layout_marginRight="10dp"
                     android:textColor="@android:color/holo_blue_light"
                     android:textSize="14sp"
@@ -103,7 +103,7 @@
                 android:id="@+id/textViewDeliveryNotice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your order might arrive later than usual"
+                android:text="Giao hàng có thể lâu hơn dự kiến nếu thời tiết xấu"
                 android:textColor="@android:color/black"
                 android:background="@android:color/darker_gray"
                 android:padding="10dp"
@@ -140,41 +140,58 @@
             </LinearLayout>
 
             <!-- Phần Order Summary -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/white">
-            <TextView
-                android:id="@+id/textViewOrderSummary"
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Danh sách món"
                 android:layout_marginHorizontal="10dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-               />
-            <TextView
-                android:id="@+id/textViewAddFoodItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thêm món"
-                android:textColor="@color/blue1"
-                android:textSize="14sp"
-                android:padding="4dp"/>
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:backgroundTint="@color/white">
 
-            </LinearLayout>
-            <!-- Danh sách món ăn trong đơn hàng -->
-
-
-                <!-- Món ăn 1 -->
-                <!-- RecyclerView để hiển thị danh sách món ăn trong giỏ hàng -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewCart"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                     />
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@android:color/transparent">
+
+                    <!-- Header chứa danh sách món và Thêm món -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textViewOrderSummary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Danh sách món"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:id="@+id/textViewAddFoodItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thêm món"
+                            android:textColor="@color/blue1"
+                            android:textSize="14sp"
+                            android:padding="4dp"/>
+                    </LinearLayout>
+
+                    <!-- RecyclerView để hiển thị danh sách món ăn trong giỏ hàng -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewCart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
             <!-- Phần Payment Details -->
             <TextView
 
@@ -223,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:text="Chuyển khoản"
                         android:buttonTint="@color/black"
-                        android:drawableRight="@drawable/vnpay"
+                        android:drawableRight="@drawable/transfer1"
                         android:layout_marginLeft="10dp"
                         android:drawablePadding="10dp"
                         android:textSize="16sp"
@@ -236,7 +253,7 @@
                     android:id="@+id/buttonApplyOffers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Apply as many available offers as you can 🎉"
+                    android:text="Áp dụng càng nhiều ưu đãi có sẵn càng tốt 🎉"
                     android:textColor="@color/colorHint"
                     android:backgroundTint="@color/white"
                     android:padding="10dp"

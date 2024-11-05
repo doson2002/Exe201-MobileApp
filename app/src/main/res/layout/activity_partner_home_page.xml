@@ -10,6 +10,7 @@
 
     <!-- Title Bar -->
     <FrameLayout
+        android:id="@+id/fram1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!-- Toolbar (đặt dưới để nó nằm dưới CardView) -->
@@ -19,21 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/light_grey"
-            android:layout_marginTop="10dp"
             android:elevation="10dp"
             app:title=""
             app:titleTextColor="@color/black">
-            <!-- ImageView để hiển thị icon với kích thước tùy chỉnh -->
-            <ImageView
-                android:id="@+id/account_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="end"
-                android:layout_marginRight="3dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="5dp"
-                android:padding="7dp"
-                android:src="@drawable/ic_account_foreground" />
+<!--            &lt;!&ndash; ImageView để hiển thị icon với kích thước tùy chỉnh &ndash;&gt;-->
+<!--            <ImageView-->
+<!--                android:id="@+id/account_icon"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginRight="3dp"-->
+<!--                android:layout_marginBottom="30dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:padding="7dp"-->
+<!--                android:src="@drawable/ic_account_foreground" />-->
 
 
         </androidx.appcompat.widget.Toolbar>
@@ -44,6 +44,7 @@
 
 
     </FrameLayout>
+
     <TextView
         android:id="@+id/tvHelloPartner"
         android:layout_width="wrap_content"
@@ -55,11 +56,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingBottom="16dp"
-        android:layout_marginTop="25dp"
+        android:paddingBottom="1dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
-
 
     <!-- Grid Layout for Icons -->
     <GridLayout
@@ -186,8 +186,9 @@
                 android:ellipsize="end" />
         </LinearLayout>
 
-        <!-- Hours of Operation Icon -->
+        <!-- Order -->
         <LinearLayout
+            android:id="@+id/orderManageIcon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -197,7 +198,7 @@
             android:padding="8dp">
 
             <ImageView
-                android:layout_width="48dp"
+                android:layout_width="45dp"
                 android:layout_height="60dp"
                 android:background="@drawable/image_view_background"
                 android:src="@drawable/ic_menu_restaurant_foreground" />
@@ -205,12 +206,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hours of operation"
+                android:text="Đơn hàng"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:maxLines="2"
                 android:ellipsize="end" />
+            <TextView
+                android:id="@+id/orderCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:background="@drawable/circle_background" />
         </LinearLayout>
 
         <!-- Restaurant Manager Icon -->
@@ -316,7 +328,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:text="Promotional cooperation"
+                android:layout_marginHorizontal="15dp"
+                android:text="Thông báo"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -330,22 +343,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nhập 'PHV70': Giảm 70k trên giá món"
+                    android:text="- Thiết lập nhà hàng để người dùng dễ dàng nhận biết"
+                    android:maxLines="2"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nhập 'PHV70': Giảm 70k trên giá món"
+                    android:text="- Bạn cần phải cập nhật vị trí cửa hàng trên bản đồ để người dùng có thể tìm thấy"
+                    android:maxLines="2"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="Xem tất cả"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="right"-->
+<!--                    android:text="Xem tất cả"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="italic" />-->
             </LinearLayout>
 
             <!-- Order Section -->

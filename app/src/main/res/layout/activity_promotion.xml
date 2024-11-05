@@ -22,7 +22,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:background="@color/light_grey"
             android:elevation="10dp"
             app:title=""
@@ -36,20 +36,20 @@
                 android:contentDescription="Back Arrow"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/baseline_arrow_back_24"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:layout_gravity="start" />
 
             <!-- ImageView để hiển thị icon với kích thước tùy chỉnh -->
-            <ImageView
-                android:id="@+id/account_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="end"
-                android:layout_marginRight="3dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="10dp"
-                android:padding="7dp"
-                android:src="@drawable/ic_account_foreground" />
+<!--            <ImageView-->
+<!--                android:id="@+id/account_icon"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginRight="3dp"-->
+<!--                android:layout_marginBottom="30dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:padding="7dp"-->
+<!--                android:src="@drawable/ic_account_foreground" />-->
         </androidx.appcompat.widget.Toolbar>
     </FrameLayout>
 

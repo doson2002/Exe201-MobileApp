@@ -28,6 +28,8 @@
                 android:id="@+id/textViewSupplierName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="Supplier Name"
                 android:textColor="@color/black"
                 android:textSize="20sp"

@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.exe201"
+    namespace = "app.foodpt.exe201"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.exe201"
+        applicationId = "app.foodpt.exe201"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -26,7 +26,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
         }
+
 
     }
     buildFeatures {
@@ -41,6 +43,7 @@ android {
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
     }
+
 
 }
 
@@ -79,6 +82,8 @@ dependencies {
     implementation(libs.android.maps.utils)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
+    implementation(libs.dotsindicator)
 
 //    implementation(libs.android)
 

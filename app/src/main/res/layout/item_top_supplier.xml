@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="(40)"
         android:gravity="center"
-        android:textColor="@color/blue"
+        android:textColor="@color/green"
         android:textSize="14sp" />
 
     <RatingBar

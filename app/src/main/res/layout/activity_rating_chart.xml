@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/main"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,9 +24,9 @@
             android:id="@+id/back_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="7dp"
             android:contentDescription="Back Arrow"
-            android:padding="16dp"
+            android:padding="10dp"
             android:src="@drawable/baseline_arrow_back_24" />
 
         <!-- Tên quán ăn, địa chỉ và thông tin tổng quan -->
@@ -36,7 +37,7 @@
             android:text="Đánh giá &amp; nhận xét"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:padding="15dp"
+            android:padding="7dp"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/black"/>
     </LinearLayout>
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:paddingStart="8dp"
-            android:text="4.6"
+            android:text="5"
             android:textColor="@color/black" />
         <TextView
             android:id="@+id/textViewRating"
@@ -65,7 +66,7 @@
             android:layout_height="30dp"
             android:background="@drawable/ic_star_rate_foreground"
             android:drawablePadding="3dp"
-            android:text="4.6"
+            android:text=""
             android:textStyle="bold" />
 
         <TextView
@@ -74,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:paddingStart="8dp"
-            android:text="(41 lượt đánh giá)"
+            android:text="(x lượt đánh giá)"
             android:textColor="@color/black" />
     </LinearLayout>
     <com.github.mikephil.charting.charts.BarChart

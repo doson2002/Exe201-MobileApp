@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/light_black"
     android:layout_height="match_parent"
+    android:id="@+id/root_view"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,16 +24,16 @@
             android:layout_height="wrap_content"
             android:contentDescription="Back Arrow"
             android:src="@drawable/baseline_arrow_back_24"
-            android:padding="16dp"
+            android:padding="10dp"
             android:layout_margin="16dp" />
         <EditText
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
+            android:padding="1dp"
+            android:layout_marginTop="2dp"
             android:drawableLeft="@drawable/ic_search_foreground"
-            android:hint="Search Item"
+            android:hint="Tìm kiếm thực đơn"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textColorHint="@color/light_black" />
