@@ -128,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@color/light_black"
-                    android:hint="Search"
+                    android:textColorHint="@color/colorHint"
+                    android:hint="Tìm kiếm món ăn"
                     android:padding="12dp"
                     android:paddingStart="40dp"
                     android:textColor="@android:color/black" />
@@ -136,12 +137,11 @@
                 <!-- Search Icon inside the search bar, aligned to the left -->
                 <ImageView
                     android:id="@+id/searchIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="4dp"
                     android:contentDescription="Search Icon"
                     android:src="@drawable/ic_search_foreground" />
 
@@ -159,7 +159,6 @@
         android:layout_height="0dp"
         android:translationZ="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/outerBasketLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutBack"
@@ -285,7 +284,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:padding="8dp"
-                        android:text="5.000đ off delivery fee with 75.000đ order"
+                        android:text="Nhận nhiều mã khuyến mãi tại fanpage FoodPT"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -331,7 +330,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/outerBasketLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -342,29 +340,46 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/outerBasketLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:elevation="10dp"
-        android:orientation="vertical"
-        android:padding="10dp"
+        android:elevation="15dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_margin="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        >
 
-        <ImageView
-            android:id="@+id/imgShowCart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+
+
+            <!-- ImageView giỏ hàng -->
+            <ImageView
+                android:id="@+id/imgShowCart"
+                android:layout_width="40dp"
+                android:padding="5dp"
+            android:layout_height="40dp"
             android:contentDescription="show cart"
-            android:elevation="20dp"
             android:src="@drawable/baseline_add_shopping_cart_24"
             android:visibility="visible" />
 
-    </LinearLayout>
+            <!-- Dấu chấm đỏ -->
+            <View
+                android:id="@+id/redDot"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/red_dot"
+                android:layout_gravity="end|top"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp"
+                android:visibility="visible"
+                android:shape="oval" />
 
+
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

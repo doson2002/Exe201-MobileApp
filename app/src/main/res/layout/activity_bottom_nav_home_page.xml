@@ -18,11 +18,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:elevation="10dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:itemBackground="@drawable/nav_item_background"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color"
+        app:itemIconTint="@color/bottom_nav_color_selector"
+        app:itemTextColor="@color/bottom_nav_color_selector"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         />

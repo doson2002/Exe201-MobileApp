@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     android:background="@color/white"
     tools:context=".ProfileActivity">
 
@@ -207,31 +208,34 @@
                 android:paddingTop="8dp" />
 
             <TextView
+                android:id="@+id/tvAddPayment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Liên kết tài khoản"
+                android:text="Liên kết ngân hàng"
                 android:textStyle="bold"
                 android:textColor="@color/black"
+                android:visibility="gone"
                 android:paddingTop="16dp" />
             <!-- Tài khoản liên kết -->
             <LinearLayout
-                android:id="@+id/linearFb"
+                android:id="@+id/linearAddPayment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:gravity="center_vertical">
 
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/icon_fb" />
+                    android:src="@drawable/baseline_view_kanban_24" />
 
                 <TextView
                     android:id="@+id/facebook_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Facebook"
+                    android:text="Cập nhật liên kết"
                     android:paddingStart="8dp"
                     android:textColor="@android:color/black"/>
 

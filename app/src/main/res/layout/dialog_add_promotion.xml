@@ -12,7 +12,7 @@
         android:id="@+id/textViewDiscountType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Discount Type"
+        android:hint="Chọn loại khuyến mãi"
         android:textColorHint="@color/colorHint"
         android:padding="12dp"
         android:background="@drawable/rounded_edittext_forgotpw"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/colorHint"
         android:textColor="@color/black"
-        android:hint="Enter Discount Percentage"
+        android:hint="Nhập % khuyến mãi"
         android:inputType="numberDecimal"
         android:visibility="gone" />
 
@@ -35,7 +35,7 @@
         android:id="@+id/editTextFixedDiscountAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Fixed Discount Amount"
+        android:hint="Nhập số tiền khuyến mãi"
         android:textColorHint="@color/colorHint"
         android:textColor="@color/black"
         android:inputType="numberDecimal"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textColorHint="@color/colorHint"
-        android:hint="Enter Description"
+        android:hint="Nhập mô tả"
         android:inputType="textMultiLine" />
     <!-- CheckBox for status -->
     <CheckBox

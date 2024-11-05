@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:id="@+id/root_view"
     tools:context=".Fragment.Customer.ActivityFragment">
 
@@ -31,7 +32,8 @@
             android:layout_height="0dp"
             android:background="@color/light_black"
             android:layout_weight="1"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_food_order"/>
 
     </LinearLayout>
 

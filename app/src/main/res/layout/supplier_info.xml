@@ -69,18 +69,10 @@
                     android:layout_height="wrap_content"
                     android:text="(Số lượng đánh giá)"
                     android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/holo_red_dark"
                     />
 
-                <!-- Loại nhà hàng -->
-                <TextView
-                    android:id="@+id/textViewRestaurantType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Loại nhà hàng"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_red_light"
-                    android:layout_marginStart="10dp" />
+
             </LinearLayout>
 
 
@@ -102,14 +94,14 @@
                     android:textColor="@android:color/darker_gray" />
 
 
-                <!-- Thông tin giảm giá -->
+                <!-- Loại nhà hàng -->
                 <TextView
-                    android:id="@+id/textViewDiscountInfo"
+                    android:id="@+id/textViewRestaurantType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Giảm 10.000đ"
+                    android:text="Loại nhà hàng"
                     android:textSize="14sp"
-                    android:textColor="@android:color/holo_green_dark"
+                    android:textColor="@color/blue1"
                     android:layout_marginStart="10dp" />
             </LinearLayout>
 
@@ -120,24 +112,30 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="4dp">
 
-                <!-- Thông tin khuyến mãi 1 -->
                 <TextView
-                    android:id="@+id/textViewPromo1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10.000đ off"
+                    android:text="Hoạt động: "
                     android:textSize="14sp"
-                    android:textColor="@android:color/holo_blue_dark" />
+                    android:textColor="@android:color/holo_orange_dark" />
+                <!-- Thông tin khuyến mãi 1 -->
+                <TextView
+                    android:id="@+id/textViewTimeOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5:00"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_orange_dark" />
 
                 <!-- Thông tin khuyến mãi 2 -->
                 <TextView
-                    android:id="@+id/textViewPromo2"
+                    android:id="@+id/textViewTimeClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10% off"
+                    android:text="11:30"
                     android:textSize="14sp"
                     android:textColor="@android:color/holo_orange_dark"
-                    android:layout_marginStart="10dp" />
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

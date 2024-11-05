@@ -13,5 +13,5 @@
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/ic_account_foreground"
-        android:title="Account page" />
+        android:title="Tài Khoản" />
 </menu>
