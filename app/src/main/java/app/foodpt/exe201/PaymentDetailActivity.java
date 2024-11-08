@@ -52,7 +52,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private long orderTime;
     private Button btnConfirmTransfer;
     private Handler handler = new Handler();
-    private int countdownTime = 15 * 60; // 15 phút, 900 giây
+    private int countdownTime = 10 * 60; // 10 phút, 600 giây
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +94,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
         btnConfirmTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                compareValuesWithSheet(orderTime, orderId);
+                btnConfirmTransfer.setText("ĐANG KIỂM TRA");
+                btnConfirmTransfer.setEnabled(false);
+                long startTime = System.currentTimeMillis();  // Lưu thời gian bắt đầu
+                compareValuesWithSheet(orderTime, orderId, startTime);
             }
         });
 
@@ -181,7 +184,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 .into(qrCodeImage);
     }
 
-    private void compareValuesWithSheet(long orderTimeMillis, int orderId) {
+    private void compareValuesWithSheet(long orderTimeMillis, int orderId, long startTime) {
         new Thread(() -> {
             String spreadsheetId = "10UmBMouznhL_dwAehlB9U3RbhKAi8ZzeiHSjrMCQeNE";
             String range = "macro!B:D"; // Thay đổi nếu cần
@@ -189,77 +192,84 @@ public class PaymentDetailActivity extends AppCompatActivity {
             boolean found = false;
 
             while (!found) {
+                // Kiểm tra thời gian đã trôi qua
+                if (System.currentTimeMillis() - startTime >= TimeUnit.MINUTES.toMillis(1)) {
+                    // Nếu quá 1 phút, cập nhật trạng thái đơn hàng và thoát
+                    runOnUiThread(() -> {
+                        textViewOrderStatus.setText("Đơn hàng đang chờ xử lý.");
+                    });
+                    updatePaymentStatus(orderId, 2); // Trạng thái đang chờ
+                    updateOrderStatus(orderId, "thất bại");
+                    found = true;
+                    Intent intent = new Intent(PaymentDetailActivity.this, CreateOrderSuccessActivity.class);
+                    intent.putExtra("orderId", orderId);
+                    startActivity(intent);
+                    break;
+                }
+
                 try {
-                    Sheets sheetsService = new GoogleSheetsService(PaymentDetailActivity.this).getSheetsService(); // Khởi tạo dịch vụ Sheets
+                    Sheets sheetsService = new GoogleSheetsService(PaymentDetailActivity.this).getSheetsService();
                     ValueRange response = sheetsService.spreadsheets().values()
                             .get(spreadsheetId, range)
                             .execute();
                     List<List<Object>> values = response.getValues();
 
                     if (values != null && !values.isEmpty()) {
-                        long orderTimePlusTwoHours = orderTimeMillis + TimeUnit.HOURS.toMillis(2); // Thêm 2 tiếng
+                        long orderTimePlusTwoHours = orderTimeMillis + TimeUnit.HOURS.toMillis(2);
                         List<List<Object>> filteredValues = new ArrayList<>();
 
-                        // Lọc ra các hàng có thời gian thỏa mãn
                         for (List<Object> row : values) {
                             if (row.size() >= 3) {
-                                String timeString = row.get(2).toString(); // Cột D
+                                String timeString = row.get(2).toString();
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
                                 Date time = null;
 
-                                // Kiểm tra xem thời gian có thể phân tích được không
                                 try {
                                     time = sdf.parse(timeString);
                                 } catch (ParseException e) {
-                                    e.printStackTrace(); // Ghi lại lỗi
-                                    continue; // Bỏ qua hàng này nếu không thể phân tích
+                                    e.printStackTrace();
+                                    continue;
                                 }
 
                                 long timeMillis = time != null ? time.getTime() : 0;
 
-                                // Kiểm tra xem thời gian có nằm trong khoảng yêu cầu
                                 if (timeMillis >= orderTimeMillis && timeMillis <= orderTimePlusTwoHours) {
-                                    filteredValues.add(row); // Thêm hàng vào danh sách đã lọc
+                                    filteredValues.add(row);
                                 }
                             }
                         }
 
-                        // Kiểm tra các hàng đã lọc để so sánh giá trị
                         for (List<Object> row : filteredValues) {
-                            String amount = row.get(0).toString(); // Cột B
-                            String content = row.get(1).toString(); // Cột C
+                            String amount = row.get(0).toString();
+                            String content = row.get(1).toString();
 
-                            // So sánh content trước
                             if (content.equals(contentBank)) {
-                                // Nếu content khớp, kiểm tra amount
                                 if (amount.equals(String.format("%.0f", totalPrice))) {
                                     runOnUiThread(() -> {
                                         textViewOrderStatus.setText("Thanh toán thành công");
                                     });
-                                    found = true; // Đã tìm thấy
-                                    updatePaymentStatus(orderId, 1); // Gọi hàm cập nhật trạng thái thanh toán thành công
-                                    updateOrderStatus(orderId,"hoàn thành");
+                                    found = true;
+                                    updatePaymentStatus(orderId, 1);
+                                    updateOrderStatus(orderId, "hoàn thành");
                                     Intent intent = new Intent(PaymentDetailActivity.this, CreateOrderSuccessActivity.class);
-                                    intent.putExtra("orderId",orderId);
+                                    intent.putExtra("orderId", orderId);
                                     startActivity(intent);
                                 } else {
                                     runOnUiThread(() -> {
-                                        textViewOrderStatus.setText("Thanh toán thất bại, số tiền không hợp lệ"); // Content đúng nhưng amount sai
+                                        textViewOrderStatus.setText("Thanh toán thất bại, số tiền không hợp lệ");
                                     });
-                                    found = true; // Đã tìm thấy
-                                    updatePaymentStatus(orderId, 2); // Gọi hàm cập nhật trạng thái thanh toán thất bại
-                                    updateOrderStatus(orderId,"thất bại");
+                                    found = true;
+                                    updatePaymentStatus(orderId, 2);
+                                    updateOrderStatus(orderId, "thất bại");
                                     Intent intent = new Intent(PaymentDetailActivity.this, FailedPaymentActivity.class);
-                                    intent.putExtra("orderId",orderId);
+                                    intent.putExtra("orderId", orderId);
                                     startActivity(intent);
-
                                 }
-                                break; // Thoát vòng lặp khi đã kiểm tra hàng này
+                                break;
                             }
                         }
 
                         if (!found) {
-                            // Nếu không tìm thấy, hiển thị thông báo và chờ trước khi thử lại
                             runOnUiThread(() -> {
                                 textViewOrderStatus.setText("Đang kiểm tra...");
                             });
@@ -268,19 +278,18 @@ public class PaymentDetailActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             textViewOrderStatus.setText("Không có dữ liệu trong bảng tính.");
                         });
-                        break; // Thoát vòng lặp nếu không có dữ liệu
+                        break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // Xử lý lỗi
-                    break; // Thoát vòng lặp nếu có lỗi
+                    break;
                 }
 
                 try {
                     Thread.sleep(5000); // Chờ 5 giây trước khi quét lại
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    break; // Thoát nếu có lỗi khi chờ
+                    break;
                 }
             }
         }).start();

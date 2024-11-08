@@ -2,9 +2,11 @@ package app.foodpt.exe201;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -126,31 +128,50 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         linearAddFoodType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Inflate the dialog layout
-                LayoutInflater inflater = LayoutInflater.from(FoodItemDetailActivity.this);
-                View dialogView = inflater.inflate(R.layout.dialog_add_food_type, null);
+                // Tạo dialog
+                final Dialog dialog = new Dialog(FoodItemDetailActivity.this);
+                dialog.setContentView(R.layout.dialog_add_food_type);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+                // Lấy các thành phần từ dialog layout
+                EditText editTextTypeName = dialog.findViewById(R.id.editTextTypeName);
+                EditText editTextPosition = dialog.findViewById(R.id.editTextPosition);
+                ImageView closeButton = dialog.findViewById(R.id.close_button);
+                Button buttonConfirm = dialog.findViewById(R.id.buttonConfirm);
+                Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
 
-                // Create the dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(FoodItemDetailActivity.this);
-                builder.setView(dialogView);
+                // Xử lý nút đóng (nút X)
+                closeButton.setOnClickListener(v1 -> dialog.dismiss());
 
-                // Get references to the input fields
-                EditText editTextTypeName = dialogView.findViewById(R.id.editTextTypeName);
-                EditText editTextPosition = dialogView.findViewById(R.id.editTextPosition);
-
-                // Set up the dialog buttons
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                // Xử lý khi bấm nút Confirm
+                buttonConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Get the entered data
+                    public void onClick(View v) {
+                        // Lấy dữ liệu từ các trường
                         String typeName = editTextTypeName.getText().toString().trim();
-                        int position = Integer.parseInt(editTextPosition.getText().toString().trim());
-                        // Get supplierInfoId from SharedPreferences
+                        String positionText = editTextPosition.getText().toString().trim();
 
-                        // Check if supplierInfoId is valid
+                        // Kiểm tra nếu tên loại hoặc vị trí để trống
+                        if (typeName.isEmpty()) {
+                            editTextTypeName.setError("Tên loại thực phẩm không được để trống");
+                            return;
+                        }
+
+                        if (positionText.isEmpty()) {
+                            editTextPosition.setError("Vị trí không được để trống");
+                            return;
+                        }
+
+                        int position;
+                        try {
+                            position = Integer.parseInt(positionText);
+                        } catch (NumberFormatException e) {
+                            editTextPosition.setError("Vị trí phải là số nguyên");
+                            return;
+                        }
+                        // Check if supplierId is valid
                         if (supplierId != -1) {
-                            // Create a JSON object for the request
+                            // Tạo JSON cho request
                             JSONObject jsonBody = new JSONObject();
                             try {
                                 jsonBody.put("typeName", typeName);
@@ -158,43 +179,30 @@ public class FoodItemDetailActivity extends AppCompatActivity {
                                 jsonBody.put("supplierInfoId", supplierId);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+
                             }
 
-                            // Send the API request
-                            sendCreateFoodTypeRequest(jsonBody,jwtToken, supplierId);
+                            // Gửi request API
+                            sendCreateFoodTypeRequest(jsonBody, jwtToken, supplierId);
+
+                            dialog.dismiss(); // Đóng dialog sau khi gọi API
                         } else {
                             Toast.makeText(FoodItemDetailActivity.this, "Error: Supplier ID not found.", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                // Xử lý khi bấm nút Cancel
+                buttonCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void onClick(View v) {
+                        dialog.dismiss(); // Đóng dialog
                     }
                 });
 
-                // Create the dialog
-                AlertDialog dialog = builder.create();
-
-
-                // Set background color for the dialog window using color from colors.xml
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(
-                            ContextCompat.getColor(FoodItemDetailActivity.this, R.color.light_black) // Thay R.color.your_color_name bằng tên màu trong colors.xml
-                    ));
-                }
-
-                // Show the dialog
+                // Hiển thị dialog
                 dialog.show();
-                // Set color for "Add" button
-                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                positiveButton.setTextColor(ContextCompat.getColor(FoodItemDetailActivity.this, R.color.orange)); // Thay màu từ colors.xml
-
-                // Set color for "Cancel" button
-                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                negativeButton.setTextColor(ContextCompat.getColor(FoodItemDetailActivity.this, R.color.orange)); // Thay màu từ colors.xml
             }
         });
         if (typeSpinner == null) {

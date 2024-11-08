@@ -43,7 +43,9 @@
     <string-array name="bank_type">
         <item>Vietcombank</item>
         <item>MbBank</item>
-        <item>Angribank</item>
+        <item>Agribank</item>
+        <item>Vietinbank</item>
+
 
     </string-array>
 </resources>

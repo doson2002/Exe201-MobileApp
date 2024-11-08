@@ -69,25 +69,14 @@ public class ActivityFragment extends Fragment {
         adapter = new FoodOrderAdapter(getActivity(), foodOrderList);
 
         // Call the API to fetch orders
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", getActivity().MODE_PRIVATE);        String token = sharedPreferences.getString("JwtToken", null);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyAppPrefs", getActivity().MODE_PRIVATE);        String token = sharedPreferences.getString("JwtToken", null);
         int userId = sharedPreferences.getInt("user_id", 0);
         String jwtToken = sharedPreferences.getString("JwtToken", null);
 
         fetchOrdersFromApi(userId, jwtToken);
-//        View rootView = view.findViewById(R.id.root_view);
-//        // Thiết lập WindowInsetsListener
-//        ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
-//            @Override
-//            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-//                // Áp dụng padding để tránh bị thanh hệ thống che
-//                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
-//                        insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-//                return insets.consumeSystemWindowInsets();
-//            }
-//        });
         // Set up RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recyclerView.setAdapter(adapter);
 // Add a divider between RecyclerView items
         // Add a custom divider with margin
@@ -101,7 +90,7 @@ public class ActivityFragment extends Fragment {
         String url = ApiEndpoints.GET_ORDER_BY_USER_ID + "/" + userId;  // Thay thế bằng URL API của bạn
 
         // Initialize a request queue
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
 
         // Create a JsonArrayRequest
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
