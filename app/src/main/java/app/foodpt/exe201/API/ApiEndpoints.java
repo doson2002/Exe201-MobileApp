@@ -3,7 +3,7 @@ package app.foodpt.exe201.API;
 public class ApiEndpoints {
     // Địa chỉ cơ sở (base URL) của API
 
-    private static final String BASE_URL = "http://14.225.206.203:8080/api/v1/";
+    private static final String BASE_URL = "https://lequocanh.com:8443/api/v1/";
 //    private static final String BASE_URL = "http://192.168.1.9:8080/api/v1/";
 
     // Các endpoint API

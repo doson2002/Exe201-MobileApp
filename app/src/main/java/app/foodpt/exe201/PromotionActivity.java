@@ -283,10 +283,12 @@ public class PromotionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         progressDialog.dismiss();
+
                         try {
                             String status = response.getString("status");
                             if ("success".equals(status)) {
                                 Toast.makeText(PromotionActivity.this, "Promotion created successfully!", Toast.LENGTH_SHORT).show();
+                                promotionList.clear();
                                 loadPromotions(supplierId, jwtToken);
                             } else {
                                 String errorMessage = response.getString("errorMessage");

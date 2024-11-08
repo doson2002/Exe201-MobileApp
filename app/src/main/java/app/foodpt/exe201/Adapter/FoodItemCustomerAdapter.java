@@ -242,6 +242,7 @@ public class FoodItemCustomerAdapter extends RecyclerView.Adapter<FoodItemCustom
     public void updateData(List<Menu> newFoodItems) {
         this.foodItemList.clear();
         this.foodItemList.addAll(newFoodItems);
+        notifyDataSetChanged();
     }
     public interface MenuListClickListener{
         public void onAddToCartClick(Menu menu);

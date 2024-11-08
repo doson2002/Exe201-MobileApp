@@ -8,6 +8,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1020176009330:android:90de9cd4c6f929a4ca1aeb",
+        "android_client_info": {
+          "package_name": "app.foodpt.exe201"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrL4YbSvbHVAvE6cvSUFRBniuJUf7nALg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1020176009330:android:4baad15f8d9bc55eca1aeb",
         "android_client_info": {
           "package_name": "com.example.exe201"
